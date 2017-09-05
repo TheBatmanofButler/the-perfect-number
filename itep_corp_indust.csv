@@ -1,0 +1,259 @@
+Company,Industry
+Boeing,Aerospace & defense
+United Technologies,Aerospace & defense
+Rockwell Collins,Aerospace & defense
+L-3 Communications,Aerospace & defense
+Raytheon,Aerospace & defense
+Northrop Grumman,Aerospace & defense
+Precision Castparts,Aerospace & defense
+Lockheed Martin,Aerospace & defense
+SAIC,Aerospace & defense
+Alliant Techsystems,Aerospace & defense
+General Dynamics,Aerospace & defense
+Air Products & Chemicals,Chemicals
+Celanese,Chemicals
+Mosaic,Chemicals
+Eastman Chemical,Chemicals
+Praxair,Chemicals
+DuPont,Chemicals
+Sherwin-Williams,Chemicals
+Monsanto,Chemicals
+Ecolab,Chemicals
+PPG Industries,Chemicals
+CF Industries Holdings,Chemicals
+Corning,Computers/office equip/software/data
+Qualcomm,Computers/office equip/software/data
+International Business Machines,Computers/office equip/software/data
+Pitney Bowes,Computers/office equip/software/data
+Harris,Computers/office equip/software/data
+Intel,Computers/office equip/software/data
+Oracle,Computers/office equip/software/data
+Texas Instruments,Computers/office equip/software/data
+CA,Computers/office equip/software/data
+Cognizant Technology Solutions,Computers/office equip/software/data
+NVR,Engineering & construction
+Tutor Perini,Engineering & construction
+Quanta Services,Engineering & construction
+Emcor Group,Engineering & construction
+Jacobs Engineering Group,Engineering & construction
+Reinsurance Group of America,Financial
+State Street Corp.,Financial
+Principal Financial,Financial
+PNC Financial Services Group,Financial
+Loews,Financial
+Arthur Gallagher,Financial
+J.P. Morgan Chase & Co.,Financial
+Wells Fargo,Financial
+Travelers Cos.,Financial
+BB&T Corp.,Financial
+Alleghany Corporation,Financial
+Fifth Third Bancorp,Financial
+W.R. Berkley,Financial
+Goldman Sachs Group,Financial
+U.S. Bancorp,Financial
+Capital One Financial,Financial
+H&R Block,Financial
+Unum Group,Financial
+Discover Financial Services,Financial
+Charles Schwab,Financial
+Raymond James Financial,Financial
+American Financial Group,Financial
+Franklin Resources,Financial
+American Express,Financial Data Services
+MasterCard,Financial Data Services
+Alliance Data Systems,Financial Data Services
+Fiserv,Financial Data Services
+Visa,Financial Data Services
+Constellation Brands,Food & beverages & tobacco
+Coca-Cola,Food & beverages & tobacco
+General Mills,Food & beverages & tobacco
+Kellogg,Food & beverages & tobacco
+Campbell Soup,Food & beverages & tobacco
+ConAgra Foods,Food & beverages & tobacco
+Archer Daniels Midland,Food & beverages & tobacco
+PepsiCo,Food & beverages & tobacco
+Hormel Foods,Food & beverages & tobacco
+Hershey,Food & beverages & tobacco
+J.M. Smucker,Food & beverages & tobacco
+Altria Group,Food & beverages & tobacco
+Reynolds American,Food & beverages & tobacco
+Community Health Systems,Health care
+DaVita,Health care
+HCA Holdings,Health care
+Cigna,Health care
+Universal Health Services,Health care
+Laboratory Corp. of America,Health care
+Quest Diagnostics,Health care
+Aetna,Health care
+LifePoint Health,Health care
+WellPoint,Health care
+UnitedHealth Group,Health care
+Health Net,Health care
+Humana,Health care
+Centene,Health care
+Molina Healthcare,Health care
+Kimberly-Clark,Household & personal products
+Procter & Gamble,Household & personal products
+Clorox,Household & personal products
+General Electric,Industrial machinery
+Honeywell International,Industrial machinery
+Joy Global,Industrial machinery
+Flowserve,Industrial machinery
+Dover,Industrial machinery
+Parker Hannifin,Industrial machinery
+Deere,Industrial machinery
+Priceline.com,Internet Services & Retailing
+Facebook,Internet Services & Retailing
+International Paper,Miscellaneous manufacturing
+Westrock,Miscellaneous manufacturing
+Levi Strauss,Miscellaneous manufacturing
+Trinity Industries,Miscellaneous manufacturing
+Phillips-Van Heusen,Miscellaneous manufacturing
+Ball,Miscellaneous manufacturing
+Nike,Miscellaneous manufacturing
+Danaher,Miscellaneous manufacturing
+Amphenol,Miscellaneous manufacturing
+Paccar,Miscellaneous manufacturing
+Domtar,Miscellaneous manufacturing
+Rockwell Automation,Miscellaneous manufacturing
+Thermo Fisher Scientific,Miscellaneous manufacturing
+3M,Miscellaneous manufacturing
+VF,Miscellaneous manufacturing
+Packaging Corp. of America,Miscellaneous manufacturing
+Polo Ralph Lauren,Miscellaneous manufacturing
+Harley-Davidson,Miscellaneous manufacturing
+Illinois Tool Works,Miscellaneous manufacturing
+Bemis,Miscellaneous manufacturing
+Emerson Electric,Miscellaneous manufacturing
+Interpublic Group,Miscellaneous services
+CBS,Miscellaneous services
+ABM Industries,Miscellaneous services
+FedEx,Miscellaneous services
+Darden Restaurants,Miscellaneous services
+Time Warner,Miscellaneous services
+Twenty-First Century Fox,Miscellaneous services
+Wyndham Worldwide Corporation,Miscellaneous services
+Viacom,Miscellaneous services
+Waste Management,Miscellaneous services
+Yum Brands,Miscellaneous services
+Walt Disney,Miscellaneous services
+Omnicom Group,Miscellaneous services
+United Parcel Service,Miscellaneous services
+Automatic Data Processing,Miscellaneous services
+Discovery Communications Inc.,Miscellaneous services
+Apollo Group,Miscellaneous services
+McDonald's,Miscellaneous services
+Oneok,Oil/gas/pipelines
+Devon Energy,Oil/gas/pipelines
+Williams,Oil/gas/pipelines
+Spectra Energy,Oil/gas/pipelines
+MDU Resources,Oil/gas/pipelines
+Exxon Mobil,Oil/gas/pipelines
+Consol Energy,Oil/gas/pipelines
+HollyFrontier,Oil/gas/pipelines
+CVR Energy,Oil/gas/pipelines
+Eli Lilly,Pharmaceuticals & medical products
+Merck,Pharmaceuticals & medical products
+Biogen Idec,Pharmaceuticals & medical products
+R.R. Donnelley & Sons,Publishing/printing
+Amazon.com,Retail & wholesale trade
+Netflix,Retail & wholesale trade
+Casey's General Stores,Retail & wholesale trade
+Wesco International,Retail & wholesale trade
+Andersons,Retail & wholesale trade
+Sonic Automotive,Retail & wholesale trade
+SpartanNash,Retail & wholesale trade
+Group 1 Automotive,Retail & wholesale trade
+McKesson,Retail & wholesale trade
+Airgas,Retail & wholesale trade
+Insight Enterprises,Retail & wholesale trade
+Core-Mark Holding,Retail & wholesale trade
+Asbury Automotive Group Inc.,Retail & wholesale trade
+Kroger,Retail & wholesale trade
+Arrow Electronics,Retail & wholesale trade
+Staples,Retail & wholesale trade
+Reliance Steel & Aluminum,Retail & wholesale trade
+Anixter International,Retail & wholesale trade
+AutoNation,Retail & wholesale trade
+LKQ Corporation,Retail & wholesale trade
+Macy's,Retail & wholesale trade
+Cardinal Health,Retail & wholesale trade
+Dick's Sporting Goods,Retail & wholesale trade
+Advance Auto Parts,Retail & wholesale trade
+O'Reilly Automotive,Retail & wholesale trade
+Costco Wholesale,Retail & wholesale trade
+Genuine Parts,Retail & wholesale trade
+Limited Brands,Retail & wholesale trade
+TJX,Retail & wholesale trade
+Publix Super Markets,Retail & wholesale trade
+Target,Retail & wholesale trade
+AutoZone,Retail & wholesale trade
+Henry Schein,Retail & wholesale trade
+AmerisourceBergen,Retail & wholesale trade
+United Natural Foods,Retail & wholesale trade
+Dollar General,Retail & wholesale trade
+Wal-Mart Stores,Retail & wholesale trade
+Big Lots,Retail & wholesale trade
+W.W. Grainger,Retail & wholesale trade
+Owens & Minor,Retail & wholesale trade
+Nordstrom,Retail & wholesale trade
+Tractor Supply Company,Retail & wholesale trade
+Dollar Tree,Retail & wholesale trade
+CarMax,Retail & wholesale trade
+Walgreen,Retail & wholesale trade
+GameStop,Retail & wholesale trade
+Kohl's,Retail & wholesale trade
+Gap,Retail & wholesale trade
+Bed Bath & Beyond,Retail & wholesale trade
+Home Depot,Retail & wholesale trade
+Ross Stores,Retail & wholesale trade
+Tech Data,Retail & wholesale trade
+Graybar Electric,Retail & wholesale trade
+Synnex,Retail & wholesale trade
+CVS Caremark,Retail & wholesale trade
+Whole Foods Market,Retail & wholesale trade
+United Stationers,Retail & wholesale trade
+Coach Inc.,Retail & wholesale trade
+Best Buy,Retail & wholesale trade
+Lowe's,Retail & wholesale trade
+Express Scripts,Retail & wholesale trade
+Cablevision Systems,Telecommunications
+Time Warner Cable,Telecommunications
+Windstream,Telecommunications
+AT&T,Telecommunications
+CenturyLink,Telecommunications
+Verizon Communications,Telecommunications
+DISH Network,Telecommunications
+Comcast,Telecommunications
+Ryder System,Transportation
+CSX,Transportation
+Norfolk Southern,Transportation
+J.B. Hunt Transport Services,Transportation
+Union Pacific,Transportation
+Southwest Airlines,Transportation
+C.H. Robinson Worldwide,Transportation
+Pepco Holdings,Utilities/gas/electric
+PG&E Corp.,Utilities/gas/electric
+Wisconsin Energy,Utilities/gas/electric
+NiSource,Utilities/gas/electric
+FirstEnergy,Utilities/gas/electric
+Atmos Energy,Utilities/gas/electric
+American Electric Power,Utilities/gas/electric
+Duke Energy,Utilities/gas/electric
+NextEra Energy,Utilities/gas/electric
+Xcel Energy,Utilities/gas/electric
+Ameren,Utilities/gas/electric
+CMS Energy,Utilities/gas/electric
+Sempra Energy,Utilities/gas/electric
+Eversource Energy,Utilities/gas/electric
+Consolidated Edison,Utilities/gas/electric
+PPL,Utilities/gas/electric
+DTE Energy,Utilities/gas/electric
+Entergy,Utilities/gas/electric
+AGL Resources,Utilities/gas/electric
+Southern,Utilities/gas/electric
+Exelon,Utilities/gas/electric
+Dominion Resources,Utilities/gas/electric
+Scana,Utilities/gas/electric
+Public Service Enterprise Group,Utilities/gas/electric
+UGI,Utilities/gas/electric
