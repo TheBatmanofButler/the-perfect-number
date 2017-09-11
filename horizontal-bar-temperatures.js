@@ -39,25 +39,26 @@ var svg = d3.select("#chart").append("svg")
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-d3.csv("Land-Ocean-TempIndex-YR.csv", type, function(error, data) {
+d3.csv("csv/dv_data/interactive_data.csv", type, function(error, data) {
+    data = data.sort(function(a,b) { return b.rate - a.rate; })
+
     x.domain(data.map(function(d) {
-        // console.log(d.Year);
-        return d.Year;
+        return d.company_name;
     }));
     y.domain(d3.extent(data, function(d) {
-        // console.log(d.Celsius);
-        return d.Celsius;
+        return d.rate;
     })).nice();
 
-    // console.log(data);
-
+    // x.domain(data.map(function(d) { return d.company_name; }));
+    // y.domain([d3.min(data, function(d) { return d.Celcius; }), d3.max(data, function(d) { return d.Celcius; })]);
 
     svg.selectAll(".bar")
-        .data(data.sort(function(a,b) { return a.Celsius - b.Celsius; }))
+        .data(data)
         .enter().append("rect")
         .attr("class", function(d) {
-
-            if (d.Celsius < 0){
+            // console.log('hi')
+            // console.log(d.rate);
+            if (d.rate < 0){
                 return "bar negative";
             } else {
                 return "bar positive";
@@ -65,18 +66,18 @@ d3.csv("Land-Ocean-TempIndex-YR.csv", type, function(error, data) {
 
         })
         .attr("data-yr", function(d){
-            return d.Year;
+            return d.company_name;
         })
         .attr("data-c", function(d){
-            return d.Celsius;
+            return d.rate;
         })
         .attr("title", function(d){
-            return (d.Year + ": " + d.Celsius + " °C")
+            return (d.company_name + ": " + d.rate + "%")
         })
         .attr("y", function(d) {
-            console.log(y(0))
-            if (d.Celsius > 0){
-                return y(d.Celsius);
+            // console.log(y(0))
+            if (d.rate > 0){
+                return y(d.rate);
             } else {
                 return y(0);
             }
@@ -84,34 +85,35 @@ d3.csv("Land-Ocean-TempIndex-YR.csv", type, function(error, data) {
         })
         .attr("x", function(d) {
             // console.log(x)
-            return x(d.Year);
+            return x(d.company_name);
         })
-        .attr("width", x.rangeBand())
+        // .attr("width", x.rangeBand())
+        .attr("width", 2,5)
         .attr("height", function(d) {
-            return Math.abs(y(d.Celsius) - y(0));
+            return Math.abs(y(d.rate) - y(0));
         })
         .on("mouseover", function(d){
-            // alert("Year: " + d.Year + ": " + d.Celsius + " Celsius");
+            // alert("company_name: " + d.company_name + ": " + d.rate + " rate");
             d3.select("#_yr")
-                .text("Year: " + d.Year);
+                .text("Company: " + d.company_name);
             d3.select("#degree")
-                .text(d.Celsius + "°C");
+                .text("Rate: " + d.rate + "%");
         });
 
-    // svg.append("g")
-    //     .attr("class", "y axis")
-    //     .call(yAxis);
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis);
 
-    // svg.append("g")
-    //     .attr("class", "y axis")
-    //     .append("text")
-    //     .text("°Celsius")
-    //     .attr("transform", "translate(15, 40), rotate(-90)")
+    svg.append("g")
+        .attr("class", "y axis")
+        .append("text")
+        .text("% rate")
+        .attr("transform", "translate(15, 40), rotate(-90)")
 
-    // svg.append("g")
-    //     .attr("class", "X axis")
-    //     .attr("transform", "translate(" + (margin.left - 6.5) + "," + height + ")")
-    //     .call(xAxis);
+    svg.append("g")
+        .attr("class", "X axis")
+        .attr("transform", "translate(" + (margin.left - 6.5) + "," + height + ")")
+        .call(xAxis);
 
     svg.append("g")
         .attr("class", "x axis")
@@ -121,14 +123,21 @@ d3.csv("Land-Ocean-TempIndex-YR.csv", type, function(error, data) {
         .attr("x2", width);
 
     svg.append("g")
+        .attr("class", "x axis")
+        .append("line")
+        .attr("y1", y(35))
+        .attr("y2", y(35))
+        .attr("x2", width);
+
+    svg.append("g")
         .attr("class", "infowin")
-        .attr("transform", "translate(50, 5)")
+        .attr("transform", "translate(50, 250)")
         .append("text")
         .attr("id", "_yr");
 
     svg.append("g")
         .attr("class", "infowin")
-        .attr("transform", "translate(110, 5)")
+        .attr("transform", "translate(270, 250)")
         .append("text")
         .attr("id","degree");
 
@@ -136,6 +145,6 @@ d3.csv("Land-Ocean-TempIndex-YR.csv", type, function(error, data) {
 
 
 function type(d) {
-    d.Celsius = +d.Celsius;
+    d.rate = +d.rate;
     return d;
 }
