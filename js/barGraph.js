@@ -149,13 +149,14 @@ var highlightBars = function (str) {
                 return i * 1000;
             })
         .style('fill', 'black')
-        .style('opacity', 1); 
+        .style('opacity', 1)
+        .attr("width", 3);
 
 }
 
 var yearsNoTax = function () {
     makeLessOpaque();
-    highlightBars('#molina-healthcare-path, #wec-path');
+    highlightBars('#molina-healthcare-path, #centene-path, #wec-path');
 }
 
 loadBarData();
