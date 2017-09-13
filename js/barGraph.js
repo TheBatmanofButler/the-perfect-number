@@ -10,12 +10,7 @@ var slugify = function (string) {
     .replace(/-+$/, "");
 }
 
-var type = function (d) {
-    d.rate = +d.rate;
-    return d;
-}
-
-var loadBarData = function () {
+var loadBarData = function (data) {
     var margin = {
         top: 10,
         right: 10,
@@ -24,8 +19,6 @@ var loadBarData = function () {
     },
     width = 920 - margin.left - margin.right,
     height = 400 - margin.top - margin.bottom;
-
-    var d1 = $.Deferred();
 
     var x = d3.scaleBand()
         .range([0, width, .1, 1]);
@@ -46,98 +39,95 @@ var loadBarData = function () {
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
     
-    d3.csv("csv/dv_data/interactive_data.csv", type, function(error, data) {
-        data = data.sort(function(a,b) { return b.rate - a.rate; })
+    data = data.sort(function(a,b) { return b.rate - a.rate; })
 
-        x.domain(data.map(function(d) {
-            return d.company_name;
-        }));
-        y.domain(d3.extent(data, function(d) {
-            return d.rate;
-        })).nice();
+    x.domain(data.map(function(d) {
+        return d.company_name;
+    }));
+    y.domain(d3.extent(data, function(d) {
+        return d.rate;
+    })).nice();
 
-        barSVG.append("g")
-            .attr("class", "line35")
-            .append("line")
-            .attr("x1", 0)
-            .attr("x2", 0)
-            .attr("y1", y(35))
-            .attr("y2", y(35))
-            .transition()
-            .duration(1000)
-            .attr("x2", width)
+    barSVG.append("g")
+        .attr("class", "line35")
+        .append("line")
+        .attr("x1", 0)
+        .attr("x2", 0)
+        .attr("y1", y(35))
+        .attr("y2", y(35))
+        .transition()
+        .duration(1000)
+        .attr("x2", width)
 
-        barSVG.append("g")
-            .attr("class", "axis")
-            .append("line")
-            .attr("x1", 0)
-            .attr("x2", width)
-            .attr("y1", y(0))
-            .attr("y2", y(0))
-            .style('opacity', 0)
-            .transition()
-            .duration(3000)
-            .style('opacity', 1);
+    barSVG.append("g")
+        .attr("class", "axis")
+        .append("line")
+        .attr("x1", 0)
+        .attr("x2", width)
+        .attr("y1", y(0))
+        .attr("y2", y(0))
+        .style('opacity', 0)
+        .transition()
+        .duration(3000)
+        .style('opacity', 1);
 
-        var bars = barSVG.selectAll(".bar")
-            .data(data)
-            .enter()
-            .append("rect")
-            .attr("id", function(d) { 
-                console.log(slugify(d.company_name) + '-path');  
-                return slugify(d.company_name) + '-path';
-            })
-            .attr("class", function(d) {
-                if (d.rate < 0){
-                    return "bar negative";
-                } else {
-                    return "bar positive";
-                }
-            })
-            .attr("x", function(d) {
-                return x(d.company_name);
-            })
-            .attr("y", function(d) {
+    var bars = barSVG.selectAll(".bar")
+        .data(data)
+        .enter()
+        .append("rect")
+        .attr("id", function(d) { 
+            return slugify(d.company_name) + '-path';
+        })
+        .attr("class", function(d) {
+            if (d.rate < 0){
+                return "bar negative";
+            } else {
+                return "bar positive";
+            }
+        })
+        .attr("x", function(d) {
+            return x(d.company_name);
+        })
+        .attr("y", function(d) {
+            return y(0);
+        })
+        .attr("width", 2)
+        .attr("height", 0)
+        // // .on("mouseover", function(d){
+        // //     d3.select("#_yr")
+        // //         .text("Company: " + d.company_name);
+        // //     d3.select("#degree")
+        // //         .text("Rate: " + d.rate + "%");
+        // // })
+        .transition()
+        .duration(10)
+        .delay(function (d, i) {
+            return i * 20;
+        })
+        .attr("y", function(d) {
+            if (d.rate > 0){
+                return y(d.rate);
+            } else {
                 return y(0);
-            })
-            .attr("width", 2)
-            .attr("height", 0)
-            // // .on("mouseover", function(d){
-            // //     d3.select("#_yr")
-            // //         .text("Company: " + d.company_name);
-            // //     d3.select("#degree")
-            // //         .text("Rate: " + d.rate + "%");
-            // // })
-            .transition()
-            .duration(10)
-            .delay(function (d, i) {
-                return i * 20;
-            })
-            .attr("y", function(d) {
-                if (d.rate > 0){
-                    return y(d.rate);
-                } else {
-                    return y(0);
-                }
-            })
-            .attr("height", function(d) {
-                return Math.abs(y(d.rate) - y(0));
-            })
-            .end(function() {
-                yearsNoTax();
-            });
-
-    });
+            }
+        })
+        .attr("height", function(d) {
+            return Math.abs(y(d.rate) - y(0));
+        })
+        .end(function() {
+            // yearsNoTax();
+            transitionTo92();
+        });
 }
 
-var makeLessOpaque = function () {
+var fadeBars = function (opacity) {
     d3.selectAll('.bar')
         .transition()
             .duration(300)
             .delay(function (d, i) {
                 return i * 10;
             })
-        .style('opacity', 0.5);
+        .style('opacity', opacity);
 
 }
 
@@ -155,8 +145,14 @@ var highlightBars = function (str) {
 }
 
 var yearsNoTax = function () {
-    makeLessOpaque();
+    fadeBars(0.5);
     highlightBars('#molina-healthcare-path, #centene-path, #wec-path');
 }
 
-loadBarData();
+var transitionTo92 = function() {
+    d3.selectAll('.bar')
+        .transition()
+            .duration(100)
+        .style('opacity', 0);
+    highlightBars('#molina-healthcare-path, #centene-path, #wec-path');
+}
