@@ -16,7 +16,7 @@ d3.transition.prototype.end = function(callback, delayIfEmpty) {
                 f.apply(transition, args);
                 return true;
             }, typeof(delay) === "number" ? delay : 0);
-        } else {                                            // else Mike Bostock's rutine
+        } else {                                            // else Mike Bostock's routine
             var n = 0; 
             transition.each(function() { ++n; }) 
                 .on("end", function() { 
