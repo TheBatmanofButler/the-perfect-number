@@ -16,7 +16,6 @@ var type = function (d) {
 }
 
 var loadBarData = function () {
-
     var margin = {
         top: 10,
         right: 10,
@@ -84,7 +83,8 @@ var loadBarData = function () {
             .data(data)
             .enter()
             .append("rect")
-            .attr("id", function(d) {   
+            .attr("id", function(d) { 
+                console.log(slugify(d.company_name) + '-path');  
                 return slugify(d.company_name) + '-path';
             })
             .attr("class", function(d) {
@@ -130,8 +130,32 @@ var loadBarData = function () {
     });
 }
 
-var yearsNoTax = function () {
-    console.log('hi');
+var makeLessOpaque = function () {
     d3.selectAll('.bar')
-        .style('fill', 'green');
+        .transition()
+            .duration(300)
+            .delay(function (d, i) {
+                return i * 10;
+            })
+        .style('opacity', 0.5);
+
 }
+
+var highlightBars = function (str) {
+   d3.selectAll(str)
+        .transition()
+            .duration(500)
+            .delay(function (d, i) {
+                return i * 1000;
+            })
+        .style('fill', 'black')
+        .style('opacity', 1); 
+
+}
+
+var yearsNoTax = function () {
+    makeLessOpaque();
+    highlightBars('#molina-healthcare-path, #wec-path');
+}
+
+loadBarData();
