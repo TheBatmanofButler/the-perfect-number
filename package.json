@@ -1,0 +1,22 @@
+{
+  "name": "corporate-tax-cuts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/PedalTech/corporate-tax-cuts.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/PedalTech/corporate-tax-cuts/issues"
+  },
+  "homepage": "https://gitlab.com/PedalTech/corporate-tax-cuts#README",
+  "dependencies": {
+    "semantic-ui": "^2.2.13"
+  }
+}
