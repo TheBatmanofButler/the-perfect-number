@@ -14,7 +14,7 @@ d3.csv("../csv/dv_data/interactive_data.csv", type, function(companies) {
     companyNames.push(d.company_name);
   });
 
-  populateDropdown(companyNames);
+  // populateDropdown(companyNames);
 
 	for (var i = 1; i < 9; i++) {
 		years[i] = [2,3]

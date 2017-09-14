@@ -115,8 +115,8 @@ var loadBarData = function (data) {
             return Math.abs(y(d.rate) - y(0));
         })
         .end(function() {
-            // yearsNoTax();
-            transitionTo92();
+            yearsNoTax();
+            // transitionTo92();
         });
 }
 
