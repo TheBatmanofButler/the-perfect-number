@@ -28,7 +28,7 @@ var substringMatcher = function(strs) {
   };
 };
 
-var initTypeahead = function(companyNames) {
+var populateDropdown = function(companyNames) {
   $('.typeahead').typeahead({
     hint: true,
     highlight: true,
