@@ -25,8 +25,6 @@ var createProportionGraph = function () {
     var svg = d3.select(gridDiv).append("svg");
     var w = gridDiv.clientWidth;
     var h = gridDiv.clientHeight;
-    console.log("w: "+ w);
-    console.log("h: "+ h);
     var noOfSquares = 1333;
     
     svg
@@ -40,15 +38,16 @@ var createProportionGraph = function () {
     // calculate number of rows and columns
     var squaresRow = Math.floor(w / square);
     var squaresColumn = Math.floor(h / square);
-    console.log('row: ' + squaresRow);
-    console.log('column: ' + squaresColumn);
-    console.log(squaresRow*squaresColumn-noOfSquares);
+    while((squaresRow-1)*squaresColumn>noOfSquares) { squaresRow-=1; };
+    var squaresExtra = squaresRow*squaresColumn-noOfSquares;
 
     // loop over number of columns
     d3.range(squaresColumn).forEach( function(n) {
       // create each set of rows
       var rows = svg.selectAll('rect' + ' .row-' + (n + 1))
-        .data(d3.range(squaresRow))
+        .data(function(d,i) {
+          return n==squaresColumn-1? d3.range(squaresRow-squaresExtra): d3.range(squaresRow);
+        })
         .enter().append('rect')
         .attr('class', 'square')
       .attr('id', function(d, i) {
