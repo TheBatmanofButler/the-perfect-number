@@ -45,9 +45,6 @@ var createProportionGraph = function (noOfSquares) {
       squaresColumn = Math.floor(w / square);
       squaresRow = Math.floor(h / square);
     }
-
-    console.log(squaresColumn);
-    console.log(squaresRow);
     // loop over number of columns
     d3.range(squaresRow).forEach( function(n) {
       // create each set of rows
@@ -58,20 +55,24 @@ var createProportionGraph = function (noOfSquares) {
         })
         .enter().append('rect')
         .attr('class', 'square')
-      .attr('id', function(d, i) {
-        return 'r-' + n + 'c-' + i;
-      })
-      .attr('width', square)
-      .attr('height', square)
-      .attr('x', function(d, i) {
-        return i * square;
-      })
-      .attr('y', n * square)
-      .attr('fill', '#fff')
-      .attr('stroke', '#FDBB30')
-      .on('mouseover', function(d, i) {
-        console.log('r-' + n + 'c-' + i);
-      });
+        .attr('id', function(d, i) {
+          return 'r-' + n + 'c-' + i;
+        })
+        .attr('width', square)
+        .attr('height', square)
+        .attr('x', function(d, i) {
+          return i * square;
+        })
+        .attr('y', n * square)
+        .attr('fill', '#fff')
+        .attr('stroke', '#FDBB30')
+        .on('mouseover', function(d, i) {
+          console.log('r-' + n + 'c-' + i);
+        })
+        .style('opacity',0)
+        .transition()
+          .duration(2000)
+          .style('opacity', 1)
     });
   }
   redraw();
@@ -79,12 +80,15 @@ var createProportionGraph = function (noOfSquares) {
 
 }
 
-var changeSquareColor = function(rowNum, columnNum, color) {
+var changeSquareColor = function(rowNum, columnNum, color, opacity) {
   d3.select('#' + 'r-' + rowNum + 'c-' + columnNum)
     .attr('fill', color)
+        .transition()
+          .duration(2000)
+          .style('opacity', opacity)
 }
 
-var changeAreaColor = function(rowNum, columnNum, noOfSquares, color) {
+var changeAreaColor = function(rowNum, columnNum, noOfSquares, color, opacity) {
   squaresColored = 0;
   i=rowNum;
   j=columnNum;
@@ -93,7 +97,7 @@ var changeAreaColor = function(rowNum, columnNum, noOfSquares, color) {
       j+=1;
       i=0;
     }
-    changeSquareColor(i,j,color);
+    changeSquareColor(i,j,color,opacity);
     squaresColored+=1;
     i+=1;
   };
