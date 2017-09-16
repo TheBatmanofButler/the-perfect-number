@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 var slugify = function (string) {
   return string
     .toString()
@@ -261,6 +262,8 @@ var slide3 = function (width, x, y, data, companiesYearsNoTax, barGraph) {
 
 // }
 
+=======
+>>>>>>> a4feceb609febb013507a69c721449892daee164
 var loadBarData = function (data) {
     var margin = {
         top: 10,
@@ -366,7 +369,11 @@ var loadBarData = function (data) {
             return Math.abs(y(d.rate) - y(0));
         })
         .end(function() {
+<<<<<<< HEAD
             // yearsNoTax();
+=======
+            yearsNoTax();
+>>>>>>> a4feceb609febb013507a69c721449892daee164
             // transitionTo92();
         });
 

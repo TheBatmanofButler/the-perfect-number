@@ -5,6 +5,15 @@ html, body {
   color: #fff;
 }
 
+section {
+  height: 55vh;
+}
+
+#gridSVG {
+  height: 100%;
+  width: 100%;
+}
+
 .container {
   display: flex;
   flex-direction: column;
@@ -45,6 +54,16 @@ html, body {
       overflow-y: auto;
     }
 
+    .tt-suggestion {
+      padding: 3px 20px;
+      font-size: 18px;
+      line-height: 24px;
+    }
+
+    .tt-suggestion:hover { 
+      background-color: #0097cf;
+
+    }
     .search-wrapper {
       flex: 2;
     }
@@ -129,6 +148,8 @@ html, body {
         flex-grow: 1;
 
         background: #511730;
+        /*background: white;*/
+        border: 1px solid black;
       }
 
       .info {

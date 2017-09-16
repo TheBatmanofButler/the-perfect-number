@@ -105,6 +105,7 @@
 
             <div class="proportion-graph">
               Proportion Graph
+              <section id='grid'></section>
             </div>
 
             <div class="arrow">
@@ -112,25 +113,25 @@
             </div>
 
             <div class="info">
-              <div class="company-name">
+              <div class="company-name" id="company-name">
                 Company Name
               </div>
-              <div class="industry">
+              <div class="industry" id="industry">
                 Industry
               </div>
-              <div class="rate">
+              <div class="rate" id="rate">
                 Tax Rate
               </div>
-              <div class="tax-break">
+              <div class="tax-break" id="tax-break">
                 Tax Break
               </div>
-              <div class="years-no-tax">
+              <div class="years-no-tax" id="years-no-tax">
                 Years of no tax
               </div>
-              <div class="tax-rebates">
+              <div class="tax-rebates" id="tax-rebates">
                 Tax Rebates
               </div>
-              <div class="note">
+              <div class="note" id="note">
                 Note
               </div>
             </div>
@@ -140,7 +141,7 @@
             <div class="bar-graph">
               Bar Graph
             </div>
-            <div class="company-bar-name">
+            <div class="company-bar-name" id="company-bar-name">
               Company Name
             </div>
           </div>
@@ -153,10 +154,12 @@
     <script type="text/javascript" src="js/vendor/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="js/vendor/d3.min.js"></script>
     <script type="text/javascript" src="js/vendor/typeahead.bundle.min.js"></script>
-    <script type="text/javascript" src="js/graph.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
+    <script type="text/javascript" src="js/proportion.js"></script>
+    <script type="text/javascript" src="js/info.js"></script>
     <script type="text/javascript" src="js/dropdown.js"></script>
-    <script type="text/javascript" src="js/main.js"></script>
     <script type="text/javascript" src="js/global.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
 
   </body>
 

@@ -5,6 +5,8 @@
  * @description: API for proportion graph
  *
  */
+var squaresRow=0;
+var squaresColumn=0;
 
 var openProportionGraph = function () {
   $('.proportion-graph-viewer').animate({'height': '60vh'});
@@ -12,66 +14,97 @@ var openProportionGraph = function () {
 }
 
 var closeProportionGraph = function () {
-  // $('.arrow>img').hide(1000);
+  // $('.arrow>img').hicde(1000);
   $('.proportion-graph-viewer').animate({'height': '0vh'});
 }
 
-var createProportionGraph = function () {
+var createProportionGraph = function (noOfSquares) {
 
-  var square = 10,
-    w = 1500,
-    h = 300;
+  var gridDiv = document.getElementById("grid");
+  
+  function redraw() {
+    d3.select("svg").remove();
+    var svg = d3.select(gridDiv).append("svg");
+    var w = gridDiv.clientWidth;
+    var h = gridDiv.clientHeight;
+    // var noOfSquares = 1500;
+    
+    svg
+      .attr('id', 'gridSVG')
+      .attr({
+        width: w,
+        height: h
+      });
+    console.log('w: '+ w);
+    console.log('h: ' +h);
 
-  // create the svg
-  var svg = d3.select('#grid').append('svg')
-    .attr('id', 'gridSVG')
-    .attr({
-      width: w,
-      height: h
+    var square = Math.floor(Math.sqrt((w*h)/noOfSquares));
+    // calculate number of rows and columns
+    squaresColumn = Math.floor(w / square);
+    squaresRow = Math.floor(h / square);
+    while(squaresColumn*squaresRow<noOfSquares) {
+      square-=1;
+      squaresColumn = Math.floor(w / square);
+      squaresRow = Math.floor(h / square);
+    }
+    console.log(squaresRow);
+    console.log(squaresColumn);
+    // loop over number of columns
+    d3.range(squaresRow).forEach( function(n) {
+      // create each set of rows
+      var columns = svg.selectAll('rect' + ' .column-' + (n + 1))
+        .data(function(d,i) {
+          // return n==squaresColumn-1? d3.range(squaresRow-squaresExtra): d3.range(squaresRow);
+          return d3.range(squaresColumn);
+        })
+        .enter().append('rect')
+        .attr('class', 'square')
+        .attr('id', function(d, i) {
+          return 'r-' + n + 'c-' + i;
+        })
+        .attr('width', square)
+        .attr('height', square)
+        .attr('x', function(d, i) {
+          return i * square;
+        })
+        .attr('y', n * square)
+        .attr('fill', '#fff')
+        .attr('stroke', '#FDBB30')
+        .on('mouseover', function(d, i) {
+          console.log('r-' + n + 'c-' + i);
+        })
+        .style('opacity',0)
+        .transition()
+          .duration(2000)
+          .style('opacity', 1)
     });
-
-  // calculate number of rows and columns
-  var squaresRow = Math.round(w / square);
-  var squaresColumn = Math.round(h / square);
-
-  // loop over number of columns
-  d3.range(squaresColumn).forEach( function(n) {
-    // create each set of rows
-    var rows = svg.selectAll('rect' + ' .row-' + (n + 1))
-      .data(d3.range(squaresRow))
-      .enter().append('rect')
-      .attr('class', 'square')
-    .attr('id', function(d, i) {
-      return 'r-' + n + 'c-' + i;
-    })
-    .attr('width', square)
-    .attr('height', square)
-    .attr('x', function(d, i) {
-      return i * square;
-    })
-    .attr('y', n * square)
-    .attr('fill', '#fff')
-    .attr('stroke', '#FDBB30')
-    .on('mouseover', function(d, i) {
-      console.log('r-' + n + 'c-' + i);
-    });
-  });
+  }
+  redraw();
+  window.addEventListener("resize", redraw);
 
 }
 
-var changeSquareColor = function(rowNum, columnNum, color) {
+var changeSquareColor = function(rowNum, columnNum, color, opacity) {
   d3.select('#' + 'r-' + rowNum + 'c-' + columnNum)
     .attr('fill', color)
+        .transition()
+          .duration(2000)
+          .style('opacity', opacity)
 }
 
-var chart = $('#gridSVG'),
-    aspect = chart.width() / chart.height(),
-    container = chart.parent();
+var changeAreaColor = function(rowNum, columnNum, noOfSquares, color, opacity) {
+  squaresColored = 0;
+  i=rowNum;
+  j=columnNum;
+  while(squaresColored<noOfSquares) {
+    if(i==squaresRow) {
+      j+=1;
+      i=0;
+    }
+    changeSquareColor(i,j,color,opacity);
+    squaresColored+=1;
+    i+=1;
+  };
+}
 
-$(window).on('resize', function() {
-    var targetWidth = container.width();
-    chart.attr('width', targetWidth);
-    chart.attr('height', Math.round(targetWidth / aspect));
-}).trigger('resize');
-
-createProportionGraph();
+// createProportionGraph(1500);

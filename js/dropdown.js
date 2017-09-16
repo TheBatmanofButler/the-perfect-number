@@ -38,5 +38,5 @@ var populateDropdown = function(companyNames) {
     name: 'companyNames',
     limit: 300,
     source: substringMatcher(companyNames)
-  });
+  })
 }
