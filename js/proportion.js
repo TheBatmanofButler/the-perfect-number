@@ -35,8 +35,6 @@ var createProportionGraph = function (noOfSquares) {
         width: w,
         height: h
       });
-    console.log('w: '+ w);
-    console.log('h: ' +h);
 
     var square = Math.floor(Math.sqrt((w*h)/noOfSquares));
     // calculate number of rows and columns
@@ -54,8 +52,7 @@ var createProportionGraph = function (noOfSquares) {
       // create each set of rows
       var columns = svg.selectAll('rect' + ' .column-' + (n + 1))
         .data(function(d,i) {
-          // return n==squaresColumn-1? d3.range(squaresRow-squaresExtra): d3.range(squaresRow);
-          return d3.range(squaresColumn);
+                  return d3.range(squaresColumn);
         })
         .enter().append('rect')
         .attr('class', 'square')
@@ -73,10 +70,10 @@ var createProportionGraph = function (noOfSquares) {
         .on('mouseover', function(d, i) {
           console.log('r-' + n + 'c-' + i);
         })
-        .style('opacity',0)
-        .transition()
-          .duration(2000)
-          .style('opacity', 1)
+        // .style('opacity',0)
+        // .transition()
+        //   .duration(2000)
+        //   .style('opacity', 1)
     });
   }
   redraw();

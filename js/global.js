@@ -40,7 +40,7 @@ d3.csv("../csv/dv_data/interactive_data.csv", type, function(companies) {
 	// console.log(companies);
 	// var total35 = 0;
 	var companyNames = ['All companies'];
-	var companyMap = {};
+	companyMap = {};
 	data = companies.map(function(d)
 	{
 		companyNames.push(d.company_name);
@@ -61,13 +61,8 @@ d3.csv("../csv/dv_data/interactive_data.csv", type, function(companies) {
 	});
 	populateDropdown(companyNames);
 
-	$('.typeahead').bind('typeahead:select', function(ev, suggestion) {
-	  console.log('Selection: ' + suggestion);
-	  loadInfo(slugify(suggestion),companyMap[slugify(suggestion)]);
-	});
-
 	// loadBarData(companies);
-	totalTaxBreaks = amtSaved([companies[0]]);
+	totalTaxBreaks = amtSaved(companies);
 	total35 = amtIf35(companies)/1000;
 	totalTaxBreaks = amtSaved(companies)/1000;
 
