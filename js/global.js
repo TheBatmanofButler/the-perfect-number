@@ -37,8 +37,6 @@ var amtSaved = function(companies) {
 }
 
 d3.csv("../csv/dv_data/interactive_data.csv", type, function(companies) {
-	// console.log(companies);
-	// var total35 = 0;
 	var companyNames = ['All companies'];
 	companyMap = {};
 	data = companies.map(function(d)
@@ -60,37 +58,36 @@ d3.csv("../csv/dv_data/interactive_data.csv", type, function(companies) {
 		};
 	});
 
-  var companyNames = ['All companies'],
-      companiesIPS = [],
-      companiesYearsNoTax = {
-                          '8': [],
-                          '7': [],
-                          '6': [],
-                          '5': [],
-                          '4': [],
-                          '3': [],
-                          '2': [],
-                          '1': []
-                        };
+	var companyNames = ['All companies'],
+		companiesIPS = [],
+		companiesYearsNoTax = {
+			'8': [],
+            '7': [],
+            '6': [],
+            '5': [],
+            '4': [],
+            '3': [],
+            '2': [],
+            '1': []
+        };
 
-  companies.map(function (d) {
-    companyNames.push(d['company_name']);
-    if (d['ceo_comp_amt'] != '') {
-      companiesIPS.push(d);
-    }
-    var years_no_tax = d['years_no_tax']
-    if (d['years_no_tax'] != '0') {
-      companiesYearsNoTax[years_no_tax].push(d);
-    }
-  });
+    companies.map(function (d) {
+	    companyNames.push(d['company_name']);
+	    if (d['ceo_comp_amt'] != '') {
+	    	companiesIPS.push(d);
+	    }
+	    var years_no_tax = d['years_no_tax']
+	    if (d['years_no_tax'] != '0') {
+	    	companiesYearsNoTax[years_no_tax].push(d);
+	    }
+	});
 
-  createSlides(companies, companiesYearsNoTax);
-
+	populateDropdown(companyNames);
+    // createSlides(companies, companiesYearsNoTax);
 
 	// loadBarData(companies);
 	totalTaxBreaks = amtSaved(companies);
 	total35 = amtIf35(companies)/1000;
 	totalTaxBreaks = amtSaved(companies)/1000;
-
 
 });
