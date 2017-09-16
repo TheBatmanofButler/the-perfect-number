@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 var slugify = function (string) {
   return string
     .toString()
@@ -196,25 +195,14 @@ var slide3 = function (width, x, y, data, companiesYearsNoTax, barGraph) {
       highlightBarsTimeout(data, companiesYearsNoTax, ii);
     }
   });
+}
 
-  
-  // updateBars(barGraph, data, x, y, '#000', 1000, function () {
-  //   highlightBars(data, companiesYearsNoTax[8], 1000, 'red', function () {
-  //     highlightBars(data, companiesYearsNoTax[7], 1000, 'red', function () {
-  //       highlightBars(data, companiesYearsNoTax[6], 1000, 'red', function () {
-  //         highlightBars(data, companiesYearsNoTax[5], 1000, 'red', function () {
-  //           highlightBars(data, companiesYearsNoTax[4], 1000, 'red', function () {
-  //             highlightBars(data, companiesYearsNoTax[3], 1000, 'red', function () {
-  //               highlightBars(data, companiesYearsNoTax[2], 1000, 'red', function () {
-  //                 highlightBars(data, companiesYearsNoTax[1], 1000, 'red')
-  //               });
-  //             });
-  //           });
-  //         });
-  //       });
-  //     });
-  //   });
-  // });
+var slide3 = function (width, x, y, data, companiesYearsNoTax, barGraph) {
+  updateYAxis([0,35], barGraph, y, 1000);
+  updateXAxis(barGraph, width, y, 1000);
+  updateBars(barGraph, data, x, y, '#000', 1000, function () {
+    highlightBarsTimeout(data, companiesYearsNoTax, ii);
+  });
 }
 
 // var slide3 = function (width, x, y, yAxis, data, barGraph) {
@@ -262,8 +250,6 @@ var slide3 = function (width, x, y, data, companiesYearsNoTax, barGraph) {
 
 // }
 
-=======
->>>>>>> a4feceb609febb013507a69c721449892daee164
 var loadBarData = function (data) {
     var margin = {
         top: 10,
@@ -369,11 +355,6 @@ var loadBarData = function (data) {
             return Math.abs(y(d.rate) - y(0));
         })
         .end(function() {
-<<<<<<< HEAD
-            // yearsNoTax();
-=======
-            yearsNoTax();
->>>>>>> a4feceb609febb013507a69c721449892daee164
             // transitionTo92();
         });
 
