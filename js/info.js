@@ -1,8 +1,9 @@
-var loadInfo = function (d) {
-	$(".company-name").text(d.company_name);
-	$(".industry").text(d.industry);
-	$(".rate").text(d.rate);
-	$(".tax-break").text(d.tax_break);
-	$(".years-no-tax").text(d.years_no_tax);
-	$(".tax-rebates").text(taxRebates);
-	$(".note").text(d.note);
+var loadInfo = function (company_name, companyMap) {
+	$(".company-name").text(companyMap["company_name"]);
+	$(".industry").text(companyMap["industry"]);
+	$(".rate").text(companyMap["rate"]);
+	$(".tax-break").text(companyMap["tax_break"]);
+	$(".years-no-tax").text(companyMap["years_no_tax"]);
+	// $(".tax-rebates").text(companyMap["taxRebates"]);
+	// $(".note").text(companyMap["note"]);
+}

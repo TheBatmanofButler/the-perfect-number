@@ -35,6 +35,8 @@ var createProportionGraph = function (noOfSquares) {
         width: w,
         height: h
       });
+    console.log('w: '+ w);
+    console.log('h: ' +h);
 
     var square = Math.floor(Math.sqrt((w*h)/noOfSquares));
     // calculate number of rows and columns
@@ -45,6 +47,8 @@ var createProportionGraph = function (noOfSquares) {
       squaresColumn = Math.floor(w / square);
       squaresRow = Math.floor(h / square);
     }
+    console.log(squaresRow);
+    console.log(squaresColumn);
     // loop over number of columns
     d3.range(squaresRow).forEach( function(n) {
       // create each set of rows
@@ -103,4 +107,4 @@ var changeAreaColor = function(rowNum, columnNum, noOfSquares, color, opacity) {
   };
 }
 
-createProportionGraph(1500);
+// createProportionGraph(1500);
