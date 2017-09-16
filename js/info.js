@@ -6,4 +6,3 @@ var loadInfo = function (d) {
 	$(".years-no-tax").text(d.years_no_tax);
 	$(".tax-rebates").text(taxRebates);
 	$(".note").text(d.note);
-}

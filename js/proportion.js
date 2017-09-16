@@ -14,7 +14,7 @@ var openProportionGraph = function () {
 }
 
 var closeProportionGraph = function () {
-  // $('.arrow>img').hide(1000);
+  // $('.arrow>img').hicde(1000);
   $('.proportion-graph-viewer').animate({'height': '0vh'});
 }
 
