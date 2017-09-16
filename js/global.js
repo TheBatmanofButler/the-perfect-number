@@ -23,7 +23,6 @@ var amtIf35 = function(companies) {
 	data = companies.map(function(d) {
 		total+=d.profit*0.35;
 	});
-	// console.log(total);
 	return(total);
 }
 
@@ -34,7 +33,6 @@ var amtSaved = function(companies) {
 			total+=type(d.tax_break);
 		}
 	});
-	// console.log(total);
 	return(total);
 }
 
@@ -60,13 +58,15 @@ d3.csv("../csv/dv_data/interactive_data.csv", type, function(companies) {
 			'acc_depreciation': d.acc_depreciation,
 			'deferred_taxes': d.deferred_taxes
 		};
-		// total35+=d.profit*0.35;
 	});
-	console.log(companyMap);
 	populateDropdown(companyNames);
 
+	$('.typeahead').bind('typeahead:select', function(ev, suggestion) {
+	  console.log('Selection: ' + suggestion);
+	  loadInfo(slugify(suggestion),companyMap[slugify(suggestion)]);
+	});
+
 	// loadBarData(companies);
-	loadInfo('3m',companyMap['3m']);
 	totalTaxBreaks = amtSaved([companies[0]]);
 	total35 = amtIf35(companies)/1000;
 	totalTaxBreaks = amtSaved(companies)/1000;
