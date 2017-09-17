@@ -58,29 +58,64 @@ d3.csv("../csv/dv_data/interactive_data.csv", type, function(companies) {
 		};
 	});
 
-	var companyNames = ['All companies'],
-		companiesIPS = [],
-		companiesYearsNoTax = {
-			'8': [],
-            '7': [],
-            '6': [],
-            '5': [],
-            '4': [],
-            '3': [],
-            '2': [],
-            '1': []
-        };
+  var companyNames = ['All companies'],
+      companiesIPS = [],
+      companiesYearsNoTax = {
+                          '8': [],
+                          '7': [],
+                          '6': [],
+                          '5': [],
+                          '4': [],
+                          '3': [],
+                          '2': [],
+                          '1': []
+                        },
+      companiesTop25 = [],
+      companiesRebates = {
+                          'stockOptions': [],
+                          'researchExperiment': [],
+                          'dpad': [],
+                          'accDepreciation': [],
+                          'deferredTaxes': []
+                        }
 
-    companies.map(function (d) {
-	    companyNames.push(d['company_name']);
-	    if (d['ceo_comp_amt'] != '') {
-	    	companiesIPS.push(d);
-	    }
-	    var years_no_tax = d['years_no_tax']
-	    if (d['years_no_tax'] != '0') {
-	    	companiesYearsNoTax[years_no_tax].push(d);
-	    }
-	});
+  companies.map(function (d) {
+    companyNames.push(d['company_name']);
+
+    if (d['ceo_comp_amt'] != '') {
+      companiesIPS.push(d);
+    }
+
+    var years_no_tax = d['years_no_tax'];
+    if (d['years_no_tax'] != '0') {
+      companiesYearsNoTax[years_no_tax].push(d);
+    }
+
+    if (d['top25'] == 'True') {
+      companiesTop25.push(d);
+    }
+
+    if (d['stock_options'] == 'True') {
+      companiesRebates['stockOptions'].push(d);
+    }
+
+    if (d['research_experiment'] == 'True') {
+      companiesRebates['researchExperiment'].push(d);
+    }
+
+    if (d['dpad'] == 'True') {
+      companiesRebates['dpad'].push(d);
+    }
+
+    if (d['acc_depreciation'] == 'True') {
+      companiesRebates['accDepreciation'].push(d);
+    }
+
+    if (d['deferred_taxes'] == 'True') {
+      companiesRebates['deferredTaxes'].push(d);
+    }
+
+  });
 
 	populateDropdown(companyNames);
     // createSlides(companies, companiesYearsNoTax);
