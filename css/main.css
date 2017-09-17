@@ -28,7 +28,9 @@ section {
     flex-direction: row;
 
     height: 34px;
-    background: #320A28;
+    /*background: #320A28;*/
+    background: #7C809B;
+    /*background: #310A31;*/
   }
 
     .square-inner {
@@ -36,7 +38,8 @@ section {
       vertical-align: middle;
       line-height: 30px;
 
-      border: 2px solid #320A28;
+      /*border: 2px solid #320A28;*/
+      border: 2px solid #7C809B;;
 
       height: 30px;
       width: 30px;
@@ -81,11 +84,17 @@ section {
     }
 
       .slide-no-square-wrapper {
+        cursor: pointer;
         /*flex: 1; */
       }
 
         .slide-no-square {
-          background: #E0D68A;
+          /*background: #E0D68A;*/
+          background: #D0CCD0;
+          color: black;
+        }
+        .slide-no-square:hover {
+          background: #8E8B8E;
         }
 
       .slide-explore {
@@ -108,7 +117,7 @@ section {
 
     font-size: 15px;
 
-    background: #8E443D;
+    /*background: #8E443D;*/
   }
 
   .middle {
@@ -155,7 +164,7 @@ section {
       }
 
       .info {
-        background: #4C2A85;
+        /*background: #4C2A85;*/
         padding: 5px;
 
         width: 200px;
@@ -165,7 +174,7 @@ section {
         position: relative;
         flex-grow: 1;
 
-        background: #EA7AF4;
+        /*background: #EA7AF4;*/
       }
 
         .bar-graph {
@@ -176,5 +185,5 @@ section {
           position: absolute;
           bottom: 0; left: 0;
 
-          background: #AEB4A9;
+          /*background: #AEB4A9;*/
         }

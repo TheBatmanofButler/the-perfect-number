@@ -34,7 +34,7 @@ $('.slide-explore').click( function (e) {
 			changeAreaColor(0,0,totalTaxBreaks,'green',0.8);
 		}
 		else {
-			createProportionGraph(20000);
+			createProportionGraph(50000);
 			$(".company-bar-name").text(companyMap[slugify(suggestion)].company_name);
 			loadInfo(slugify(suggestion),companyMap[slugify(suggestion)]);
 			company35 = companyMap[slugify(suggestion)].profit*0.35;  

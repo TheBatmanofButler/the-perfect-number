@@ -67,9 +67,9 @@ var createProportionGraph = function (noOfSquares) {
         .attr('y', n * square)
         .attr('fill', '#fff')
         .attr('stroke', '#FDBB30')
-        // .on('mouseover', function(d, i) {
-        //   console.log('r-' + n + 'c-' + i);
-        // })
+        .on('mouseover', function(d, i) {
+          console.log('r-' + n + 'c-' + i);
+        })
         // .style('opacity',0)
         // .transition()
         //   .duration(2000)
@@ -111,5 +111,6 @@ var changeAreaColor = function(rowNum, columnNum, noOfSquares, color, opacity) {
     i+=1;
   };
 }
+
 
 // createProportionGraph(1500);
