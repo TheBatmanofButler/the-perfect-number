@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <meta charset='UTF-8'>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <title>Animate thousands of points with canvas and D3</title>
+    <style>
+    html, body {
+      padding: 0;
+      margin: 0;
+    }
+    canvas {
+      cursor: pointer;
+    }
+    </style>
+  </head>
+  <body>
+
+    <div id="container"></div>
+
+    <script type="text/javascript">
+
+      pointWidth = 4;
+      pointMargin = 3;
+      width = 600;
+      height = 1000;
+      numPoints = 7000;
+
+      function gridLayout(points, pointWidth, gridWidth) {
+        const pointHeight = 8;
+        const pointsPerRow = 200;
+        const numRows = points.length / pointsPerRow;
+
+        points.forEach((point, i) => {
+          point.x = pointWidth * (i % pointsPerRow);
+          point.y = pointHeight * Math.floor(i / pointsPerRow);
+        });
+
+        return points;
+      }
+
+      function draw(canvas) {
+        const ctx = canvas.node().getContext('2d');
+        ctx.save();
+
+        // erase what is on the canvas currently
+        ctx.clearRect(0, 0, width, height);
+
+        // draw each point as a rectangle
+        for (let i = 0; i < points.length; ++i) {
+          const point = points[i];
+          ctx.fillStyle = point.color;
+          ctx.fillRect(point.x, point.y, pointWidth, pointWidth);
+        }
+
+        ctx.restore();
+      }
+
+      // generate the array of points with a unique ID and color
+      const points = d3.range(numPoints).map(index => ({
+        id: index
+      }));
+
+      console.log(points)
+
+      var canvas = d3.select('#container')
+        .append('canvas')
+        .attr('width', width)
+        .attr('height', height);
+
+      gridLayout(points, pointWidth + pointMargin, width);
+      draw(canvas);
+
+    </script>
+
+  </body>
+</html>
