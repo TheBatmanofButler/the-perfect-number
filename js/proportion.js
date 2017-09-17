@@ -67,14 +67,22 @@ var createProportionGraph = function (noOfSquares) {
         .attr('y', n * square)
         .attr('fill', '#fff')
         .attr('stroke', '#FDBB30')
-        .on('mouseover', function(d, i) {
-          console.log('r-' + n + 'c-' + i);
-        })
+        // .on('mouseover', function(d, i) {
+        //   console.log('r-' + n + 'c-' + i);
+        // })
         // .style('opacity',0)
         // .transition()
         //   .duration(2000)
         //   .style('opacity', 1)
     });
+
+    svg.append("text")
+      .attr('class', 'proportion-graph-text')
+      .attr("x", (w / 2))             
+      .attr("y", 50)
+      .attr("text-anchor", "middle")  
+      .style("font-size", "20px")   
+      .text("Tax Breaks");
   }
   redraw();
   window.addEventListener("resize", redraw);

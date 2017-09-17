@@ -139,7 +139,7 @@ section {
       .arrow>img {
         width: 100%;
 
-        /*display: none;*/
+        display: none;
         position: absolute;
         top: calc(50% - 4vw);
         /*left: calc(50% - 4vw);*/
