@@ -77,7 +77,8 @@ d3.csv("../csv/dv_data/interactive_data.csv", type, function(companies) {
                           'dpad': [],
                           'accDepreciation': [],
                           'deferredTaxes': []
-                        }
+                        },
+      companies92 = [];
 
   companies.map(function (d) {
     companyNames.push(d['company_name']);
@@ -118,7 +119,7 @@ d3.csv("../csv/dv_data/interactive_data.csv", type, function(companies) {
   });
 
 	// populateDropdown(companyNames);
-  createSlides(companies, companiesYearsNoTax, companiesTop25, companiesRebates);
+  createSlides(companies, companiesYearsNoTax, companiesTop25, companiesRebates, companiesIPS);
 
 	// loadBarData(companies);
 	totalTaxBreaks = amtSaved(companies);

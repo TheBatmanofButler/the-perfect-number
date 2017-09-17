@@ -13,7 +13,8 @@ var slugify = function (string) {
 var createSlides = function (data,
                              companiesYearsNoTax,
                              companiesTop25,
-                             companiesRebates) {
+                             companiesRebates,
+                             companiesIPS) {
   var margin = {
       top: 10,
       right: 10,
@@ -25,24 +26,26 @@ var createSlides = function (data,
 
   var barGraphSettings = initBarGraph(margin, width, height, data),
       x = barGraphSettings[0],
-      y = barGraphSettings[1],
-      xAxis = barGraphSettings[2],
-      barGraph = barGraphSettings[3];
+      y = barGraphSettings[1];
 
   $('#slide2').click( function (e) {
-    slide2(width, x, y, data, barGraph);
+    slide2(width, x, y, data);
   });
 
   $('#slide3').click( function (e) {
-    slide3(width, x, y, data, companiesYearsNoTax, barGraph);
+    slide3(width, x, y, data, companiesYearsNoTax);
   });
 
   $('#slide4').click( function (e) {
-    slide4(width, x, y, data, companiesTop25, barGraph);
+    slide4(width, x, y, data, companiesTop25);
   });
 
   $('#slide5').click( function (e) {
-    slide5(width, x, y, data, companiesRebates, barGraph);
+    slide5(width, x, y, data, companiesRebates);
+  });
+
+  $('#slide6').click( function (e) {
+    slide6(width, x, y, data, companiesIPS);
   });
 }
 
@@ -55,33 +58,36 @@ var initBarGraph = function (margin, width, height, data) {
       .attr('class', 'bar-graph')
       .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-  var x = d3.scaleBand()
-      .range([0, width, .1, 1]);
-
-  data = data.sort(function(a,b) { return b.rate - a.rate; });
-
-  x.domain(data.map(function(d) {
-      return d.company_name;
-  }));
+  barGraph
+    .append('g')
+    .attr('class', 'y-axis axis');
 
   var y = d3.scaleLinear()
       .domain([-15,50])
       .range([height,0]);
 
-  var xAxis = d3.axisBottom()
-      .scale(x)
-      .tickFormat(d3.format('d'));
+  var x = d3.scaleBand()
+      .range([0, width, .1, 1]);
 
   barGraph
     .append('g')
-    .attr('id', 'y-axis')
-    .attr('class', 'axis')
+    .attr('class', 'x-axis axis')
+    .attr('transform', 'translate(0,' + y(0) + ')')
+    .append('line')
+    .attr('x1', 0)
+    .attr('x2', width)
+    .attr('y1', y(0))
+    .attr('y2', y(0))
+    .style('opacity', 0)
 
-    return [x, y, xAxis, barGraph];
+  // updateXAxis(x, 1000);
+
+    return [x, y];
 }
 
-var updatePercentLine = function (barGraph, y, percent, duration, width, callback) {
-  barGraph.append('g')
+var updatePercentLine = function (y, percent, duration, width) {
+  d3.select('.bar-graph')
+    .append('g')
     .attr('class', 'percent-line')
     .append('line')
     .attr('x1', 0)
@@ -90,25 +96,29 @@ var updatePercentLine = function (barGraph, y, percent, duration, width, callbac
     .attr('y2', y(percent))
     .transition()
     .duration(duration)
-    .attr('x2', width)
-    .end(callback);
+    .attr('x2', width);
 }
 
-var updateXAxis = function (barGraph, width, y, duration) {
-  barGraph.append('g')
-    .attr('class', 'axis')
-    .append('line')
-    .attr('x1', 0)
-    .attr('x2', width)
-    .attr('y1', y(0))
-    .attr('y2', y(0))
-    .style('opacity', 0)
+var updateXAxis = function (x, data, duration) {
+  data = data.sort(function(a,b) { return b.rate - a.rate; });  
+  x.domain(data.map(function(d) {
+      return d.company_name;
+  }));
+
+  var xAxis = d3.axisBottom()
+    .tickFormat('')
+    .tickSize(0)
+    .scale(x);
+
+  d3.select('.x-axis')
     .transition()
     .duration(duration)
-    .style('opacity', 1);
+    .style('opacity', 1)
+    .call(xAxis);
+
 }
 
-var updateYAxis = function (tickValues, barGraph, y, duration) {
+var updateYAxis = function (tickValues, y, duration) {
   var yAxis = d3.axisLeft()
       .tickValues(tickValues)
       .tickFormat( function (d) {
@@ -117,17 +127,26 @@ var updateYAxis = function (tickValues, barGraph, y, duration) {
       .tickSize(0)
       .scale(y);
 
-  barGraph.select('#y-axis')
+  d3.select('.y-axis')
     .transition()
     .duration(duration)
     .call(yAxis);
 }
 
-var updateBars = function (barGraph, data, x, y, color, duration, callback) {
+var updateBars = function (data, x, y, callback) {
+    var barGraph = d3.select('.bar-graph');
     var bars = barGraph.selectAll('.bar')
       .data(data, function(d) {
         return d['company_name']
       });
+
+    bars
+      .exit()
+      .transition()
+      .duration(1000)
+      .attr("y", y(0))
+      .attr("height", 0)
+      .remove();
 
     bars
       .enter()
@@ -136,6 +155,9 @@ var updateBars = function (barGraph, data, x, y, color, duration, callback) {
           return slugify(d['company_name']) + '-path';
       })
       .attr('class', 'bar')
+      .on('mouseover', function(d){
+        console.log(d['company_name']);
+      })
       .attr('x', function(d) {
           return x(d['company_name']);
       })
@@ -146,25 +168,49 @@ var updateBars = function (barGraph, data, x, y, color, duration, callback) {
               return y(0);
           }
       })
-      .style('fill', color)
       .attr('width', 2)
       .attr('height', function(d) {
           return Math.abs(y(d['rate']) - y(0));
       })
-      .on('mouseover', function(d){
-        console.log(d['company_name']);
-      })
       .style('opacity', 0)
       .transition()
-      .duration(duration)
+      .duration(4000)
       .style('opacity', 1)
       .end( function () {
         if (callback) callback();
       });
 
     bars
-      .exit()
-      .remove();
+      .transition()
+      .duration(4000)
+      .attr('x', function(d) {
+          return x(d['company_name']);
+      })
+      .attr('y', function(d) {
+          if (d['rate'] > 0){
+              return y(d['rate']);
+          } else {
+              return y(0);
+          }
+      })
+      .attr('width', 2)
+      .attr('height', function(d) {
+          return Math.abs(y(d['rate']) - y(0));
+      })
+
+}
+
+var slide6 = function (width, x, y, data, companiesIPS) {
+  var barGraph = d3.select('.bar-graph');
+  updateYAxis([0,35], y, 1000);
+  updateXAxis(x, data, 1000);
+  updateBars(data, x, y);
+
+  setTimeout( function () {
+    updateXAxis(x, companiesIPS, 4000);
+    updateBars(companiesIPS, x, y);
+  }, 4000);
+
 }
 
 var highlightBars = function (data, subset, duration, color, callback) {
@@ -191,102 +237,68 @@ var highlightBars = function (data, subset, duration, color, callback) {
     });
 }
 
-var slide2 = function (width, x, y, data, barGraph) {
-  updateYAxis([35], barGraph, y, 1000);
-  updatePercentLine(barGraph, y, 35, 3000, width, function () {
-    updateYAxis([0,35], barGraph, y, 1000);
-    updateXAxis(barGraph, width, y, 1000);
-    updateBars(barGraph, data, x, y, '#000', 1000);
-  });
-}
-
-var slide3 = function (width, x, y, data, companiesYearsNoTax, barGraph) {
-  updateYAxis([0,35], barGraph, y, 1000);
-  updateXAxis(barGraph, width, y, 1000);
-
-  updateBars(barGraph, data, x, y, '#000', 1000, function () {
-    for (var ii = 8; ii > 0; ii--) {
-      var time = (9 - ii) * 1000;
-      highlightBarsTimeout(data, companiesYearsNoTax[ii], 'red', time);
-    }
-  });
-}
-
-var slide4 = function (width, x, y, data, companiesTop25, barGraph) {
-  updateYAxis([0,35], barGraph, y, 1000);
-  updateXAxis(barGraph, width, y, 1000);
-  updateBars(barGraph, data, x, y, '#000', 1000, function () {
-    highlightBars(data, companiesTop25, 1000, 'red');
-  });
-}
-
 var highlightBarsTimeout = function (data, subset, color, time) {
   setTimeout( function () {
     highlightBars(data, subset, 1000, color);
   }, time); 
 }
 
-var slide5 = function (width, x, y, data, companiesRebates, barGraph) {
-  updateYAxis([0,35], barGraph, y, 1000);
-  updateXAxis(barGraph, width, y, 1000);
-  var rebates = ['stockOptions','researchExperiment','dpad','accDepreciation','deferredTaxes'];
+var slide2 = function (width, x, y, data) {
+  var barGraph = d3.select('.bar-graph');
+  updateYAxis([35], y, 1000);
+  updatePercentLine(y, 35, 3000, width)
+  
+  setTimeout( function () {
+    updateYAxis([0,35], y, 1000);
+    updateXAxis(y, 1000);
+    updateBars(data, x, y);
+  }, 3000);
+}
 
-  updateBars(barGraph, data, x, y, '#000', 1000, function () {
+var slide3 = function (width, x, y, data, companiesYearsNoTax) {
+  var barGraph = d3.select('.bar-graph');
+  updateYAxis([0,35], y, 1000);
+  updateXAxis(y, 1000);
+  updateBars(data, x, y);
+  
+  setTimeout( function () {
+    for (var ii = 8; ii > 0; ii--) {
+      var time = (9 - ii) * 1000;
+      highlightBarsTimeout(data, companiesYearsNoTax[ii], 'red', time);
+    }
+  }, 1000);
+}
+
+var slide4 = function (width, x, y, data, companiesTop25) {
+  var barGraph = d3.select('.bar-graph');
+  updateYAxis([0,35], y, 1000);
+  updateXAxis(y, 1000);
+  updateBars(data, x, y);
+
+  setTimeout( function () {
+    highlightBars(data, companiesTop25, 1000, 'red');
+  }, 1000);
+}
+
+var slide5 = function (width, x, y, data, companiesRebates) {
+  var barGraph = d3.select('.bar-graph');
+  updateYAxis([0,35], y, 1000);
+  updateXAxis(y, 1000);
+
+  var rebates = ['stockOptions','researchExperiment','dpad','accDepreciation','deferredTaxes'];
+  updateBars(data, x, y);
+
+  setTimeout( function () {
     var counter = 1;
     while (rebates.length > 0) {
-      var rebate = rebates.pop();
+      var rebate = rebates.shift();
       highlightBarsTimeout(data, companiesRebates[rebate], 'red', counter * 1000);
 
       counter++;
       highlightBarsTimeout(data, data, '#000', counter * 1000);
     }
-  });
+  }, 1000);
 }
-
-// var slide3 = function (width, x, y, yAxis, data, barGraph) {
-
-//     addYAxis(barGraph, y);
-
-//     var bars = barGraph.selectAll('.bar')
-//         .data(data, function(d) {
-//           console.log(d['company_name'])
-//           return d['company_name'];
-//         })
-
-//     bars
-//         .enter()
-//         .append('rect')
-//         .attr('id', function(d) { 
-//             return slugify(d.company_name) + '-path';
-//         })
-//         .attr('class', function(d) {
-//             if (d.rate < 0){
-//                 return 'bar negative';
-//             } else {
-//                 return 'bar positive';
-//             }
-//         })
-//         .attr('x', function(d) {
-//             return x(d.company_name);
-//         })
-//         .attr('y', function(d) {
-//             if (d.rate > 0){
-//                 return y(d.rate);
-//             } else {
-//                 return y(0);
-//             }
-//         })
-//         .attr('width', 2)
-//         .attr('height', function(d) {
-//             return Math.abs(y(d.rate) - y(0));
-//         })
-//         .on('click', function(e, i){
-//           var x = data.splice(i, 1);
-//           console.log(x);
-//           slide3(width, x, y, yAxis, data, barGraph);
-//         });
-
-// }
 
 var loadBarData = function (data) {
     var margin = {
@@ -407,7 +419,6 @@ var loadBarData = function (data) {
             return 0;
         })
 }
-
 
 var fadeBars = function (opacity) {
     d3.selectAll('.bar')
