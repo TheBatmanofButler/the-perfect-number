@@ -10,7 +10,7 @@ var slugify = function (string) {
     .replace(/-+$/, '');
 }
 
-var createSlides = function (data
+var createSlides = function (data,
                              companiesYearsNoTax,
                              companiesTop25,
                              companiesRebates) {
@@ -39,6 +39,10 @@ var createSlides = function (data
 
   $('#slide4').click( function (e) {
     slide4(width, x, y, data, companiesTop25, barGraph);
+  });
+
+  $('#slide5').click( function (e) {
+    slide5(width, x, y, data, companiesRebates, barGraph);
   });
 }
 
@@ -164,17 +168,27 @@ var updateBars = function (barGraph, data, x, y, color, duration, callback) {
 }
 
 var highlightBars = function (data, subset, duration, color, callback) {
-  d3.selectAll('.bar')
-    .filter( function (d) {
-      return subset.indexOf(d) > -1;
-    })
+  
+  if (data == subset) {
+    console.log(1);
+    var bar = d3.selectAll('.bar')
+  }
+  else {
+    console.log(2);
+    var bar = d3.selectAll('.bar')
+      .filter( function (d) {
+        // console.log(subset);\
+        return subset.indexOf(d) > -1;
+      })
+  }
+
+  bar
     .transition()
     .duration(duration)
     .style('fill', color)
     .end( function () {
       if (callback) callback();
     });
-
 }
 
 var slide2 = function (width, x, y, data, barGraph) {
@@ -190,16 +204,10 @@ var slide3 = function (width, x, y, data, companiesYearsNoTax, barGraph) {
   updateYAxis([0,35], barGraph, y, 1000);
   updateXAxis(barGraph, width, y, 1000);
 
-  var highlightBarsTimeout = function (data, companiesYearsNoTax, ii) {
-    var time = (9 - ii) * 1000;
-    setTimeout( function () {
-      highlightBars(data, companiesYearsNoTax[ii], 1000, 'red');
-    }, time); 
-  }
-
   updateBars(barGraph, data, x, y, '#000', 1000, function () {
     for (var ii = 8; ii > 0; ii--) {
-      highlightBarsTimeout(data, companiesYearsNoTax, ii);
+      var time = (9 - ii) * 1000;
+      highlightBarsTimeout(data, companiesYearsNoTax[ii], 'red', time);
     }
   });
 }
@@ -212,11 +220,26 @@ var slide4 = function (width, x, y, data, companiesTop25, barGraph) {
   });
 }
 
-var slide5 = function (width, x, y, data, companiesTop25, barGraph) {
+var highlightBarsTimeout = function (data, subset, color, time) {
+  setTimeout( function () {
+    highlightBars(data, subset, 1000, color);
+  }, time); 
+}
+
+var slide5 = function (width, x, y, data, companiesRebates, barGraph) {
   updateYAxis([0,35], barGraph, y, 1000);
   updateXAxis(barGraph, width, y, 1000);
+  var rebates = ['stockOptions','researchExperiment','dpad','accDepreciation','deferredTaxes'];
+
   updateBars(barGraph, data, x, y, '#000', 1000, function () {
-    highlightBars(data, companiesTop25, 1000, 'red');
+    var counter = 1;
+    while (rebates.length > 0) {
+      var rebate = rebates.pop();
+      highlightBarsTimeout(data, companiesRebates[rebate], 'red', counter * 1000);
+
+      counter++;
+      highlightBarsTimeout(data, data, '#000', counter * 1000);
+    }
   });
 }
 
