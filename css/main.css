@@ -1,7 +1,7 @@
 html, body {
   padding: 0;
   margin: 0;
-
+  font-family: 'Asap Condensed', sans-serif;
   color: #fff;
 }
 
@@ -66,10 +66,12 @@ section {
 
     .tt-suggestion:hover { 
       background-color: #0097cf;
+      opacity: 0.4; 
 
     }
     .search-wrapper {
       flex: 2;
+      float: right;
     }
       .scrollable-dropdown-menu {
         width: 385px;
@@ -85,16 +87,17 @@ section {
 
       .slide-no-square-wrapper {
         cursor: pointer;
+        color: black;
         /*flex: 1; */
       }
 
         .slide-no-square {
           /*background: #E0D68A;*/
           background: #D0CCD0;
-          color: black;
         }
         .slide-no-square:hover {
           background: #8E8B8E;
+          color: white;
         }
 
       .slide-explore {
@@ -106,9 +109,19 @@ section {
         height: 34px;
         width: 105px;
       }
+      .slide-explore:hover {
+        color: white;
+      }
 
     .about {
-      background: #CB9173;
+      /*background: #CB9173;*/
+      background: #D0CCD0;
+      color: black;
+    }
+
+    .about:hover {
+      background: #8E8B8E;
+      color: white;
     }
 
   .dynamic-text {
@@ -116,8 +129,9 @@ section {
     padding: 5px;
 
     font-size: 15px;
-
-    /*background: #8E443D;*/
+    border-top: 3px solid white;
+    border-bottom: 3px solid white;
+    background: #8E443D;
   }
 
   .middle {
@@ -164,9 +178,9 @@ section {
       }
 
       .info {
-        /*background: #4C2A85;*/
+        background: #4C2A85;
         padding: 5px;
-
+        display: none;
         width: 200px;
       }
 

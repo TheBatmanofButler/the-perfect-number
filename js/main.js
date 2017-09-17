@@ -13,6 +13,7 @@ $('.about').click( function (e) {
 $('.slide-explore').click( function (e) {
 	$('.proportion-graph-viewer').animate({'height': '60vh'})
 	$('.arrow>img').show()
+	$('.info').show()
 
 	$('#left-arrow').click( function (e) {
 		console.log('left arrow clicked');

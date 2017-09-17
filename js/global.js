@@ -118,8 +118,8 @@ d3.csv("../csv/dv_data/interactive_data.csv", type, function(companies) {
 
   });
 
-	// populateDropdown(companyNames);
-  createSlides(companies, companiesYearsNoTax, companiesTop25, companiesRebates, companiesIPS);
+	populateDropdown(companyNames);
+  // createSlides(companies, companiesYearsNoTax, companiesTop25, companiesRebates, companiesIPS);
 
 	// loadBarData(companies);
 	totalTaxBreaks = amtSaved(companies);
