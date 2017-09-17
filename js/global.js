@@ -37,8 +37,6 @@ var amtSaved = function(companies) {
 }
 
 d3.csv("../csv/dv_data/interactive_data.csv", type, function(companies) {
-	// console.log(companies);
-	// var total35 = 0;
 	var companyNames = ['All companies'];
 	companyMap = {};
 	data = companies.map(function(d)
@@ -119,13 +117,12 @@ d3.csv("../csv/dv_data/interactive_data.csv", type, function(companies) {
 
   });
 
-  createSlides(companies, companiesYearsNoTax, companiesTop25, );
-
+	populateDropdown(companyNames);
+    // createSlides(companies, companiesYearsNoTax);
 
 	// loadBarData(companies);
 	totalTaxBreaks = amtSaved(companies);
 	total35 = amtIf35(companies)/1000;
 	totalTaxBreaks = amtSaved(companies)/1000;
-
 
 });
