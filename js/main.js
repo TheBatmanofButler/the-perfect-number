@@ -12,12 +12,14 @@ $('.about').click( function (e) {
 
 $('.slide-explore').click( function (e) {
 	$('.proportion-graph-viewer').animate({'height': '60vh'})
-	createProportionGraph(1500);
+
+	createProportionGraph(10000);
 	changeAreaColor(0,0,total35,'green',0.4);
 	changeAreaColor(0,0,totalTaxBreaks,'green',0.8);
 
 	$('.typeahead').bind('typeahead:select', function(ev, suggestion) {
 		createProportionGraph(9000);
+		$(".company-bar-name").text(companyMap[slugify(suggestion)].company_name);
 		loadInfo(slugify(suggestion),companyMap[slugify(suggestion)]);
 		company35 = companyMap[slugify(suggestion)].profit*0.35;  
 		console.log(company35);
