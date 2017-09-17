@@ -6,7 +6,8 @@ html, body {
 }
 
 section {
-  height: 50vh;
+  height: 55vh;
+  width: 180vh;
 }
 
 #gridSVG {
@@ -75,12 +76,12 @@ section {
 
     .slide-no {
       display: flex;
-      flex: 1;
+      /*flex: 1;*/
       flex-direction: row;
     }
 
       .slide-no-square-wrapper {
-        flex: 1; 
+        /*flex: 1; */
       }
 
         .slide-no-square {
@@ -138,7 +139,7 @@ section {
       .arrow>img {
         width: 100%;
 
-        /*display: none;*/
+        display: none;
         position: absolute;
         top: calc(50% - 4vw);
         /*left: calc(50% - 4vw);*/
@@ -146,10 +147,11 @@ section {
 
       .proportion-graph {
         flex-grow: 1;
+        display: flex;
+        align-items: center;
 
-        background: #511730;
-        /*background: white;*/
-        border: 1px solid black;
+        /*background: #511730;*/
+        background: white;
       }
 
       .info {
