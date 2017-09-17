@@ -10,7 +10,10 @@ var slugify = function (string) {
     .replace(/-+$/, '');
 }
 
-var createSlides = function (data, companiesYearsNoTax) {
+var createSlides = function (data
+                             companiesYearsNoTax,
+                             companiesTop25,
+                             companiesRebates) {
   var margin = {
       top: 10,
       right: 10,
@@ -32,6 +35,10 @@ var createSlides = function (data, companiesYearsNoTax) {
 
   $('#slide3').click( function (e) {
     slide3(width, x, y, data, companiesYearsNoTax, barGraph);
+  });
+
+  $('#slide4').click( function (e) {
+    slide4(width, x, y, data, companiesTop25, barGraph);
   });
 }
 
@@ -197,11 +204,19 @@ var slide3 = function (width, x, y, data, companiesYearsNoTax, barGraph) {
   });
 }
 
-var slide3 = function (width, x, y, data, companiesYearsNoTax, barGraph) {
+var slide4 = function (width, x, y, data, companiesTop25, barGraph) {
   updateYAxis([0,35], barGraph, y, 1000);
   updateXAxis(barGraph, width, y, 1000);
   updateBars(barGraph, data, x, y, '#000', 1000, function () {
-    highlightBarsTimeout(data, companiesYearsNoTax, ii);
+    highlightBars(data, companiesTop25, 1000, 'red');
+  });
+}
+
+var slide5 = function (width, x, y, data, companiesTop25, barGraph) {
+  updateYAxis([0,35], barGraph, y, 1000);
+  updateXAxis(barGraph, width, y, 1000);
+  updateBars(barGraph, data, x, y, '#000', 1000, function () {
+    highlightBars(data, companiesTop25, 1000, 'red');
   });
 }
 
