@@ -78,7 +78,21 @@ d3.csv("../csv/dv_data/interactive_data.csv", type, function(companies) {
                           'accDepreciation': [],
                           'deferredTaxes': []
                         },
-      companies92 = [];
+      companies92 = [],
+      companiesTop3EmpChanges = {
+                              '1': [],
+                              '2': [],
+                              '3': []
+                            },
+      companiesLostEmployees = [],
+      companiesForeignDiff = [],
+      companiesCompetitors = {
+                              '1': [],
+                              '2': [],
+                              '3': [],
+                              '4': [],
+                              '5': []
+                            };
 
   companies.map(function (d) {
     companyNames.push(d['company_name']);
@@ -87,9 +101,9 @@ d3.csv("../csv/dv_data/interactive_data.csv", type, function(companies) {
       companiesIPS.push(d);
     }
 
-    var years_no_tax = d['years_no_tax'];
+    var yearsNoTax = d['years_no_tax'];
     if (d['years_no_tax'] != '0') {
-      companiesYearsNoTax[years_no_tax].push(d);
+      companiesYearsNoTax[yearsNoTax].push(d);
     }
 
     if (d['top25'] == 'True') {
@@ -116,10 +130,37 @@ d3.csv("../csv/dv_data/interactive_data.csv", type, function(companies) {
       companiesRebates['deferredTaxes'].push(d);
     }
 
+    var empChangeRank = d['top3_emp_changes'];
+    if (d['top3_emp_changes'] != '0') {
+      companiesTop3EmpChanges[empChangeRank].push(d);
+    }
+
+    if (d['lost_employees'] == 'True') {
+      companiesLostEmployees.push(d);
+    }
+
+    if (d['us_foreign_diff'] != '') {
+      companiesForeignDiff.push(d);
+    }
+
+    var competitor = d['competitor'];
+    if (competitor != '0') {
+      console.log(competitor)
+      companiesCompetitors[competitor].push(d);
+    }
+
   });
 
 	// populateDropdown(companyNames);
-  createSlides(companies, companiesYearsNoTax, companiesTop25, companiesRebates, companiesIPS);
+  createSlides(companies,
+    companiesYearsNoTax,
+    companiesTop25,
+    companiesRebates,
+    companiesIPS,
+    companiesTop3EmpChanges,
+    companiesLostEmployees,
+    companiesForeignDiff,
+    companiesCompetitors);
 
 	// loadBarData(companies);
 	totalTaxBreaks = amtSaved(companies);
