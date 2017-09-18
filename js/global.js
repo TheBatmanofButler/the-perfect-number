@@ -166,5 +166,7 @@ d3.csv("../csv/dv_data/interactive_data.csv", type, function(companies) {
 	totalTaxBreaks = amtSaved(companies);
 	total35 = amtIf35(companies)/1000;
 	totalTaxBreaks = amtSaved(companies)/1000;
+  // console.log(total35);
+  // console.log(totalTaxBreaks);
 
 });

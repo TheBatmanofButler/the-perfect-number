@@ -11,8 +11,16 @@
       margin: 0;
     }
     canvas {
-      cursor: pointer;
+      /*cursor: pointer;*/
+      background: white;
     }
+    #container {
+      width: 1000px;
+      height: 500px;
+      margin: 50px;
+
+    }
+
     </style>
   </head>
   <body>
@@ -21,26 +29,36 @@
 
     <script type="text/javascript">
 
-      pointWidth = 4;
-      pointMargin = 3;
-      width = 600;
-      height = 1000;
-      numPoints = 7000;
+      numPoints = 0;
+      squaresRow = 0;
+      squaresColumn =0;
 
-      function gridLayout(points, pointWidth, gridWidth) {
-        const pointHeight = 8;
-        const pointsPerRow = 200;
-        const numRows = points.length / pointsPerRow;
-
+      var gridLayout = function(points) {
+        var gridDiv = document.getElementById("container");
+        width = gridDiv.clientWidth;
+        height = gridDiv.clientHeight;
+        cellSize = Math.floor(Math.sqrt((width*height)/numPoints));
+        
+        if (cellSize < 5) { cellSpacing = 0.3; }
+        else { cellSpacing = 1;}
+        
+        squaresColumn = Math.floor(width / (cellSize+cellSpacing));
+        squaresRow = Math.floor(height / (cellSize+cellSpacing));
+        while(squaresColumn*squaresRow<numPoints) {
+          cellSize-=1;
+          squaresColumn = Math.floor(width /  (cellSize+cellSpacing));
+          squaresRow = Math.floor(height /  (cellSize+cellSpacing));
+        }
+        
         points.forEach((point, i) => {
-          point.x = pointWidth * (i % pointsPerRow);
-          point.y = pointHeight * Math.floor(i / pointsPerRow);
+          point.x = (cellSize+cellSpacing) * Math.floor(i / squaresRow);
+          point.y = (cellSize+cellSpacing) * (i % squaresRow);
         });
 
         return points;
       }
 
-      function draw(canvas) {
+      var draw = function(canvas) {
         const ctx = canvas.node().getContext('2d');
         ctx.save();
 
@@ -51,26 +69,47 @@
         for (let i = 0; i < points.length; ++i) {
           const point = points[i];
           ctx.fillStyle = point.color;
-          ctx.fillRect(point.x, point.y, pointWidth, pointWidth);
+          ctx.fillRect(point.x, point.y, cellSize, cellSize);
         }
 
         ctx.restore();
       }
 
-      // generate the array of points with a unique ID and color
-      const points = d3.range(numPoints).map(index => ({
-        id: index
-      }));
+      var changeSquareColor = function(points, id, color) {
+        points[id].color = color;
+      }
 
-      console.log(points)
+      var changeAreaColor = function(points, rowNum, columnNum, noOfSquares, color) {
+        var id = columnNum*squaresRow+rowNum;
+        for (var i = 0; i < noOfSquares; i++) {
+          changeSquareColor(points,id+i,color);
+        };
+        draw(canvas);
+      }
 
-      var canvas = d3.select('#container')
-        .append('canvas')
-        .attr('width', width)
-        .attr('height', height);
+      var createProportionGraph = function (noOfSquares) {
 
-      gridLayout(points, pointWidth + pointMargin, width);
-      draw(canvas);
+        numPoints = noOfSquares;
+        // generate the array of points with a unique ID and color
+        points = d3.range(numPoints).map(index => ({
+          id: index,
+          color: "rgba(0, 0, 0, 0.3)"
+        }));
+
+        canvas = d3.select('#container')
+          .append('canvas')
+
+        gridLayout(points);
+        canvas
+          .attr('width', width)
+          .attr('height', height);
+
+        // changeAreaColor(points, 0, 10, 1333,"rgba(255, 0, 0, 0.4)");
+        // changeAreaColor(points, 0, 10, 530,"rgba(255, 0, 0, 0.8)");
+        draw(canvas);
+      }
+
+      createProportionGraph(2000);
 
     </script>
 
