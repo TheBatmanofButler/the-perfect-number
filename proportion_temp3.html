@@ -29,13 +29,12 @@
 
     <script type="text/javascript">
 
-      numPoints = 20000;
+      numPoints = 0;
       squaresRow = 0;
       squaresColumn =0;
 
-      var gridDiv = document.getElementById("container");
-
       var gridLayout = function(points) {
+        var gridDiv = document.getElementById("container");
         width = gridDiv.clientWidth;
         height = gridDiv.clientHeight;
         cellSize = Math.floor(Math.sqrt((width*height)/numPoints));
@@ -77,7 +76,6 @@
       }
 
       var changeSquareColor = function(points, id, color) {
-        // var id = columnNum*squaresRow+rowNum;
         points[id].color = color;
       }
 
@@ -86,26 +84,32 @@
         for (var i = 0; i < noOfSquares; i++) {
           changeSquareColor(points,id+i,color);
         };
+        draw(canvas);
       }
 
-      // generate the array of points with a unique ID and color
-      var points = d3.range(numPoints).map(index => ({
-        id: index,
-        color: "rgba(0, 0, 0, 0.3)"
-      }));
+      var createProportionGraph = function (noOfSquares) {
 
-      var canvas = d3.select('#container')
-        .append('canvas')
+        numPoints = noOfSquares;
+        // generate the array of points with a unique ID and color
+        points = d3.range(numPoints).map(index => ({
+          id: index,
+          color: "rgba(0, 0, 0, 0.3)"
+        }));
 
-      gridLayout(points);
-      canvas
-        .attr('width', width)
-        .attr('height', height);
-      console.log(points)
+        canvas = d3.select('#container')
+          .append('canvas')
 
-      changeAreaColor(points, 0, 10, 1000,"rgba(255, 0, 0, 0.4)");
-      changeAreaColor(points, 0, 10, 500,"rgba(255, 0, 0, 0.8)");
-      draw(canvas);
+        gridLayout(points);
+        canvas
+          .attr('width', width)
+          .attr('height', height);
+
+        // changeAreaColor(points, 0, 10, 1333,"rgba(255, 0, 0, 0.4)");
+        // changeAreaColor(points, 0, 10, 530,"rgba(255, 0, 0, 0.8)");
+        draw(canvas);
+      }
+
+      createProportionGraph(2000);
 
     </script>
 

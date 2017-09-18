@@ -5,9 +5,13 @@
  * @description: API for proportion graph
  *
  */
-var squaresRow=0;
-var squaresColumn=0;
+numPoints = 0;
+squaresRow = 0;
+squaresColumn =0;
 
+canvas = d3.select('#grid')
+    .append('canvas')
+    
 var openProportionGraph = function () {
   $('.proportion-graph-viewer').animate({'height': '60vh'});
   // $('.arrow>img').show(1000);
@@ -18,99 +22,72 @@ var closeProportionGraph = function () {
   $('.proportion-graph-viewer').animate({'height': '0vh'});
 }
 
+var gridLayout = function(points) {
+  var gridDiv = document.getElementById("grid");
+  width = gridDiv.clientWidth;
+  height = gridDiv.clientHeight;
+  cellSize = Math.floor(Math.sqrt((width*height)/numPoints));
+  
+  if (cellSize < 5) { cellSpacing = 0.3; }
+  else { cellSpacing = 1;}
+  
+  squaresColumn = Math.floor(width / (cellSize+cellSpacing));
+  squaresRow = Math.floor(height / (cellSize+cellSpacing));
+  while(squaresColumn*squaresRow<numPoints) {
+    cellSize-=1;
+    squaresColumn = Math.floor(width /  (cellSize+cellSpacing));
+    squaresRow = Math.floor(height /  (cellSize+cellSpacing));
+  }
+  
+  points.forEach((point, i) => {
+    point.x = (cellSize+cellSpacing) * Math.floor(i / squaresRow);
+    point.y = (cellSize+cellSpacing) * (i % squaresRow);
+  });
+
+  return points;
+}
+
+var draw = function(canvas) {
+  const ctx = canvas.node().getContext('2d');
+  ctx.save();
+
+  // erase what is on the canvas currently
+  ctx.clearRect(0, 0, width, height);
+
+  // draw each point as a rectangle
+  for (let i = 0; i < points.length; ++i) {
+    const point = points[i];
+    ctx.fillStyle = point.color;
+    ctx.fillRect(point.x, point.y, cellSize, cellSize);
+  }
+
+  ctx.restore();
+}
+
+var changeSquareColor = function(points, id, color) {
+  points[id].color = color;
+}
+
+var changeAreaColor = function(points, rowNum, columnNum, noOfSquares, color) {
+  var id = columnNum*squaresRow+rowNum;
+  for (var i = 0; i < noOfSquares; i++) {
+    changeSquareColor(points,id+i,color);
+  };
+  draw(canvas);
+}
+
 var createProportionGraph = function (noOfSquares) {
 
-  var gridDiv = document.getElementById("grid");
-  
-  function redraw() {
-    d3.select("svg").remove();
-    var svg = d3.select(gridDiv).append("svg");
-    var w = gridDiv.clientWidth;
-    var h = gridDiv.clientHeight;
-    // var noOfSquares = 1500;
-    
-    svg
-      .attr('id', 'gridSVG')
-      .attr({
-        width: w,
-        height: h
-      });
+  numPoints = noOfSquares;
+  // generate the array of points with a unique ID and color
+  points = d3.range(numPoints).map(index => ({
+    id: index,
+    color: "rgba(0, 0, 0, 0.3)"
+  }));
 
-    var square = Math.floor(Math.sqrt((w*h)/noOfSquares));
-    // calculate number of rows and columns
-    squaresColumn = Math.floor(w / square);
-    squaresRow = Math.floor(h / square);
-    while(squaresColumn*squaresRow<noOfSquares) {
-      square-=1;
-      squaresColumn = Math.floor(w / square);
-      squaresRow = Math.floor(h / square);
-    }
-    console.log(squaresRow);
-    console.log(squaresColumn);
-    // loop over number of columns
-    d3.range(squaresRow).forEach( function(n) {
-      // create each set of rows
-      var columns = svg.selectAll('rect' + ' .column-' + (n + 1))
-        .data(function(d,i) {
-                  return d3.range(squaresColumn);
-        })
-        .enter().append('rect')
-        .attr('class', 'square')
-        .attr('id', function(d, i) {
-          return 'r-' + n + 'c-' + i;
-        })
-        .attr('width', square)
-        .attr('height', square)
-        .attr('x', function(d, i) {
-          return i * square;
-        })
-        .attr('y', n * square)
-        .attr('fill', '#fff')
-        .attr('stroke', '#FDBB30')
-        .on('mouseover', function(d, i) {
-          console.log('r-' + n + 'c-' + i);
-        })
-        // .style('opacity',0)
-        // .transition()
-        //   .duration(2000)
-        //   .style('opacity', 1)
-    });
-
-    svg.append("text")
-      .attr('class', 'proportion-graph-text')
-      .attr("x", (w / 2))             
-      .attr("y", 50)
-      .attr("text-anchor", "middle")  
-      .style("font-size", "20px")   
-      .text("Tax Breaks");
-  }
-  redraw();
-  window.addEventListener("resize", redraw);
-
+  gridLayout(points);
+  canvas
+    .attr('width', width)
+    .attr('height', height);
+  draw(canvas);
 }
-
-var changeSquareColor = function(rowNum, columnNum, color, opacity) {
-  d3.select('#' + 'r-' + rowNum + 'c-' + columnNum)
-    .attr('fill', color)
-        .transition()
-          .duration(2000)
-          .style('opacity', opacity)
-}
-
-var changeAreaColor = function(rowNum, columnNum, noOfSquares, color, opacity) {
-  squaresColored = 0;
-  i=rowNum;
-  j=columnNum;
-  while(squaresColored<noOfSquares) {
-    if(i==squaresRow) {
-      j+=1;
-      i=0;
-    }
-    changeSquareColor(i,j,color,opacity);
-    squaresColored+=1;
-    i+=1;
-  };
-}
-
-
-// createProportionGraph(1500);
