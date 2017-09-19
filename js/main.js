@@ -23,14 +23,13 @@ $('.slide-explore').click( function (e) {
 		console.log('right arrow clicked');
 	});
 
-	console.log(globalComparison);
-
-	createProportionGraph(2000);
-	allCompaniesPanel();
+	// createProportionGraph(total35);
+	// allCompaniesPanel();
+	createProportionGraph(1001);
 
 	$('.typeahead').bind('typeahead:select', function(ev, suggestion) {
 		if(suggestion=='All companies'){
-			createProportionGraph(2000);
+			createProportionGraph(total35);
 			$(".company-bar-name").text('All companies');
 			allCompaniesPanel();
 		}
@@ -40,7 +39,7 @@ $('.slide-explore').click( function (e) {
 			loadInfo(slugify(suggestion),companyMap[slugify(suggestion)]);
 			company35 = companyMap[slugify(suggestion)].profit*0.35;
 			companyTaxBreak = companyMap[slugify(suggestion)].tax_break;
-			createProportionGraph(company35+1000);  
+			createProportionGraph(company35);  
 			console.log(company35);
 			console.log(companyTaxBreak);
 			companiesPanel(company35,companyTaxBreak);

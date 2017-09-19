@@ -5,12 +5,14 @@
  * @description: API for proportion graph
  *
  */
-numPoints = 0;
-squaresRow = 0;
-squaresColumn =0;
+var numPoints = 0;
+var squaresRow = 0;
+var squaresColumn = 0;
 
-canvas = d3.select('#grid')
+var canvas = d3.select('#grid')
     .append('canvas')
+    .attr('class','propCanvas');
+
 
 var openProportionGraph = function () {
   $('.proportion-graph-viewer').animate({'height': '60vh'});
@@ -31,13 +33,20 @@ var gridLayout = function(points) {
   if (cellSize < 5) { cellSpacing = 0.3; }
   else { cellSpacing = 1;}
   
-  squaresColumn = Math.floor(width / (cellSize+cellSpacing));
+  // squaresColumn = Math.floor(width / (cellSize+cellSpacing));
   squaresRow = Math.floor(height / (cellSize+cellSpacing));
-  while(squaresColumn*squaresRow<numPoints) {
-    cellSize-=1;
-    squaresColumn = Math.floor(width /  (cellSize+cellSpacing));
-    squaresRow = Math.floor(height /  (cellSize+cellSpacing));
-  }
+  squaresColumn = Math.floor(numPoints/squaresRow);
+  // while((squaresColumn)*(squaresRow)<numPoints) {
+  //   cellSize-=1;
+  //   // squaresColumn = Math.floor(width /  (cellSize+cellSpacing));
+  //   squaresRow = Math.floor(height /  (cellSize+cellSpacing));
+  //   squaresColumn = Math.floor(numPoints/squaresRow);
+  // }
+  if(squaresColumn*(cellSize+cellSpacing)) { cellSize-=1; }
+  console.log('cellSize: ' + cellSize);
+  // console.log('numPoints: ' + numPoints);
+  console.log('squaresColumn: ' + squaresColumn);
+  console.log('squaresRow: ' + squaresRow);
   
   points.forEach((point, i) => {
     point.x = (cellSize+cellSpacing) * Math.floor(i / squaresRow);
@@ -48,7 +57,7 @@ var gridLayout = function(points) {
 }
 
 var draw = function(canvas) {
-  const ctx = canvas.node().getContext('2d');
+  var ctx = canvas.node().getContext('2d');
   ctx.save();
 
   // erase what is on the canvas currently
@@ -56,7 +65,7 @@ var draw = function(canvas) {
 
   // draw each point as a rectangle
   for (let i = 0; i < points.length; ++i) {
-    const point = points[i];
+    var point = points[i];
     ctx.fillStyle = point.color;
     ctx.fillRect(point.x, point.y, cellSize, cellSize);
   }
@@ -64,15 +73,30 @@ var draw = function(canvas) {
   ctx.restore();
 }
 
-var changeSquareColor = function(points, id, color) {
+var changeSquareColor = function(points, id, color, prevColor) {
+  // var i = d3.interpolateLab(prevColor, color);
+  // var setColor = function setColor(val) {
+  //   console.log(val);
+  //   points[id].color = val; 
+  // }
+  // var x = 0;
+  // var t = d3.interval(function() {
+  //   if (x < 1) {
+  //     x += 0.1;
+  //     setColor(i(x));
+  //     draw(canvas);
+  //   } 
+  // }, 100);
+  console.log(id);
   points[id].color = color;
 }
 
-var changeAreaColor = function(points, id, noOfSquares, color) {
+var changeAreaColor = function(points, id, abc, color, prevColor) {
   // var id = columnNum*squaresRow+rowNum;
-  id = Math.floor(id);
-  for (var i = 0; i < noOfSquares; i++) {
-    changeSquareColor(points,id+i,color);
+  var id = Math.floor(id);
+  console.log(abc)
+  for (var i = 0; i < abc; i++) {
+    changeSquareColor(points,id+i,color, prevColor);
   };
   draw(canvas);
 }
@@ -80,8 +104,9 @@ var changeAreaColor = function(points, id, noOfSquares, color) {
 var createProportionGraph = function (noOfSquares) {
 
   numPoints = noOfSquares;
+  console.log('numPoints: ' + numPoints);
   // generate the array of points with a unique ID and color
-  points = d3.range(numPoints).map(index => ({
+  points = d3.range(1,numPoints+1).map(index => ({
     id: index,
     color: "rgba(0, 0, 0, 0.3)"
   }));
@@ -91,14 +116,35 @@ var createProportionGraph = function (noOfSquares) {
     .attr('width', width)
     .attr('height', height);
   draw(canvas);
+  d3.select('.propCanvas').on('mousemove', function() {
+    var mouseX = d3.event.offsetX;
+    var mouseY = d3.event.offsetY;
+    var column = Math.floor(mouseX/cellSize);
+    var row = Math.floor(mouseY/cellSize);
+    // console.log(squaresRow);
+    // console.log('column: ' + column);
+    // console.log('row: ' + row);
+    var id;
+    id = column * (squaresRow) + row + 1;
+    // if(id<numPoints) {console.log(id);}
+    console.log(id);
+    
+  });
+  
+
 }
 
 var visualise = function(comparisonMap) {
-  comparisonMap = comparisonMap.sort(function (a, b) {return a.val < b.val});
-  for (let i = 0; i < comparisonMap.length; i++) {
+  var comparisonMap = comparisonMap.sort(function (a, b) {return a.val < b.val});
+  // createProportionGraph(comparisonMap[0].length);
+  for (let i = 0; i < 1; i++) {
     // changeAreaColor(points, 0, comparisonMap[i].val,comparisonMap[i].color);
     setTimeout(function() {
-        changeAreaColor(points, 0, comparisonMap[i].val,comparisonMap[i].color);
+        var prev = i-1;
+        var prevColor;
+        if(prev<0) { prevColor = "rgba(0, 0, 0, 0.3)"}
+        else { prevColor = comparisonMap[prev].color}
+        changeAreaColor(points, 0, comparisonMap[i].val,comparisonMap[i].color,prevColor);
     }, 1000 * i);
   };
 }
@@ -117,7 +163,7 @@ var allCompaniesPanel = function () {
 
   for (var i = 0; i < globalComparison.length; i++) {
     var boxes = globalComparison[i].money/1000000000
-    if(boxes>=5 && boxes<total35+1000) {
+    if(boxes>=5 && boxes<totalTaxBreaks) {
       comparisonMap.push({
           'val': boxes,
           'color': globalComparison[i].color
@@ -142,7 +188,7 @@ var companiesPanel = function (total35,totalTaxBreaks) {
   for (var i = 0; i < globalComparison.length; i++) {
     var boxes = globalComparison[i].money/1000000
     console.log(globalComparison[i].text + ' ,boxes: ' + boxes);
-    if(boxes>=5 && boxes<total35+1000) {
+    if(boxes>=5 && boxes<totalTaxBreaks) {
       console.log(globalComparison[i].text)
       console.log('boxes: ' + boxes);
       comparisonMap.push({
@@ -153,3 +199,4 @@ var companiesPanel = function (total35,totalTaxBreaks) {
   };
   visualise(comparisonMap);
 }
+

@@ -26,11 +26,9 @@
   var x = 0;
   var t = d3.interval(function() {
     if (x < 1) {
-      x += 0.01;
+      x += 0.05;
       setColor(i(x));
-    } else {
-      x = 0;
-    }
+    } 
   }, 100);
   
 </script>

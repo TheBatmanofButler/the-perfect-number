@@ -150,22 +150,21 @@ d3.csv("../csv/dv_data/interactive_data.csv", type, function(companies) {
 
     var competitor = d['competitor'];
     if (competitor != '0') {
-      console.log(competitor)
       companiesCompetitors[competitor].push(d);
     }
 
   });
 
-	// populateDropdown(companyNames);
-  createSlides(companies,
-    companiesYearsNoTax,
-    companiesTop25,
-    companiesRebates,
-    companiesIPS,
-    companiesTop3EmpChanges,
-    companiesLostEmployees,
-    companiesForeignDiff,
-    companiesCompetitors);
+	populateDropdown(companyNames);
+  // createSlides(companies,
+  //   companiesYearsNoTax,
+  //   companiesTop25,
+  //   companiesRebates,
+  //   companiesIPS,
+  //   companiesTop3EmpChanges,
+  //   companiesLostEmployees,
+  //   companiesForeignDiff,
+  //   companiesCompetitors);
 
 	// loadBarData(companies);
 	totalTaxBreaks = amtSaved(companies);
