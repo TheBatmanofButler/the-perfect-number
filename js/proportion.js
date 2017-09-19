@@ -42,7 +42,7 @@ var gridLayout = function(points) {
   //   squaresRow = Math.floor(height /  (cellSize+cellSpacing));
   //   squaresColumn = Math.floor(numPoints/squaresRow);
   // }
-  if(squaresColumn*(cellSize+cellSpacing)) { cellSize-=1; }
+  while(squaresColumn*(cellSize+cellSpacing)>width) { cellSize-=1; }
   console.log('cellSize: ' + cellSize);
   // console.log('numPoints: ' + numPoints);
   console.log('squaresColumn: ' + squaresColumn);
@@ -121,9 +121,9 @@ var createProportionGraph = function (noOfSquares) {
   d3.select('.propCanvas').on('mousemove', function() {
     var mouseX = d3.event.offsetX;
     var mouseY = d3.event.offsetY;
-    var column = Math.floor(mouseX/(cellSize + cellSpacing));
-    var row = Math.floor(mouseY/(cellSize + cellSpacing));
-    // console.log(squaresRow);
+    var column = Math.floor(mouseX/(cellSize+cellSpacing));
+    var row = Math.floor(mouseY/(cellSize+cellSpacing));
+    // console.log (squaresRow);
     // console.log('column: ' + column);
     // console.log('row: ' + row);
     var id;

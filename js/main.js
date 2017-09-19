@@ -23,9 +23,9 @@ $('.slide-explore').click( function (e) {
 		console.log('right arrow clicked');
 	});
 
-	// createProportionGraph(total35);
-	// allCompaniesPanel();
-	createProportionGraph(1001);
+	createProportionGraph(total35);
+	allCompaniesPanel();
+	// createProportionGraph(1001);
 
 	$('.typeahead').bind('typeahead:select', function(ev, suggestion) {
 		if(suggestion=='All companies'){
