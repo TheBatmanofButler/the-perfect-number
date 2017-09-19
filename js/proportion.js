@@ -131,7 +131,6 @@ var createProportionGraph = function (noOfSquares) {
     // if(id<numPoints) {console.log(id);}
     
   });
-  
 
 }
 
