@@ -5,16 +5,6 @@ html, body {
   color: #fff;
 }
 
-section {
-  height: 55vh;
-  width: 180vh;
-}
-
-#gridSVG {
-  height: 100%;
-  width: 100%;
-}
-
 .container {
   display: flex;
   flex-direction: column;
@@ -151,30 +141,12 @@ section {
         height: 0;
       }
 
-      .arrow {
-        width: 4vw;
-        position: relative;
-        /*align-items: center;*/
-
-        background: #fff;
-      }
-
-      .arrow>img {
-        width: 100%;
-
-        display: none;
-        position: absolute;
-        top: calc(50% - 4vw);
-        /*left: calc(50% - 4vw);*/
-      }
-
       .proportion-graph {
         flex-grow: 1;
         display: flex;
         align-items: center;
 
-        /*background: #511730;*/
-        background: white;
+        background: #511730;
       }
 
       .info {
@@ -188,7 +160,7 @@ section {
         position: relative;
         flex-grow: 1;
 
-        /*background: #EA7AF4;*/
+        background: #EA7AF4;
       }
 
         .bar-graph {

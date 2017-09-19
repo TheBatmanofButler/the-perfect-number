@@ -10,38 +10,38 @@ var slugify = function (string) {
     .replace(/-+$/, "");
 }
 
-var type = function (d) {
-	d.profit = +d.profit;
-  d.rate = +d.rate;
-  d.years_no_tax = +d.years_no_tax;
-  d.tax_break = +d.tax_break;
+var typeCastInteractive = function (d) {
+	d['profit'] = +d['profit'];
+  d['rate'] = +d['rate'];
+  d['years_no_tax'] = +d['years_no_tax'];
+  d['tax_break'] = +d['tax_break'];
   return d;
 }
 
-var typeComparision = function (d) {
-  d.money = +d.money;
+var typeCastComparison = function (d) {
+  d['money'] = +d['money'];
   return d;
 }
 
-var amtIf35 = function(companies) {
+var tax35percent = function(companies) {
 	var total = 0;
 	data = companies.map(function(d) {
-		total+=d.profit*0.35;
+		total += d.profit * 0.35;
 	});
-	return(total);
+	return total;
 }
 
 var amtSaved = function(companies) {
 	var total = 0;
 	data = companies.map(function(d) {
-		if(d.tax_break>0) {
-			total+=type(d.tax_break);
+		if(d.tax_break > 0) {
+			total += d['tax_break'];
 		}
 	});
-	return(total);
+	return total;
 }
 
-d3.csv("../csv/dv_data/interactive_data.csv", type, function(companies) {
+d3.csv("../csv/dv_data/interactive_data.csv", typeCastInteractive, function(companies) {
   var companyNames = ['All companies'];
 	companyMap = {};
 	data = companies.map(function(d)
@@ -167,14 +167,13 @@ d3.csv("../csv/dv_data/interactive_data.csv", type, function(companies) {
   //   companiesCompetitors);
 
 	// loadBarData(companies);
-	totalTaxBreaks = amtSaved(companies);
-	total35 = amtIf35(companies)/1000;
+	total35 = tax35percent(companies)/1000;
 	totalTaxBreaks = amtSaved(companies)/1000;
 
 });
 
-d3.csv("../csv/dv_data/comparison_data.csv", typeComparision,function(comparison) {
-  globalComparison = comparison;
+d3.csv("../csv/dv_data/comparison_data.csv", typeCastComparison, function(comparisons) {
+  globalComparison = comparisons;
   globalComparison[0].color = "rgba(0, 0, 255, 0.4)";
   globalComparison[1].color = "rgba(0, 255, 0, 0.4)";
   globalComparison[2].color = "rgba(100, 0, 200, 0.4)";
