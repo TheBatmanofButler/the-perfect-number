@@ -14,12 +14,16 @@ var createSlides = function (data,
                              companiesYearsNoTax,
                              companiesTop25,
                              companiesRebates,
-                             companiesIPS) {
+                             companiesIPS,
+                             companiesTop3EmpChanges,
+                             companiesLostEmployees,
+                             companiesForeignDiff,
+                             companiesCompetitors) {
   var margin = {
       top: 10,
       right: 10,
       bottom: 20,
-      left: 30
+      left: 50
   },
   width = 920 - margin.left - margin.right,
   height = 400 - margin.top - margin.bottom;
@@ -45,7 +49,15 @@ var createSlides = function (data,
   });
 
   $('#slide6').click( function (e) {
-    slide6(width, height, x, y, data, companiesIPS);
+    slide6(width, height, x, y, data, companiesIPS, companiesTop3EmpChanges, companiesLostEmployees);
+  });
+
+  $('#slide8').click( function (e) {
+    slide8(width, height, x, y, data, companiesForeignDiff);
+  });
+
+  $('#slide9').click( function (e) {
+    slide9(width, height, x, y, data, companiesCompetitors);
   });
 }
 
@@ -99,8 +111,8 @@ var updatePercentLine = function (y, percent, duration, width) {
     .attr('x2', width);
 }
 
-var updateXAxis = function (x, y, data, duration) {
-  data = data.sort(function(a,b) { return b.rate - a.rate; });
+var updateXAxis = function (x, y, yParam, data, duration) {
+  data = data.sort(function(a,b) { return b[yParam] - a[yParam]; });
   x.domain(data.map(function(d) {
       return d.company_name;
   }));
@@ -133,7 +145,7 @@ var updateYAxis = function (tickValues, y, duration) {
     .call(yAxis);
 }
 
-var updateBars = function (data, x, y, exitTime, enterTime, updateTime, callback) {
+var updateBars = function (data, yParam, x, y, exitTime, enterTime, updateTime, callback) {
     var barGraph = d3.select('.bar-graph');
     var bars = barGraph.selectAll('.bar')
       .data(data, function(d) {
@@ -162,15 +174,15 @@ var updateBars = function (data, x, y, exitTime, enterTime, updateTime, callback
           return x(d['company_name']);
       })
       .attr('y', function(d) {
-          if (d['rate'] > 0){
-              return y(d['rate']);
+          if (d[yParam] > 0){
+              return y(d[yParam]);
           } else {
               return y(0);
           }
       })
       .attr('width', 2)
       .attr('height', function(d) {
-          return Math.abs(y(d['rate']) - y(0));
+          return Math.abs(y(d[yParam]) - y(0));
       })
       .style('opacity', 0)
       .transition()
@@ -188,49 +200,32 @@ var updateBars = function (data, x, y, exitTime, enterTime, updateTime, callback
           return x(d['company_name']);
       })
       .attr('y', function(d) {
-          if (d['rate'] > 0){
-              return y(d['rate']);
+          if (d[yParam] > 0){
+              return y(d[yParam]);
           } else {
               return y(0);
           }
       })
       .attr('width', 2)
       .attr('height', function(d) {
-          return Math.abs(y(d['rate']) - y(0));
+          return Math.abs(y(d[yParam]) - y(0));
       })
 
 }
 
-var slide6 = function (width, height, x, y, data, companiesIPS) {
-  var barGraph = d3.select('.bar-graph');
-  updateYAxis([0,35], y, 1000);
-  updateXAxis(x, y, data, 1000);
-  updateBars(data, x, y, 1000, 1000, 1000);
+var highlightBars = function (data, subset, yParam, limit, duration, color, callback) {
 
-  setTimeout( function () {
-    updateXAxis(x, y, companiesIPS, 1000);
-    updateYAxis([0,20,35], y, 1000);
-    updateBars(companiesIPS, x, y, 1000, 1000, 1000);
-
-    setTimeout( function () {
-      y = updateYScale(-15, 20, height);
-      updateYAxis([-15,0,20,35], y, 1000);
-      updateXAxis(x, y, companiesIPS, 1000);
-      updateBars(companiesIPS, x, y, 0, 1000, 1000);
-    }, 2000)
-
-  }, 2000);
-
-}
-
-var highlightBars = function (data, subset, duration, color, callback) {
-  
-  if (data == subset) {
-    console.log(1);
+  if (yParam != '') {
+    var bar = d3.selectAll('.bar')
+      .filter( function (d) {
+          return d[yParam] < limit;
+      })
+  }
+  else if (data == subset) {
+    console.log('okay')
     var bar = d3.selectAll('.bar')
   }
   else {
-    console.log(2);
     var bar = d3.selectAll('.bar')
       .filter( function (d) {
         return subset.indexOf(d) > -1;
@@ -246,9 +241,9 @@ var highlightBars = function (data, subset, duration, color, callback) {
     });
 }
 
-var highlightBarsTimeout = function (data, subset, color, time) {
+var highlightBarsTimeout = function (data, subset, yParam, limit, color, time) {
   setTimeout( function () {
-    highlightBars(data, subset, 1000, color);
+    highlightBars(data, subset, yParam, limit, 1000, color);
   }, time); 
 }
 
@@ -256,6 +251,7 @@ var slide2 = function (width, x, y, data) {
   var barGraph = d3.select('.bar-graph');
   updateYAxis([35], y, 1000);
   updatePercentLine(y, 35, 3000, width)
+  highlightBarsTimeout(data, data, 'rate', 35, 'red', 1000);
   
   setTimeout( function () {
     updateYAxis([0,35], y, 1000);
@@ -273,7 +269,7 @@ var slide3 = function (width, x, y, data, companiesYearsNoTax) {
   setTimeout( function () {
     for (var ii = 8; ii > 0; ii--) {
       var time = (9 - ii) * 1000;
-      highlightBarsTimeout(data, companiesYearsNoTax[ii], 'red', time);
+      highlightBarsTimeout(data, companiesYearsNoTax[ii], '', 'red', time);
     }
   }, 1000);
 }
@@ -285,7 +281,7 @@ var slide4 = function (width, x, y, data, companiesTop25) {
   updateBars(data, x, y);
 
   setTimeout( function () {
-    highlightBars(data, companiesTop25, 1000, 'red');
+    highlightBars(data, companiesTop25, '', 0, 1000, 'red');
   }, 1000);
 }
 
@@ -294,19 +290,113 @@ var slide5 = function (width, x, y, data, companiesRebates) {
   updateYAxis([0,35], y, 1000);
   updateXAxis(y, 1000);
 
-  var rebates = ['stockOptions','researchExperiment','dpad','accDepreciation','deferredTaxes'];
+  var rebates = Object.keys(companiesRebates);
   updateBars(data, x, y);
 
   setTimeout( function () {
     var counter = 1;
     while (rebates.length > 0) {
       var rebate = rebates.shift();
-      highlightBarsTimeout(data, companiesRebates[rebate], 'red', counter * 1000);
+      highlightBarsTimeout(data, companiesRebates[rebate], '', 0, 'red', counter * 1000);
 
       counter++;
-      highlightBarsTimeout(data, data, '#000', counter * 1000);
+      highlightBarsTimeout(data, data, '', 0, '#000', counter * 1000);
     }
   }, 1000);
+}
+
+var slide6 = function (width, height, x, y, data, companiesIPS, companiesTop3EmpChanges, companiesLostEmployees) {
+  var barGraph = d3.select('.bar-graph');
+  updateYAxis([0,35], y, 1000);
+  updateXAxis(x, y, 'rate', data, 1000);
+  updateBars(data, 'rate', x, y, 1000, 1000, 1000);
+
+  setTimeout( function () {
+    updateXAxis(x, y, 'rate', companiesIPS, 1000);
+    updateYAxis([0,20,35], y, 1000);
+    updateBars(companiesIPS, 'rate', x, y, 1000, 1000, 1000);
+
+    setTimeout( function () {
+      y = updateYScale(-15, 20, height);
+      updateYAxis([-15,0,20,35], y, 1000);
+      updateXAxis(x, y, 'rate', companiesIPS, 1000);
+      updateBars(companiesIPS, 'rate', x, y, 0, 1000, 1000);
+
+      setTimeout( function () {
+        y = updateYScale(-70, 2000, height);
+        updateYAxis([-70, 0, 500, 1000, 1500, 2000], y, 1000);
+        updateXAxis(x, y, 'rate', companiesIPS, 1000);
+        updateBars(companiesIPS, 'adjusted_emp_change', x, y, 0, 1000, 1000);
+
+        setTimeout( function () {
+          var counter = 1;
+          var empChangeRanks = Object.keys(companiesTop3EmpChanges);
+          while (empChangeRanks.length > 0) {
+            var rank = empChangeRanks.shift();
+            highlightBarsTimeout(data, companiesTop3EmpChanges[rank], '', 0, 'red', counter * 1000);
+
+            counter++;
+            highlightBarsTimeout(data, data, '', 0, '#000', counter * 1000);
+          }
+
+          setTimeout( function () {
+            highlightBarsTimeout(data, companiesLostEmployees, '', 0, 'red', 1000);
+
+            setTimeout( function () {
+              y = updateYScale(-70, 0, height);
+              updateXAxis(x, y, 'adjusted_emp_change', companiesLostEmployees, 1000);
+              updateYAxis([-70,0], y, 1000);
+              highlightBarsTimeout(data, companiesLostEmployees, '', 0, '#000', 1000);
+              updateBars(companiesLostEmployees, 'adjusted_emp_change', x, y, 0, 1000, 1000);
+            }, 2000);
+
+          }, 2000);
+
+        }, 2000);
+
+      }, 2000);
+
+    }, 2000)
+
+  }, 2000);
+
+}
+
+var slide8 = function (width, height, x, y, data, companiesForeignDiff) {
+  var barGraph = d3.select('.bar-graph');
+  updateYAxis([0,35], y, 1000);
+  updateXAxis(x, y, 'rate', data, 1000);
+  updateBars(data, 'rate', x, y, 1000, 1000, 1000);
+  highlightBarsTimeout(data, companiesForeignDiff, '', 0, 'red', 1000);
+
+  setTimeout( function () {
+    y = updateYScale(-40, 40, height);
+    updateXAxis(x, y, 'us_foreign_diff', companiesForeignDiff, 1000);
+    updateYAxis([-40,0,40], y, 1000);
+    updateBars(companiesForeignDiff, 'us_foreign_diff', x, y, 0, 1000, 1000);
+    highlightBarsTimeout(data, companiesForeignDiff, 'us_foreign_diff', 0, '#000', 2000);
+
+  }, 2000);
+}
+
+var slide9 = function (width, height, x, y, data, companiesCompetitors) {
+  var barGraph = d3.select('.bar-graph');
+  updateYAxis([0,35], y, 1000);
+  updateXAxis(x, y, 'rate', data, 1000);
+  updateBars(data, 'rate', x, y, 1000, 1000, 1000);
+
+  setTimeout( function () {
+    var competitorPairs = Object.keys(companiesCompetitors);
+    var counter = 1;
+    while (competitorPairs.length > 0) {
+      var pairNum = competitorPairs.shift();
+      highlightBarsTimeout(data, companiesCompetitors[pairNum], '', 0, 'red', counter * 1000);
+
+      counter++;
+      highlightBarsTimeout(data, data, '', 0, '#000', counter * 1000);
+    }
+  }, 2000);
+
 }
 
 var loadBarData = function (data) {
