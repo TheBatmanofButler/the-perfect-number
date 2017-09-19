@@ -8,6 +8,8 @@ d3.transition.prototype.end = function(callback, delayIfEmpty) {
   var f = callback, 
     delay = delayIfEmpty,
     transition = this;
+
+  if (transition.size() === 0) { callback(); }
   
   drop(2, arguments, function() {
     var args = arguments;

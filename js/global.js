@@ -135,7 +135,7 @@ d3.csv("../csv/dv_data/interactive_data.csv", type, function(companies) {
       companiesTop3EmpChanges[empChangeRank].push(d);
     }
 
-    if (d['lost_employees'] == 'True') {
+    if (d['adjusted_emp_change'] < 0) {
       companiesLostEmployees.push(d);
     }
 
@@ -145,7 +145,6 @@ d3.csv("../csv/dv_data/interactive_data.csv", type, function(companies) {
 
     var competitor = d['competitor'];
     if (competitor != '0') {
-      console.log(competitor)
       companiesCompetitors[competitor].push(d);
     }
 
