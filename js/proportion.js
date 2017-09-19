@@ -11,14 +11,14 @@ squaresColumn =0;
 
 canvas = d3.select('#grid')
     .append('canvas')
-    
+
 var openProportionGraph = function () {
   $('.proportion-graph-viewer').animate({'height': '60vh'});
   // $('.arrow>img').show(1000);
 }
 
 var closeProportionGraph = function () {
-  // $('.arrow>img').hicde(1000);
+  // $('.arrow>img').hide(1000);
   $('.proportion-graph-viewer').animate({'height': '0vh'});
 }
 
@@ -68,8 +68,9 @@ var changeSquareColor = function(points, id, color) {
   points[id].color = color;
 }
 
-var changeAreaColor = function(points, rowNum, columnNum, noOfSquares, color) {
-  var id = columnNum*squaresRow+rowNum;
+var changeAreaColor = function(points, id, noOfSquares, color) {
+  // var id = columnNum*squaresRow+rowNum;
+  id = Math.floor(id);
   for (var i = 0; i < noOfSquares; i++) {
     changeSquareColor(points,id+i,color);
   };
@@ -90,4 +91,65 @@ var createProportionGraph = function (noOfSquares) {
     .attr('width', width)
     .attr('height', height);
   draw(canvas);
+}
+
+var visualise = function(comparisonMap) {
+  comparisonMap = comparisonMap.sort(function (a, b) {return a.val < b.val});
+  for (let i = 0; i < comparisonMap.length; i++) {
+    // changeAreaColor(points, 0, comparisonMap[i].val,comparisonMap[i].color);
+    setTimeout(function() {
+        changeAreaColor(points, 0, comparisonMap[i].val,comparisonMap[i].color);
+    }, 1000 * i);
+  };
+}
+
+var allCompaniesPanel = function () {
+  var comparisonMap = [
+    {
+      'val': total35,
+      'color': "rgba(255, 0, 0, 0.4)"
+    },
+    {
+      'val': totalTaxBreaks,
+      'color': "rgba(255, 0, 0, 0.8)"
+    }
+  ]
+
+  for (var i = 0; i < globalComparison.length; i++) {
+    var boxes = globalComparison[i].money/1000000000
+    if(boxes>=5 && boxes<total35+1000) {
+      comparisonMap.push({
+          'val': boxes,
+          'color': globalComparison[i].color
+        })
+    }
+  };
+  visualise(comparisonMap);
+}
+
+var companiesPanel = function (total35,totalTaxBreaks) {
+  console.log(globalComparison);
+  var comparisonMap = [
+    {
+      'val': total35,
+      'color': "rgba(255, 0, 0, 0.4)"
+    },
+    {
+      'val': totalTaxBreaks,
+      'color': "rgba(255, 0, 0, 0.8)"
+    }
+  ]
+  for (var i = 0; i < globalComparison.length; i++) {
+    var boxes = globalComparison[i].money/1000000
+    console.log(globalComparison[i].text + ' ,boxes: ' + boxes);
+    if(boxes>=5 && boxes<total35+1000) {
+      console.log(globalComparison[i].text)
+      console.log('boxes: ' + boxes);
+      comparisonMap.push({
+          'val': boxes,
+          'color': globalComparison[i].color
+        })
+    }
+  };
+  visualise(comparisonMap);
 }
