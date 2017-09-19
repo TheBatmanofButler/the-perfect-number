@@ -12,10 +12,15 @@ var slugify = function (string) {
 
 var type = function (d) {
 	d.profit = +d.profit;
-    d.rate = +d.rate;
-    d.years_no_tax = +d.years_no_tax;
-    d.tax_break = +d.tax_break;
-    return d;
+  d.rate = +d.rate;
+  d.years_no_tax = +d.years_no_tax;
+  d.tax_break = +d.tax_break;
+  return d;
+}
+
+var typeComparision = function (d) {
+  d.money = +d.money;
+  return d;
 }
 
 var amtIf35 = function(companies) {
@@ -37,7 +42,7 @@ var amtSaved = function(companies) {
 }
 
 d3.csv("../csv/dv_data/interactive_data.csv", type, function(companies) {
-	var companyNames = ['All companies'];
+  var companyNames = ['All companies'];
 	companyMap = {};
 	data = companies.map(function(d)
 	{
@@ -150,22 +155,31 @@ d3.csv("../csv/dv_data/interactive_data.csv", type, function(companies) {
 
   });
 
-	// populateDropdown(companyNames);
-  createSlides(companies,
-    companiesYearsNoTax,
-    companiesTop25,
-    companiesRebates,
-    companiesIPS,
-    companiesTop3EmpChanges,
-    companiesLostEmployees,
-    companiesForeignDiff,
-    companiesCompetitors);
+	populateDropdown(companyNames);
+  // createSlides(companies,
+  //   companiesYearsNoTax,
+  //   companiesTop25,
+  //   companiesRebates,
+  //   companiesIPS,
+  //   companiesTop3EmpChanges,
+  //   companiesLostEmployees,
+  //   companiesForeignDiff,
+  //   companiesCompetitors);
 
 	// loadBarData(companies);
 	totalTaxBreaks = amtSaved(companies);
 	total35 = amtIf35(companies)/1000;
 	totalTaxBreaks = amtSaved(companies)/1000;
-  // console.log(total35);
-  // console.log(totalTaxBreaks);
 
 });
+
+d3.csv("../csv/dv_data/comparison_data.csv", typeComparision,function(comparison) {
+  globalComparison = comparison;
+  globalComparison[0].color = "rgba(0, 0, 255, 0.4)";
+  globalComparison[1].color = "rgba(0, 255, 0, 0.4)";
+  globalComparison[2].color = "rgba(100, 0, 200, 0.4)";
+  globalComparison[3].color = "rgba(255,255,0,0.4)";
+  globalComparison[4].color = "rgba(255,0,255,0.4)";
+});
+
+
