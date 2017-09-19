@@ -91,11 +91,11 @@ var changeSquareColor = function(points, id, color, prevColor) {
   points[id].color = color;
 }
 
-var changeAreaColor = function(points, id, abc, color, prevColor) {
+var changeAreaColor = function(points, id, numOfSq, color, prevColor) {
   // var id = columnNum*squaresRow+rowNum;
   var id = Math.floor(id);
-  console.log(abc)
-  for (var i = 0; i < abc; i++) {
+  console.log(numOfSq)
+  for (var i = 0; i < numOfSq; i++) {
     changeSquareColor(points,id+i,color, prevColor);
   };
   draw(canvas);
@@ -111,6 +111,8 @@ var createProportionGraph = function (noOfSquares) {
     color: "rgba(0, 0, 0, 0.3)"
   }));
 
+  console.log(points);
+
   gridLayout(points);
   canvas
     .attr('width', width)
@@ -119,15 +121,14 @@ var createProportionGraph = function (noOfSquares) {
   d3.select('.propCanvas').on('mousemove', function() {
     var mouseX = d3.event.offsetX;
     var mouseY = d3.event.offsetY;
-    var column = Math.floor(mouseX/cellSize);
-    var row = Math.floor(mouseY/cellSize);
+    var column = Math.floor(mouseX/(cellSize + cellSpacing));
+    var row = Math.floor(mouseY/(cellSize + cellSpacing));
     // console.log(squaresRow);
     // console.log('column: ' + column);
     // console.log('row: ' + row);
     var id;
     id = column * (squaresRow) + row + 1;
     // if(id<numPoints) {console.log(id);}
-    console.log(id);
     
   });
   
