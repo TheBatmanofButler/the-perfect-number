@@ -60,6 +60,10 @@ var createSlides = function (data,
     slide8(width, height, x, y, data, companiesForeignDiff);
   });
 
+  $('#slide8interim').click( function (e) {
+    slide8interim(width, height, x, y, data, companiesForeignDiff);
+  });
+
   $('#slide9').click( function (e) {
     slide9(width, height, x, y, data, companiesCompetitors);
   });
@@ -532,7 +536,6 @@ var slide7 = function (width, x, y, data) {
       updateBars(data,'rate', x, y, 0, 1000, 1000)
     ])
   });
-
 }
 
 var slide8 = function (width, height, x, y, data, companiesForeignDiff) {
@@ -541,9 +544,11 @@ var slide8 = function (width, height, x, y, data, companiesForeignDiff) {
   Promise.all([
     highlightAllBars('#000', 1000),
     updateYAxis([0,35], y, 1000),
-    updateXAxis(x, y, 'rate', data, 1000),
-    updateBars(data, 'rate', x, y, 1000, 1000, 1000),
+    updateXAxis(x, y, 'rate', data, 1000)
   ])
+  .then (function () {
+    return updateBars(data, 'rate', x, y, 1000, 1000, 1000);
+  })
   .then( function () {
     return Promise.all([
       highlightSomeBars(companiesForeignDiff, 'red', 1000),
@@ -559,28 +564,37 @@ var slide8 = function (width, height, x, y, data, companiesForeignDiff) {
     ])
   })
   .then( function () {
-    return Promise.all([
-      highlightBarsSplit('us_foreign_diff', 0, 'red', 'green', 1000)
-    ]);
+    return highlightBarsSplit('us_foreign_diff', 0, 'red', 'green', 1000);
   });
-  // .then( function () {
-  //   return Promise.all([
-  //     updateYAxis([0,35], y, 1000),
-  //     updateXAxis(x, y, 'rate', data, 1000),
-  //     updateBars(data, 'rate', x, y, 1000, 1000, 1000),
-  //   ])
-  // })
-  // .then( function () {
-  //   highlightAllBars('#000', 1000);
-  // });
+}
+
+var slide8interim = function (width, height, x, y, data, companiesForeignDiff) {
+  var barGraph = d3.select('.bar-graph');
+
+  highlightAllBars('red', 1000)
+  .then( function () {
+    return Promise.all([
+            y = updateYScale(-15, 50, height),
+            updateYAxis([0,35], y, 500),
+            updateXAxis(x, y, 'rate', data, 1000),
+            updateBars(companiesForeignDiff, 'rate', x, y, 0, 500, 500),
+          ]);
+  })
+  .then( function () {
+    return updateBars(data, 'rate', x, y, 0, 500, 500);
+  })
+  .then( function () {
+    return Promise.all([
+            highlightAllBars('#000', 500),
+            slidePercentLine(y, 35, 500, width)
+          ]);
+  })
 }
 
 var slide9 = function (width, height, x, y, data, companiesCompetitors) {
   var barGraph = d3.select('.bar-graph');
 
-  Promise.all([
-    fadeAll()
-  ])
+  fadeAll()
   .then( function () {
     return Promise.all([
       highlightAllBars('#000', 1000),

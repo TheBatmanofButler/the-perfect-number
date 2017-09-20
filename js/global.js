@@ -155,16 +155,16 @@ d3.csv("../csv/dv_data/interactive_data.csv", typeCastInteractive, function(comp
 
   });
 
-	populateDropdown(companyNames);
-  // createSlides(companies,
-  //   companiesYearsNoTax,
-  //   companiesTop25,
-  //   companiesRebates,
-  //   companiesIPS,
-  //   companiesTop3EmpChanges,
-  //   companiesLostEmployees,
-  //   companiesForeignDiff,
-  //   companiesCompetitors);
+	// populateDropdown(companyNames);
+  createSlides(companies,
+    companiesYearsNoTax,
+    companiesTop25,
+    companiesRebates,
+    companiesIPS,
+    companiesTop3EmpChanges,
+    companiesLostEmployees,
+    companiesForeignDiff,
+    companiesCompetitors);
 
 	// loadBarData(companies);
 	total35 = Math.floor(tax35percent(companies)/1000);
