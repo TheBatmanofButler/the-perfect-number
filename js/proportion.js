@@ -17,6 +17,8 @@ var gridLayout = function(points) {
   gridDiv = $('.grid');
   width = gridDiv.width();
   height = gridDiv.height();
+  console.log(width);
+  console.log(height);
   cellSize = Math.floor(Math.sqrt((width*height)/numPoints));
   
   if (cellSize < 5) { cellSpacing = 0.3; }
