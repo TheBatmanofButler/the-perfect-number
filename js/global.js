@@ -167,8 +167,8 @@ d3.csv("../csv/dv_data/interactive_data.csv", typeCastInteractive, function(comp
   //   companiesCompetitors);
 
 	// loadBarData(companies);
-	total35 = tax35percent(companies)/1000;
-	totalTaxBreaks = amtSaved(companies)/1000;
+	total35 = Math.floor(tax35percent(companies)/1000);
+	totalTaxBreaks = Math.floor(amtSaved(companies)/1000);
 
 });
 
@@ -179,6 +179,10 @@ d3.csv("../csv/dv_data/comparison_data.csv", typeCastComparison, function(compar
   globalComparison[2].color = "rgba(100, 0, 200, 0.4)";
   globalComparison[3].color = "rgba(255,255,0,0.4)";
   globalComparison[4].color = "rgba(255,0,255,0.4)";
+  globalComparison[5].color = "rgba(0, 0, 255, 0.4)";
+  globalComparison[6].color = "rgba(0, 255, 0, 0.4)";
+  globalComparison[7].color = "rgba(255,100,255,0.4)";
+
 });
 
 

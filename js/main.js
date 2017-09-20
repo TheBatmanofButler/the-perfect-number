@@ -28,8 +28,8 @@ $('.typeahead').bind('typeahead:select', function(ev, suggestion) {
 		
 		$('.company-bar-name').text(companyMap[slugify(suggestion)].company_name);
 		loadInfo(slugify(suggestion),companyMap[slugify(suggestion)]);
-		company35 = companyMap[slugify(suggestion)].profit*0.35;
-		companyTaxBreak = companyMap[slugify(suggestion)].tax_break;
+		company35 = Math.floor(companyMap[slugify(suggestion)].profit*0.35);
+		companyTaxBreak = Math.floor(companyMap[slugify(suggestion)].tax_break);
 		createProportionGraph(company35);
 		companiesPanel(company35,companyTaxBreak);
 	}	
