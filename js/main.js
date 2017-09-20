@@ -14,15 +14,15 @@ $('.slide-explore').click( function (e) {
 	$('.proportion-graph-viewer').animate({'height': '60vh'})
 	$('.info').show()
 
-	createProportionGraph(total35);
-	allCompaniesPanel();
+	createProportionGraph(globalComparison['All Companies']['35percent']['numSquares']);
+	// allCompaniesPanel();
 });
 
 $('.typeahead').bind('typeahead:select', function(ev, suggestion) {
 	if(suggestion == 'All companies'){
 		$('.company-bar-name').text('All companies');
 		createProportionGraph(total35);
-		allCompaniesPanel();
+		// allCompaniesPanel();
 	}
 	else {
 		

@@ -41,27 +41,34 @@ var amtSaved = function(companies) {
 	return total;
 }
 
-d3.csv("../csv/dv_data/interactive_data.csv", typeCastInteractive, function(companies) {
+d3.queue()
+.defer(d3.csv, "../csv/dv_data/interactive_data.csv", typeCastInteractive)
+.defer(d3.csv, "../csv/dv_data/comparison_data.csv", typeCastComparison)
+.await( function (error, companies, comparisons) {
+
   var companyNames = ['All companies'];
-	companyMap = {};
-	data = companies.map(function(d)
-	{
-		companyNames.push(d.company_name);
-		companyMap[slugify(d.company_name)] = {
-			'company_name': d.company_name,
-			'profit': d.profit,
-			'rate': d.rate,
-			'industry': d.industry,
-			'years_no_tax': d.years_no_tax,
-			'note': d.note,
-			'tax_break': d.tax_break,
-			'stock_options': d.stock_options,
-			'research_experiment': d.research_experiment,
-			'dpad': d.dpad,
-			'acc_depreciation': d.acc_depreciation,
-			'deferred_taxes': d.deferred_taxes
-		};
-	});
+  globalComparison = {};
+  companyMap = {};
+  var totalProfits = 0;
+  var totalTaxBreaks = 0;
+  data = companies.map(function(d)
+  {
+    companyNames.push(d.company_name);
+    companyMap[slugify(d.company_name)] = {
+      'company_name': d.company_name,
+      'profit': d.profit,
+      'rate': d.rate,
+      'industry': d.industry,
+      'years_no_tax': d.years_no_tax,
+      'note': d.note,
+      'tax_break': d.tax_break,
+      'stock_options': d.stock_options,
+      'research_experiment': d.research_experiment,
+      'dpad': d.dpad,
+      'acc_depreciation': d.acc_depreciation,
+      'deferred_taxes': d.deferred_taxes
+    };
+  });
 
   var companyNames = ['All companies'],
       companiesIPS = [],
@@ -98,6 +105,8 @@ d3.csv("../csv/dv_data/interactive_data.csv", typeCastInteractive, function(comp
                               '4': [],
                               '5': []
                             };
+
+  globalComparison = {};
 
   companies.map(function (d) {
     companyNames.push(d['company_name']);
@@ -153,9 +162,18 @@ d3.csv("../csv/dv_data/interactive_data.csv", typeCastInteractive, function(comp
       companiesCompetitors[competitor].push(d);
     }
 
+    globalComparison[ d['company_name'] ] = createProportionAreas(comparisons, d['profit'], d['tax_break'], 1e6);
+
+    var taxBreak = d['tax_break'];
+    if(taxBreak > 0) {
+      totalProfits += d['profit'];
+      totalTaxBreaks += taxBreak;
+    }
   });
 
-	populateDropdown(companyNames);
+  globalComparison['All Companies'] = createProportionAreas(comparisons, totalProfits, totalTaxBreaks, 1e9);
+
+  populateDropdown(companyNames);
   // createSlides(companies,
   //   companiesYearsNoTax,
   //   companiesTop25,
@@ -166,22 +184,58 @@ d3.csv("../csv/dv_data/interactive_data.csv", typeCastInteractive, function(comp
   //   companiesForeignDiff,
   //   companiesCompetitors);
 
-	// loadBarData(companies);
-	total35 = Math.floor(tax35percent(companies)/1000);
-	totalTaxBreaks = Math.floor(amtSaved(companies)/1000);
+  // loadBarData(companies);
+});
+
+var createProportionAreas = function (comparisons, profit, taxBreak, squareUnit) {
+
+  var num35PercentSquares = Math.floor(profit * 0.35);
+  var numTaxBreakSquares = Math.floor(taxBreak);
+
+  var proportionAreas = {
+    '35percent': {
+      'text': 'Company Tax if rate is 35%',
+      'numSquares': num35PercentSquares,
+      'color': "rgba(255, 0, 0, 0.4)"
+    },
+    'taxBreak': {
+      'text': 'Company Tax Break',
+      'numSquares': numTaxBreakSquares,
+      'color': "rgba(255, 0, 0, 0.8)"
+    }
+  }
+
+  var filled = 0;
+  for (let datum in comparisons) {
+    let comparison = comparisons[datum],
+        numComparisonSquares = Math.floor(comparison['money'] / squareUnit)
+
+    if (isValidComparison(comparison, numTaxBreakSquares, filled)) {
+      proportionAreas[slugify(comparison['text'])] = {
+        'text': comparison['text'],
+        'numSquares': numComparisonSquares,
+        'color': comparison['color']
+      }
+      filled += numComparisonSquares;
+    }
+  }
+
+  return proportionAreas;
+}
+
+var isValidComparison = function (comparison, numTaxBreakSquares, numComparisonSquares, filled) {
+    enough = numComparisonSquares > 6,
+    remaining = numTaxBreakSquares - filled,
+    notTooMany = numComparisonSquares <= remaining;
+
+    return (enough && notTooMany);
+}
+
+d3.csv("../csv/dv_data/interactive_data.csv", typeCastInteractive, function(companies) {
 
 });
 
 d3.csv("../csv/dv_data/comparison_data.csv", typeCastComparison, function(comparisons) {
-  globalComparison = comparisons;
-  globalComparison[0].color = "rgba(0, 0, 255, 0.4)";
-  globalComparison[1].color = "rgba(0, 255, 0, 0.4)";
-  globalComparison[2].color = "rgba(100, 0, 200, 0.4)";
-  globalComparison[3].color = "rgba(255,255,0,0.4)";
-  globalComparison[4].color = "rgba(255,0,255,0.4)";
-  globalComparison[5].color = "rgba(0, 0, 255, 0.4)";
-  globalComparison[6].color = "rgba(0, 255, 0, 0.4)";
-  globalComparison[7].color = "rgba(255,100,255,0.4)";
 
 });
 
