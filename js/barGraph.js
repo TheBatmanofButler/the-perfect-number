@@ -32,6 +32,10 @@ var createSlides = function (data,
       x = barGraphSettings[0],
       y = barGraphSettings[1];
 
+  $('#slide1').click( function (e) {
+    slide1(width, height);
+  });
+
   $('#slide2').click( function (e) {
     slide2(width, x, y, data);
   });
@@ -208,8 +212,8 @@ var updateBars = function (data, yParam, x, y, exitTime, enterTime, updateTime) 
           .exit()
           .transition()
           .duration(exitTime)
-          .attr("y", y(0))
-          .attr("height", 0)
+          .attr('y', y(0))
+          .attr('height', 0)
           .remove()
           .end(function () {
             console.log('exit')
@@ -332,11 +336,11 @@ var highlightBars = function (bars, color, duration) {
   });
 }
 
-var fadeAll = function () {
+var fadeAll = function (duration) {
   return new Promise( function (resolve, reject) {
     d3.select('.bar-graph')
       .transition()
-      .duration(1000)
+      .duration(duration)
       .style('opacity', 0)
       .end(resolve);
   });
@@ -350,6 +354,30 @@ var showAll = function () {
       .style('opacity', 1)
       .end(resolve);
   });
+}
+
+var slide1 = function (width, height) {
+  var barGraph = d3.select('.bar-graph');
+
+  var openingScreen = barGraph
+                        .append('g')
+                        .attr('class', 'opening-screen');
+
+  openingScreen
+    .append('text')
+    .attr('x', width / 2)
+    .attr('y', height / 2)
+    .style('text-anchor', 'middle')
+    .style('font-size', '26px')
+    .text('Corporate Tax Reality');
+
+  openingScreen
+    .append('text')
+    .attr('x', width / 2)
+    .attr('y', height * 0.8)
+    .style('text-anchor', 'middle')
+    .style('font-size', '26px')
+    .text('Visualizing the Federal Tax Rates for 258 Fortune 500 Companies');
 }
 
 var slide2 = function (width, x, y, data) {
@@ -370,7 +398,6 @@ var slide2 = function (width, x, y, data) {
   .then( function () {
     return highlightBarsSplit('rate', 35, 'red', 'green', 1000);
   });
-
 }
 
 var slide3 = function (width, x, y, data, companiesYearsNoTax) {
@@ -568,41 +595,15 @@ var slide8 = function (width, height, x, y, data, companiesForeignDiff) {
   });
 }
 
-var slide8interim = function (width, height, x, y, data, companiesForeignDiff) {
-  var barGraph = d3.select('.bar-graph');
-
-  highlightAllBars('red', 1000)
-  .then( function () {
-    return Promise.all([
-            y = updateYScale(-15, 50, height),
-            updateYAxis([0,35], y, 500),
-            updateXAxis(x, y, 'rate', data, 1000),
-            updateBars(companiesForeignDiff, 'rate', x, y, 0, 500, 500),
-          ]);
-  })
-  .then( function () {
-    return updateBars(data, 'rate', x, y, 0, 500, 500);
-  })
-  .then( function () {
-    return Promise.all([
-            highlightAllBars('#000', 500),
-            slidePercentLine(y, 35, 500, width)
-          ]);
-  })
-}
-
 var slide9 = function (width, height, x, y, data, companiesCompetitors) {
   var barGraph = d3.select('.bar-graph');
 
-  fadeAll()
-  .then( function () {
-    return Promise.all([
-      highlightAllBars('#000', 1000),
-      updateYAxis([0,35], y, 1000),
-      updateXAxis(x, y, 'rate', data, 1000),
-      updateBars(data, 'rate', x, y, 1000, 1000, 1000),
-    ])
-  })
+  Promise.all([
+    highlightAllBars('#000', 0),
+    updateYAxis([0,35], y, 0),
+    updateXAxis(x, y, 'rate', data, 0),
+    updateBars(data, 'rate', x, y, 0, 1000, 1000),
+  ])
   .then( function () {
     return Promise.all([
       showAll()
