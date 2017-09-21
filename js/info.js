@@ -55,17 +55,13 @@ let currentSlide = 1;
     }   
   });
 
-let changeDynamicText = function (newText, duration) {
+let changeDynamicText = function (duration, newText, imgSrc) {
 	return new Promise( function (resolve, reject) {
-    d3.select('.dynamic-text')
-    	.transition()
-		.duration(duration)
-		.style('opacity',0)
-		.transition()
-		.duration(duration)
-		.text(newText)
-		.style('opacity',1)
-		.end(resolve);
-  });
+		$('.dynamic-text').fadeOut(duration, function(){
+    		$(this).html(newText).fadeIn(duration);
+    		if (imgSrc)
+    			$(this).prepend('<img src=' + imgSrc + ' class="dynamic-text-img"/>').fadeIn(duration);
+		}).end(resolve)
+  	});
 };
 

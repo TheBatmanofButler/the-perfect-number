@@ -136,6 +136,12 @@ html, body {
     border-bottom: 3px solid white;
     /*background: #8E443D;*/
   }
+    .dynamic-text-img {
+      height: 50px;
+      width: 40px;
+      vertical-align: middle;
+      margin-right: 10px; 
+    }
 
   .middle {
     display: flex;
