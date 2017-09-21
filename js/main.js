@@ -14,24 +14,20 @@ $('.slide-explore').click( function (e) {
 	$('.proportion-graph-viewer').animate({'height': '60vh'})
 	$('.info').show()
 
-	createProportionGraph(globalComparison['All Companies']['35percent']['numSquares']);
-	// allCompaniesPanel();
+	// createProportionGraph(globalComparison['All Companies']['35percent']['numSquares']);
+	allCompaniesPanel('All Companies');
 });
 
 $('.typeahead').bind('typeahead:select', function(ev, suggestion) {
 	if(suggestion == 'All companies'){
 		$('.company-bar-name').text('All companies');
-		createProportionGraph(total35);
-		// allCompaniesPanel();
+		allCompaniesPanel('All Companies');
 	}
 	else {
 		
 		$('.company-bar-name').text(companyMap[slugify(suggestion)].company_name);
 		loadInfo(slugify(suggestion),companyMap[slugify(suggestion)]);
-		company35 = Math.floor(companyMap[slugify(suggestion)].profit*0.35);
-		companyTaxBreak = Math.floor(companyMap[slugify(suggestion)].tax_break);
-		createProportionGraph(company35);
-		companiesPanel(company35,companyTaxBreak);
+		allCompaniesPanel(companyMap[slugify(suggestion)].company_name);
 	}	
 });
 

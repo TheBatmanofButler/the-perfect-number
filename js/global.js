@@ -162,7 +162,7 @@ d3.queue()
       companiesCompetitors[competitor].push(d);
     }
 
-    globalComparison[ d['company_name'] ] = createProportionAreas(comparisons, d['profit'], d['tax_break'], 1e6);
+    globalComparison[ d['company_name'] ] = createProportionAreas(comparisons, d['profit'], d['tax_break'], 1);
 
     var taxBreak = d['tax_break'];
     if(taxBreak > 0) {
@@ -171,7 +171,7 @@ d3.queue()
     }
   });
 
-  globalComparison['All Companies'] = createProportionAreas(comparisons, totalProfits, totalTaxBreaks, 1e9);
+  globalComparison['All Companies'] = createProportionAreas(comparisons, totalProfits, totalTaxBreaks, 1e3);
 
   populateDropdown(companyNames);
   // createSlides(companies,
@@ -187,35 +187,36 @@ d3.queue()
   // loadBarData(companies);
 });
 
-var createProportionAreas = function (comparisons, profit, taxBreak, squareUnit) {
+var createProportionAreas = function (comparisons, profit, taxBreak, convertConst) {
 
-  var num35PercentSquares = Math.floor(profit * 0.35);
-  var numTaxBreakSquares = Math.floor(taxBreak);
+  var num35PercentSquares = Math.floor(profit * 0.35 / convertConst);
+  var numTaxBreakSquares = Math.floor(taxBreak / convertConst);
 
-  var proportionAreas = {
-    '35percent': {
+  var proportionAreas = [
+    {
       'text': 'Company Tax if rate is 35%',
       'numSquares': num35PercentSquares,
       'color': "rgba(255, 0, 0, 0.4)"
     },
-    'taxBreak': {
+    {
       'text': 'Company Tax Break',
       'numSquares': numTaxBreakSquares,
       'color': "rgba(255, 0, 0, 0.8)"
     }
-  }
+  ]
 
   var filled = 0;
   for (let datum in comparisons) {
     let comparison = comparisons[datum],
-        numComparisonSquares = Math.floor(comparison['money'] / squareUnit)
+        numComparisonSquares = Math.floor(comparison['money'] / convertConst);
 
-    if (isValidComparison(comparison, numTaxBreakSquares, filled)) {
-      proportionAreas[slugify(comparison['text'])] = {
+    if (isValidComparison(comparison, numTaxBreakSquares, numComparisonSquares, filled)) {
+      proportionAreas.push({
         'text': comparison['text'],
         'numSquares': numComparisonSquares,
         'color': comparison['color']
-      }
+      });
+
       filled += numComparisonSquares;
     }
   }
@@ -230,13 +231,5 @@ var isValidComparison = function (comparison, numTaxBreakSquares, numComparisonS
 
     return (enough && notTooMany);
 }
-
-d3.csv("../csv/dv_data/interactive_data.csv", typeCastInteractive, function(companies) {
-
-});
-
-d3.csv("../csv/dv_data/comparison_data.csv", typeCastComparison, function(comparisons) {
-
-});
 
 

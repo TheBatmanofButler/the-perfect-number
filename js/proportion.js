@@ -14,11 +14,12 @@ var canvas = d3.select('#grid')
     .attr('class','prop-canvas');
 
 var gridLayout = function(points) {
-  gridDiv = document.getElementById('grid');
+  var gridDiv = document.getElementById('grid');
   width = gridDiv.clientWidth;
   height = gridDiv.clientHeight;
 
-  cellSize = Math.floor(Math.sqrt((width*height)/numPoints));
+  cellSize = Math.floor(Math.sqrt((width*height)/points.length));
+  console.log(width, height, points.length);
   
   if (cellSize < 5) { cellSpacing = 0.3; }
   else { cellSpacing = 1;}
@@ -32,7 +33,6 @@ var gridLayout = function(points) {
     point.x = (cellSize+cellSpacing) * Math.floor(i / squaresRow);
     point.y = (cellSize+cellSpacing) * (i % squaresRow);
   });
-  console.log(points)
   return points;
 }
 
@@ -64,75 +64,23 @@ var createProportionGraph = function (noOfSquares) {
 }
 
 var visualise = function(possibleComparisons) {
-  changeAreaColor(points, 0, possibleComparisons[0].money,possibleComparisons[0].color);
-  changeAreaColor(points, 0, possibleComparisons[1].money,possibleComparisons[1].color);
+  changeAreaColor(points, 0, possibleComparisons[0]['numSquares'],possibleComparisons[0]['color']);
+  changeAreaColor(points, 0, possibleComparisons[1]['numSquares'],possibleComparisons[1]['color']);
   var prevSquareId = 0;
   for (let i = 2; i < possibleComparisons.length; i++) {
-
     setTimeout(function() {
-        changeAreaColor(points, prevSquareId, possibleComparisons[i].money,possibleComparisons[i].color);
-        prevSquareId += possibleComparisons[i].money;
-    }, 1000 * i);
+        changeAreaColor(points, prevSquareId, possibleComparisons[i]['numSquares'],possibleComparisons[i]['color']);
+        prevSquareId += possibleComparisons[i]['numSquares'];
+    }, 1000 * i-2);
   };
 }
 
-var allCompaniesPanel = function () {
-  var possibleComparisons = [
-    {
-      'text': 'Total Tax if rate is 35%',
-      'money': total35,
-      'color': "rgba(255, 0, 0, 0.4)"
-    },
-    {
-      'text': 'All Companies Tax Break',
-      'money': totalTaxBreaks,
-      'color': "rgba(255, 0, 0, 0.8)"
-    }
-  ]
-
-  var totalSquares = 0;
-  for (let i = 0; i < globalComparison.length; i++) {
-    var squares = Math.floor(globalComparison[i].money / 1000000);
-    if(squares >=5  && squares <= totalTaxBreaks-totalSquares) {
-      possibleComparisons.push({
-        'text': globalComparison[i].text,
-        'money': squares,
-        'color': globalComparison[i].color
-      })
-      totalSquares += squares;
-    }
-  };
-  possibleComparisons = possibleComparisons.sort(function (a, b) {return a.money < b.money});
-  visualise(possibleComparisons);
-}
-
-var companiesPanel = function (company35TaxSquares, companyTaxBreaksSquares) {
-  var possibleComparisons = [
-    {
-      'text': 'Company Tax if rate is 35%',
-      'money': company35TaxSquares,
-      'color': "rgba(255, 0, 0, 0.4)"
-    },
-    {
-      'text': 'Company Tax Break',
-      'money': companyTaxBreaksSquares,
-      'color': "rgba(255, 0, 0, 0.8)"
-    }
-  ]
-
-  var totalSquares = 0;
-  for (let i = 0; i < globalComparison.length; i++) {
-    var squares = Math.floor(globalComparison[i].money / 1000000);
-    if(squares >=5  && squares <= companyTaxBreaksSquares-totalSquares) {
-      possibleComparisons.push({
-        'text': globalComparison[i].text,
-        'money': squares,
-        'color': globalComparison[i].color
-      })
-      totalSquares += squares;
-    }
-  };
-  possibleComparisons = possibleComparisons.sort(function (a, b) {return a.money < b.money});
+var allCompaniesPanel = function (companyKey) {
+  var possibleComparisons = globalComparison[companyKey].sort(function (a, b) {
+    return b['numSquares'] - a['numSquares'];
+  });
+  createProportionGraph(possibleComparisons[0]['numSquares']);
+  console.log(possibleComparisons)
   visualise(possibleComparisons);
 }
 
