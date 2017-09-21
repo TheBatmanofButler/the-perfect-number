@@ -27,38 +27,47 @@ let createSlides = function (data,
 
   $('#slide1').click( function (e) {
     slide1(barGraphWidth, barGraphHeight);
+    currentSlide = 1;
   });
 
   $('#slide2').click( function (e) {
     slide2(barGraphWidth, x, y, data);
+    currentSlide = 2;
   });
 
   $('#slide3').click( function (e) {
     slide3(barGraphWidth, x, y, data, companiesYearsNoTax);
+    currentSlide = 3;
   });
 
   $('#slide4').click( function (e) {
     slide4(barGraphWidth, x, y, data, companiesTop25);
+    currentSlide = 4;
   });
 
   $('#slide5').click( function (e) {
     slide5(barGraphWidth, x, y, data, companiesRebates);
+    currentSlide = 5;
   });
 
   $('#slide6').click( function (e) {
     slide6(barGraphWidth, barGraphHeight, x, y, data, companiesIPS, companiesTop3EmpChanges, companiesLostEmployees);
+    currentSlide = 6;
   });
 
   $('#slide7').click( function (e) {
     slide7(barGraphWidth, x, y, data);
+    currentSlide = 7;
   });
 
   $('#slide8').click( function (e) {
     slide8(barGraphWidth, barGraphHeight, x, y, data, companiesForeignDiff);
+    currentSlide = 8;
   });
 
   $('#slide9').click( function (e) {
     slide9(barGraphWidth, barGraphHeight, x, y, data, companiesCompetitors);
+    currentSlide = 9;
   });
 }
 

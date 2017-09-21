@@ -215,7 +215,7 @@ html, body {
         display: flex;
         align-items: stretch;
         flex-grow: 1;
-        background-color: red;
+        /*background-color: red;*/
       }
 
         .bar-graph-wrapper {

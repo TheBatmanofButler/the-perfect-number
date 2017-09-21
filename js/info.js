@@ -1,4 +1,4 @@
-var loadInfo = function (company_name, companyMap) {
+let loadInfo = function (company_name, companyMap) {
 	$('.company-name').text(companyMap['company_name']);
 	$('.industry').text(companyMap['industry']);
 	$('.rate').text('Tax Rate: ' + companyMap['rate'] + '%');
@@ -15,7 +15,7 @@ var loadInfo = function (company_name, companyMap) {
 	else {
 		$('.years-no-tax').hide();
 	}
-	var taxRebates = ['deferred_taxes','acc_depreciation','dpad','research_experiment','stock_options'];
+	let taxRebates = ['deferred_taxes','acc_depreciation','dpad','research_experiment','stock_options'];
 	for (let i in taxRebates) {
 		console.log(taxRebates[i]);
 		if (companyMap[taxRebates[i]]=='True') {
@@ -28,3 +28,44 @@ var loadInfo = function (company_name, companyMap) {
 	};
 	$('.note').text(companyMap['note']);
 }
+
+let currentSlide = 1;
+  $('.bar-graph-viewer').click( function (e) {
+    if(currentSlide == 9) { currentSlide = 0; }
+    currentSlide += 1;
+    switch (currentSlide) {
+      case 1: $("#slide1").trigger( "click" ); 
+              break;
+      case 2: $("#slide2").trigger( "click" );
+              break;
+      case 3: $("#slide3").trigger( "click" );
+              break;
+      case 4: $("slide4").trigger( "click" );
+              break;
+      case 5: $("#slide5").trigger( "click" );
+              break;
+      case 6: $("#slide6").trigger( "click" );
+              break;
+      case 7: $("#slide7").trigger( "click" );
+              break;
+      case 8: $("#slide8").trigger( "click" );
+              break;
+      case 9: $("#slide9").trigger( "click" );
+              break;
+    }   
+  });
+
+let changeDynamicText = function (newText, duration) {
+	return new Promise( function (resolve, reject) {
+    d3.select('.dynamic-text')
+    	.transition()
+		.duration(duration)
+		.style('opacity',0)
+		.transition()
+		.duration(duration)
+		.text(newText)
+		.style('opacity',1)
+		.end(resolve);
+  });
+};
+
