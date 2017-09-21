@@ -6,3 +6,7 @@
 .axis line {
   stroke: #000;
 }
+
+.bar-graph {
+	background: blue;
+}

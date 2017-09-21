@@ -20,7 +20,6 @@ let createSlides = function (data,
   },
       barGraphWidth = $('.bar-graph-viewer').width() - margin.left - margin.right,
       barGraphHeight = $('.bar-graph-viewer').height() - margin.top - margin.bottom;
-  console.log(barGraphHeight)
 
   let barGraphSettings = initBarGraph(margin, barGraphWidth, barGraphHeight, data),
       x = barGraphSettings[0],
@@ -57,10 +56,6 @@ let createSlides = function (data,
   $('#slide8').click( function (e) {
     slide8(barGraphWidth, barGraphHeight, x, y, data, companiesForeignDiff);
   });
-
-  // $('#slide8interim').click( function (e) {
-  //   slide8interim(barGraphWidth, barGraphHeight, x, y, data, companiesForeignDiff);
-  // });
 
   $('#slide9').click( function (e) {
     slide9(barGraphWidth, barGraphHeight, x, y, data, companiesCompetitors);
