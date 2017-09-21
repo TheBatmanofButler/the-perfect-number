@@ -10,11 +10,16 @@ $('.about').click( function (e) {
 	console.log('about clicked');
 });
 
-$('.slide-explore').click( function (e) {
-	$('.proportion-graph-viewer').animate({'height': '60vh'})
-	$('.info').show()
+$('.slide-no').click( function (e) {
+	$('.proportion-graph-viewer').hide();
+	$('.info').hide();
+});
 
-	// createProportionGraph(globalComparison['All Companies']['35percent']['numSquares']);
+$('.slide-explore').click( function (e) {
+	// $('.proportion-graph-viewer').show();
+	$('.proportion-graph-viewer').animate({'height': '60vh'});
+	// $('.bar-graph-viewer').animate({'height': '30vh'});
+	// $('.info').show();
 	allCompaniesPanel('All Companies');
 });
 

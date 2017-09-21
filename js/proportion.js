@@ -13,21 +13,31 @@ var canvas = d3.select('#grid')
     .append('canvas')
     .attr('class','prop-canvas');
 
-var gridLayout = function(points) {
-  var gridDiv = document.getElementById('grid');
-  width = gridDiv.clientWidth;
-  height = gridDiv.clientHeight;
+var margin = {
+      top: 50,
+      right: 80,
+      bottom: 200,
+      left: 80
+  },
+  proportionWidth = $('.proportion-graph').width() - margin.left - margin.right,
+  proportionHeight = $('.proportion-graph').height() - margin.top - margin.bottom;
 
-  cellSize = Math.floor(Math.sqrt((width*height)/points.length));
-  console.log(width, height, points.length);
+var gridLayout = function(points) {
+  // var gridDiv = document.getElementById('grid');
+  // proportionWidth = $('.proportion-graph').width();
+  // proportionHeight = $('.proportion-graph').height();
+
+
+  cellSize = Math.floor(Math.sqrt((proportionWidth*proportionHeight)/points.length));
+  console.log(proportionWidth, proportionHeight, points.length);
   
   if (cellSize < 5) { cellSpacing = 0.3; }
   else { cellSpacing = 1;}
   
-  var squaresRow = Math.floor(height / (cellSize+cellSpacing));
+  var squaresRow = Math.floor(proportionHeight / (cellSize+cellSpacing));
   var squaresColumn = Math.floor(numPoints/squaresRow);
 
-  while(squaresColumn*(cellSize+cellSpacing)>width) { cellSize-=1; }
+  while(squaresColumn*(cellSize+cellSpacing)>proportionWidth) { cellSize-=1; }
   
   points.forEach((point, i) => {
     point.x = (cellSize+cellSpacing) * Math.floor(i / squaresRow);
@@ -50,8 +60,8 @@ var createProportionGraph = function (noOfSquares) {
 
   gridLayout(points);
   canvas
-    .attr('width', width)
-    .attr('height', height);
+    .attr('proportionWidth', proportionWidth)
+    .attr('proportionHeight', proportionHeight);
   drawCanvas(canvas);
   d3.select('.prop-canvas').on('mousemove', function() {
     var mouseX = d3.event.offsetX;
@@ -100,7 +110,7 @@ var drawCanvas = function(canvas) {
   ctx.save();
 
   // erase what is on the canvas currently
-  ctx.clearRect(0, 0, width, height);
+  ctx.clearRect(0, 0, proportionWidth, proportionHeight);
 
   // draw each point as a rectangle
   for (let i = 0; i < points.length; ++i) {

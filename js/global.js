@@ -173,16 +173,16 @@ d3.queue()
 
   globalComparison['All Companies'] = createProportionAreas(comparisons, totalProfits, totalTaxBreaks, 1e3);
 
-  populateDropdown(companyNames);
-  // createSlides(companies,
-  //   companiesYearsNoTax,
-  //   companiesTop25,
-  //   companiesRebates,
-  //   companiesIPS,
-  //   companiesTop3EmpChanges,
-  //   companiesLostEmployees,
-  //   companiesForeignDiff,
-  //   companiesCompetitors);
+  // populateDropdown(companyNames);
+  createSlides(companies,
+    companiesYearsNoTax,
+    companiesTop25,
+    companiesRebates,
+    companiesIPS,
+    companiesTop3EmpChanges,
+    companiesLostEmployees,
+    companiesForeignDiff,
+    companiesCompetitors);
 
   // loadBarData(companies);
 });
@@ -231,5 +231,3 @@ var isValidComparison = function (comparison, numTaxBreakSquares, numComparisonS
 
     return (enough && notTooMany);
 }
-
-

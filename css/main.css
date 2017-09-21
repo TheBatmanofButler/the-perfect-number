@@ -89,6 +89,19 @@ html, body {
           color: white;
         }
 
+        button {
+          cursor: pointer;
+          padding: 0;
+          box-sizing: content-box;
+          font-size: 16px;
+        }
+
+        button:active {
+          background: #8E8B8E;
+          color: white;
+        }
+
+
       .slide-explore {
         text-align: center;
         vertical-align: middle;
@@ -140,11 +153,13 @@ html, body {
       .proportion-graph-viewer {
         display: flex;
         height: 0;
+        border-bottom: 5px solid white;
+        background-color: blue;
       }
 
       .proportion-graph {
-        flex-grow: 1;
         display: flex;
+        flex-grow: 1;
         align-items: center;
 
         background: #511730;
@@ -153,7 +168,6 @@ html, body {
       .info {
         background: #4C2A85;
         border-left: 5px solid white;
-        border-bottom: 5px solid white;
         padding: 10px;
         padding-left: 20px;
         padding-right: 20px;
@@ -197,10 +211,9 @@ html, body {
         
 
       .bar-graph-viewer {
-        position: relative;
+        /*position: relative;*/
         flex-grow: 1;
-
-        background: #EA7AF4;
+        background-color: red;
       }
 
         .bar-graph {

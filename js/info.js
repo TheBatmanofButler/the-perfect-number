@@ -26,20 +26,5 @@ var loadInfo = function (company_name, companyMap) {
 			$('.'+taxRebates[i]).hide()
 		}
 	};
-		
-	// $('.tax-rebates').text(companyMap['taxRebates']);
-	// var taxRebates = '';
-	// if(companyMap['deferred_taxes']=='True') {taxRebates += 'Deferred taxes, '};
-	// if(companyMap['acc_depreciation']=='True') {taxRebates += 'Accelerated Depreciation, '};
-	// if(companyMap['dpad']=='True') {taxRebates += 'Domestic Production Activities Deduction, '};
-	// if(companyMap['research_experiment']=='True') {taxRebates += 'Research and Experimentation tax credit, '};
-	// if(companyMap['stock_options']=='True') {taxRebates += 'Stock options, '};
-	// $('.tax-rebates').text(taxRebates);
-	// if(taxRebates) {
-	// 	$('.tax-rebates').text('Tax Rebates: ' + taxRebates.slice(0,taxRebates.length -2));
-	// }
-	// else {
-	// 	$('.tax-rebates').hide();
-	// }
 	$('.note').text(companyMap['note']);
 }

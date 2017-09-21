@@ -4,6 +4,7 @@
     <title></title>
 
     <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="css/barGraph.css">
     <link href="https://fonts.googleapis.com/css?family=Asap+Condensed" rel="stylesheet">
 
   </head>
@@ -14,72 +15,73 @@
       <div class="top">
         <div class="slide-no">
 
-          <div id="sq1" class="slide-no-square-wrapper">
+          <div id="slide1" class="slide-no-square-wrapper">
             <div class="slide-no-square square-inner">
               1
             </div>
           </div>
 
-          <div id="sq2" class="slide-no-square-wrapper">
+          <div id="slide2" class="slide-no-square-wrapper">
             <div class="slide-no-square square-inner">
               2
             </div>
           </div>
 
-          <div id="sq3" class="slide-no-square-wrapper">
+          <div id="slide3" class="slide-no-square-wrapper">
             <div class="slide-no-square square-inner">
               3
             </div>
           </div>
 
-          <div id="sq4" class="slide-no-square-wrapper">
+          <div id="slide4" class="slide-no-square-wrapper">
             <div class="slide-no-square square-inner">
               4
             </div>
           </div>
 
-          <div id="sq5" class="slide-no-square-wrapper">
+          <div id="slide5" class="slide-no-square-wrapper">
             <div class="slide-no-square square-inner">
               5
             </div>
           </div>
 
-          <div id="sq6" class="slide-no-square-wrapper">
+          <div id="slide6" class="slide-no-square-wrapper">
             <div class="slide-no-square square-inner">
               6
             </div>
           </div>
 
-          <div id="sq7" class="slide-no-square-wrapper">
+          <div id="slide7" class="slide-no-square-wrapper">
             <div class="slide-no-square square-inner">
               7
             </div>
           </div>
 
-          <div id="sq8" class="slide-no-square-wrapper">
+          <div id="slide8" class="slide-no-square-wrapper">
             <div class="slide-no-square square-inner">
               8
             </div>
           </div>
 
-          <div id="sq9" class="slide-no-square-wrapper">
+          <div id="slide9" class="slide-no-square-wrapper">
             <div class="slide-no-square square-inner">
               9
             </div>
           </div>
+        </div>
 
-          <div id="sq10" class="slide-no-square-wrapper">
+          <!-- <div id="slide10" class="slide-no-square-wrapper">
             <div class="slide-no-square square-inner">
               10
             </div>
-          </div>
+          </div> -->
 
-          <div id="sq11" class="slide-no-square-wrapper">
-            <div class="slide-explore">
-              Explore the data
-            </div>
+        <div id="slide11" class="slide-no-square-wrapper">
+          <div class="slide-explore">
+            Explore the data
           </div>
         </div>
+        
 
         <div class="search-wrapper">
           <input class="typeahead scrollable-dropdown-menu" type="text" placeholder="Companies">
@@ -96,7 +98,9 @@
 
       <div class="middle">
 
-        <div class="graph-viewer-wrapper">
+        <!-- <div class="bar-graph-viewer">
+          <div id="chart" style="border: 2px solid #000"></div>
+        </div> -->
 
           <div class="proportion-graph-viewer">
 
@@ -137,8 +141,7 @@
           </div>
 
           <div class="bar-graph-viewer">
-            <div class="bar-graph">
-              Bar Graph
+            <div class="bar-graph-wrapper">
             </div>
             <div class="company-bar-name" id="company-bar-name">
               Company Name
@@ -153,6 +156,10 @@
     <script type="text/javascript" src="js/vendor/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="js/vendor/d3.min.js"></script>
     <script type="text/javascript" src="js/vendor/typeahead.bundle.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.10.2/d3.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="d3extras.js"></script>
+    <script type="text/javascript" src="js/barGraph.js"></script>
     <script type="text/javascript" src="js/proportion.js"></script>
     <script type="text/javascript" src="js/info.js"></script>
     <script type="text/javascript" src="js/dropdown.js"></script>
