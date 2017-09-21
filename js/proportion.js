@@ -60,8 +60,8 @@ var createProportionGraph = function (noOfSquares) {
 
   gridLayout(points);
   canvas
-    .attr('proportionWidth', proportionWidth)
-    .attr('proportionHeight', proportionHeight);
+    .attr('width', proportionWidth)
+    .attr('height', proportionHeight);
   drawCanvas(canvas);
   d3.select('.prop-canvas').on('mousemove', function() {
     var mouseX = d3.event.offsetX;

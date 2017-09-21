@@ -16,10 +16,10 @@ $('.slide-no').click( function (e) {
 });
 
 $('.slide-explore').click( function (e) {
-	// $('.proportion-graph-viewer').show();
+	$('.proportion-graph-viewer').show();
 	$('.proportion-graph-viewer').animate({'height': '60vh'});
 	// $('.bar-graph-viewer').animate({'height': '30vh'});
-	// $('.info').show();
+	$('.info').show();
 	allCompaniesPanel('All Companies');
 });
 

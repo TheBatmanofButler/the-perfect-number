@@ -18,10 +18,9 @@ let createSlides = function (data,
       bottom: 200,
       left: 80
   },
-  barGraphWidth = $('.bar-graph-viewer').width() - margin.left - margin.right,
-  barGraphHeight = $('.bar-graph-viewer').height() - margin.top - margin.bottom;
-  console.log(barGraphWidth);
-  console.log(barGraphHeight);
+      barGraphWidth = $('.bar-graph-viewer').width() - margin.left - margin.right,
+      barGraphHeight = $('.bar-graph-viewer').height() - margin.top - margin.bottom;
+  console.log(barGraphHeight)
 
   let barGraphSettings = initBarGraph(margin, barGraphWidth, barGraphHeight, data),
       x = barGraphSettings[0],
@@ -71,8 +70,8 @@ let createSlides = function (data,
 let initBarGraph = function (margin, barGraphWidth, barGraphHeight, data) {
 
   let barGraph = d3.select('.bar-graph-wrapper').append('svg')
-      .attr('barGraphWidth', barGraphWidth + margin.left + margin.right)
-      .attr('barGraphHeight', barGraphHeight + margin.top + margin.bottom)
+      .attr('width', barGraphWidth + margin.left + margin.right)
+      .attr('height', barGraphHeight + margin.top + margin.bottom)
       .append('g')
       .attr('class', 'bar-graph')
       .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
@@ -271,8 +270,8 @@ let updateBarParams = function (bars, x, y, yParam) {
         return y(0);
       }
     })
-    .attr('barGraphWidth', 2)
-    .attr('barGraphHeight', function(d) {
+    .attr('width', 2)
+    .attr('height', function(d) {
       return Math.abs(y(d[yParam]) - y(0));
     })
 }
