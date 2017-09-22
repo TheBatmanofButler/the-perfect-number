@@ -6,8 +6,20 @@
  *
  */
 
-$('.about').click( function (e) {
+$('.about-button').click( function (e) {
 	console.log('about clicked');
+	getAboutDiv();
+});
+
+$(document).mouseup(function(e) 
+{
+    var container = $('.about');
+
+    // if the target of the click isn't the container nor a descendant of the container
+    if (!container.is(e.target) && container.has(e.target).length === 0) 
+    {
+        container.animate({'width': '0vw'});
+    }
 });
 
 $('.slide-no').click( function (e) {
