@@ -6,6 +6,7 @@
  *
  */
 
+
 $('.about').click( function (e) {
   console.log('about clicked');
 });
@@ -29,9 +30,9 @@ $('.typeahead').bind('typeahead:select', function(ev, suggestion) {
   }
   else {
     
-    $('.company-bar-name').text(companyMap[slugify(suggestion)].company_name);
-    loadInfo(companyMap[slugify(suggestion)]);
-    createProportionGraph(companyMap[slugify(suggestion)].company_name);
+    $('.company-bar-name').text(infoBoxData[slugify(suggestion)]['companyName']);
+    loadInfo(infoBoxData[slugify(suggestion)]);
+    createProportionGraph(infoBoxData[slugify(suggestion)]['companyName']);
   } 
 });
 
