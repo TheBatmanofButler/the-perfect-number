@@ -7,11 +7,7 @@ let createSlides = function (data,
                              companiesLostEmployees,
                              companiesForeignDiff,
                              companiesCompetitors) {
-  
- 
-  // console.log($('.bar-graph-viewer').barGraphHeight())
-  // barGraphWidth = gridDiv.clientbarGraphWidth;
-  // barGraphHeight = gridDiv.clientbarGraphHeight;
+
   let margin = {
       top: 50,
       right: 80,
