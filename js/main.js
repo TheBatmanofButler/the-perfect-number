@@ -6,7 +6,6 @@
  *
  */
 
-
 $('.about-button').click( function (e) {
   console.log('about clicked');
   getAboutDiv();
@@ -14,14 +13,18 @@ $('.about-button').click( function (e) {
 
 $('.slide-no').click( function (e) {
   $('.proportion-graph-viewer').hide();
-  $('.info').hide();
 });
 
 $('.slide-explore').click( function (e) {
-  $('.proportion-graph-viewer').show();
-  $('.proportion-graph-viewer').animate({'height': '60vh'});
-  $('.info').show();
-  createProportionGraph('All Companies');
+  $('.proportion-graph-viewer').css('display', 'flex');
+  $('.proportion-graph-viewer').animate({'height': '60vh'}, function () {
+    createProportionGraph('All Companies');
+  });
+
+  window.addEventListener('resize', function () {
+    createProportionGraph('All Companies');
+
+  })
 });
 
 $('.typeahead').bind('typeahead:select', function(ev, suggestion) {
@@ -59,7 +62,7 @@ $('.bar-graph-viewer').click( function (e) {
             break;
     case 9: $("#slide9").trigger( "click" );
             break;
-  }   
+  }
 });
 
 var openProportionGraph = function () {

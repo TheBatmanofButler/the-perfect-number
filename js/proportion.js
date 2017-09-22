@@ -19,26 +19,15 @@ let getSquareLength = function (width, height, numSquares) {
   let sx = getSquareLengthHelper(height, width, numSquares),
       sy = getSquareLengthHelper(width, height, numSquares);
 
-  return Math.floor( Math.max(sx, sy) );
+  return parseFloat(sx.toFixed(1));
 }
 
 let createProportionGraph = function (companyKey) {
-
-  let margin = {
-        top: 50,
-        right: 80,
-        bottom: 200,
-        left: 80
-    },
-    proportionWidth = 900 - margin.left - margin.right,
-    proportionHeight = 500 - margin.top - margin.bottom;
-  console.log($('.grid').width());
-  console.log($('.grid').height());
-  let canvas = d3.select('.grid')
-      .append('canvas')
-      .attr('class','prop-canvas')
-      .attr('width', window.innerWidth)
-      .attr('height', window.innerHeight);
+  let proportionWidth = $('.proportion-graph-wrapper').width(),
+      proportionHeight = $('.proportion-graph-wrapper').height(),
+      canvas = d3.select('.proportion-graph')
+        .attr('width', proportionWidth)
+        .attr('height', proportionHeight);
 
   let regions = comparisonData[companyKey].sort(function (a, b) {
     return b['numSquares'] - a['numSquares'];
@@ -50,7 +39,7 @@ let createProportionGraph = function (companyKey) {
 let drawProportionGraph = function(regions, proportionWidth, proportionHeight) {
   let numSquares = regions[0]['numSquares'],
       squareLength = getSquareLength(proportionWidth, proportionHeight, numSquares);
-
+  console.log(squareLength);
   let rowLength = Math.floor(proportionHeight / squareLength),
       points = getGridPoints(numSquares, squareLength, rowLength);
 
@@ -70,7 +59,7 @@ let getGridPoints = function (numSquares, squareLength, rowLength) {
 }
 
 let bindMouseEvent = function (squareLength, rowLength) {
-  d3.select('.prop-canvas').on('mousemove', function() {
+  d3.select('.proportion-graph').on('mousemove', function() {
     let mouseX = d3.event.offsetX,
       mouseY = d3.event.offsetY,
       column = Math.floor(mouseX / squareLength),
@@ -107,7 +96,7 @@ let updateRegionColor = function(points, startSquareId, numOfSq, color) {
 }
 
 let drawCanvas = function(points, squareLength, proportionWidth, proportionHeight) {
-  let canvas = d3.select('.prop-canvas');
+  let canvas = d3.select('.proportion-graph');
   let ctx = canvas.node().getContext('2d');
   ctx.save();
 
@@ -115,7 +104,7 @@ let drawCanvas = function(points, squareLength, proportionWidth, proportionHeigh
 
   for (let i = 0; i < points.length; ++i) {
     let point = points[i];
-    drawBorder(ctx, point.x, point.y, squareLength, squareLength, '#000', 0.1);
+    drawBorder(ctx, point.x, point.y, squareLength, squareLength, '#000', 0.4);
     ctx.fillStyle = point.color;
     ctx.fillRect(point.x, point.y, squareLength, squareLength);
   }

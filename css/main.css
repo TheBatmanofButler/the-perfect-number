@@ -5,11 +5,6 @@ html, body {
   color: #fff;
 }
 
-/*.grid {*/
-  /*width: 100%;*/
-  /*height: 100%;*/
-/*}*/
-
 .visualization {
   display: flex;
   flex-direction: column;
@@ -90,19 +85,6 @@ html, body {
           color: white;
         }
 
-        button {
-          cursor: pointer;
-          padding: 0;
-          box-sizing: content-box;
-          font-size: 16px;
-        }
-
-        button:active {
-          background: #8E8B8E;
-          color: white;
-        }
-
-
       .slide-explore {
         text-align: center;
         vertical-align: middle;
@@ -128,15 +110,12 @@ html, body {
     }
 
   .dynamic-text {
-    /*height: 100px;*/
-    margin: 10px;
     padding: 10px;
     font-size: 20px;
     color: black;
     vertical-align: middle;
     border-top: 3px solid white;
     border-bottom: 3px solid white;
-    /*background: #8E443D;*/
   }
     .dynamic-text-img {
       height: 50px;
@@ -158,60 +137,61 @@ html, body {
     }
 
       .proportion-graph-viewer {
-        display: flex;
+        display: none;
+        flex-direction: row;
         height: 0;
         border-bottom: 5px solid white;
       }
 
-      .proportion-graph {
-        display: flex;
-        flex-grow: 1;
-        align-items: center;
+        .proportion-graph-wrapper {
+          display: flex;
+          flex-grow: 1;
+          align-items: center;
 
-        /*background: #511730;*/
-      }
+          /*background: #511730;*/
+        }
 
-      .info {
-        background: #4C2A85;
-        border-left: 5px solid white;
-        padding: 10px;
-        padding-left: 20px;
-        padding-right: 20px;
-        display: none;
-        width: 300px;
-        overflow-y: scroll; 
-      }
-        .company-name {
-          font-size: 28px;
-          text-align: center;
-          padding-bottom: 2px;
-        }
-        .industry {
-          font-size: 19px;
-          padding-bottom: 15px;
-          text-align: center;
-        }
-        .main-info {
-          padding-bottom: 10px;
-          font-size: 17px;
-        }
-          .rate, .tax-break, .years-no-tax {
-            padding-bottom: 5px;
+          .proportion-graph {
+            position: absolute;
           }
-        .tax-rebates {
-          padding-bottom: 10px;
-          font-size: 15px;
+
+        .info {
+          background: #4C2A85;
+          border-left: 5px solid white;
+          padding: 10px 30px 10px 30px;
+          width: 300px;
+          overflow-y: scroll; 
         }
-          .tax-rebates > * {
+          .company-name {
+            font-size: 28px;
+            text-align: center;
             padding-bottom: 2px;
           }
-          .how {
+          .industry {
+            font-size: 19px;
+            padding-bottom: 15px;
+            text-align: center;
+          }
+          .main-info {
+            padding-bottom: 10px;
             font-size: 17px;
           }
-        .note {
-          font-size: 15px;
-        }
-        
+            .rate, .tax-break, .years-no-tax {
+              padding-bottom: 5px;
+            }
+          .tax-rebates {
+            padding-bottom: 10px;
+            font-size: 15px;
+          }
+            .tax-rebates > * {
+              padding-bottom: 2px;
+            }
+            .how {
+              font-size: 17px;
+            }
+          .note {
+            font-size: 15px;
+          }
 
       .bar-graph-viewer {
         display: flex;

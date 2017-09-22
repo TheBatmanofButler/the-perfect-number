@@ -82,8 +82,7 @@ let initBarGraph = function (margin, barGraphWidth, barGraphHeight, data) {
 
   let y = updateYScale(-15, 50, barGraphHeight);
 
-  let x = d3.scaleBand()
-      .range([0, barGraphWidth, .1, 1]);
+  let x = updateXScale(barGraphWidth);
 
   barGraph
     .append('g')
@@ -95,6 +94,30 @@ let initBarGraph = function (margin, barGraphWidth, barGraphHeight, data) {
     .style('opacity', 0)
 
     return [x, y];
+}
+
+let resizeBarGraph = function (data, duration) {
+  let margin = {
+      top: 50,
+      right: 80,
+      bottom: 200,
+      left: 80
+  },
+  barGraphWidth = $('.bar-graph-viewer').width() - margin.left - margin.right,
+  barGraphHeight = $('.bar-graph-viewer').height() - margin.top - margin.bottom;
+
+  let x = updateXScale(barGraphWidth);
+  let y = updateYScale(-15, 50, barGraphHeight);
+
+  fadeOutPercentLine
+  updateXAxis(x, y, 'rate', data, duration);
+  updateYAxis([35], y, duration);
+  updateBars(data,'rate', x, y, 0, 1000, 1000);
+}
+
+let updateXScale = function (barGraphWidth) {
+  return d3.scaleBand()
+      .range([0, barGraphWidth, .1, 1]);
 }
 
 let updateYScale = function (domainStart, domainEnd, barGraphHeight) {
@@ -134,6 +157,7 @@ let fadeInPercentLine = function (y, percent, duration, barGraphWidth) {
 
     if (d3.select(percentClass).empty()) {
       addPercentLine(y, percent, duration, barGraphWidth);
+      
       d3.select(percentClass)
         .attr('x1', 0)
         .attr('x2', barGraphWidth)
@@ -148,6 +172,20 @@ let fadeInPercentLine = function (y, percent, duration, barGraphWidth) {
     else {
       resolve();
     }
+
+  });
+}
+
+let fadeOutPercentLine = function (y, percent, duration, barGraphWidth) {
+  return new Promise( function (resolve, reject) {
+    let percentClass = '.percent' + percent;
+
+    d3.select(percentClass)
+      .transition()
+      .duration(duration)
+      .style('opacity', 0)
+      .remove()
+      .end(resolve);
 
   });
 }
