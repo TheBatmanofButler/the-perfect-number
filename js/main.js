@@ -68,4 +68,9 @@ var closeProportionGraph = function () {
   $('.proportion-graph-viewer').animate({'height': '0vh'});
 }
 
+window.addEventListener('resize', function () {
+  createProportionGraph();
+  createSlides();
+})
+
 // openProportionGraph();

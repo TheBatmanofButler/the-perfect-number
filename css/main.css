@@ -160,8 +160,6 @@ html, body {
         display: flex;
         height: 0;
         border-bottom: 5px solid white;
-
-        background: blue;
       }
 
       .proportion-graph {
@@ -169,7 +167,7 @@ html, body {
         flex-grow: 1;
         align-items: center;
 
-        background: #511730;
+        /*background: #511730;*/
       }
 
       .info {

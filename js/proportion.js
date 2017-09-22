@@ -30,14 +30,15 @@ let createProportionGraph = function (companyKey) {
         bottom: 200,
         left: 80
     },
-    proportionWidth = 800 - margin.left - margin.right,
-    proportionHeight = 400 - margin.top - margin.bottom;
-
+    proportionWidth = 900 - margin.left - margin.right,
+    proportionHeight = 500 - margin.top - margin.bottom;
+  console.log($('.grid').width());
+  console.log($('.grid').height());
   let canvas = d3.select('.grid')
       .append('canvas')
       .attr('class','prop-canvas')
-      .attr('width', proportionWidth)
-      .attr('height', proportionHeight);
+      .attr('width', window.innerWidth)
+      .attr('height', window.innerHeight);
 
   let regions = comparisonData[companyKey].sort(function (a, b) {
     return b['numSquares'] - a['numSquares'];
@@ -49,7 +50,6 @@ let createProportionGraph = function (companyKey) {
 let drawProportionGraph = function(regions, proportionWidth, proportionHeight) {
   let numSquares = regions[0]['numSquares'],
       squareLength = getSquareLength(proportionWidth, proportionHeight, numSquares);
-  console.log(squareLength, Math.floor(Math.sqrt((proportionWidth * proportionHeight) / numSquares)));
 
   let rowLength = Math.floor(proportionHeight / squareLength),
       points = getGridPoints(numSquares, squareLength, rowLength);
@@ -77,7 +77,7 @@ let bindMouseEvent = function (squareLength, rowLength) {
       row = Math.floor(mouseY / squareLength),
       sqId = column * rowLength + row + 1;
 
-    console.log(sqId);
+    // console.log(column, row);
   });
 }
 
