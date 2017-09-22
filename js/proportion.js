@@ -23,23 +23,19 @@ let getSquareLength = function (width, height, numSquares) {
 }
 
 let createProportionGraph = function (companyKey) {
+  $('.proportion-graph').show();
 
-  let margin = {
-        top: 50,
-        right: 80,
-        bottom: 200,
-        left: 80
-    },
-    proportionWidth = 900 - margin.left - margin.right,
-    proportionHeight = 500 - margin.top - margin.bottom;
-  console.log($('.grid').width());
-  console.log($('.grid').height());
-  let canvas = d3.select('.grid')
-      .append('canvas')
-      .attr('class','prop-canvas')
-      .attr('width', window.innerWidth)
-      .attr('height', window.innerHeight);
+  let proportionWidth = $('.proportion-graph-wrapper').width(),
+      proportionHeight = $('.proportion-graph-wrapper').height();
 
+  let canvas = d3.select('.proportion-graph');
+
+  canvas
+      .attr('width', proportionWidth)
+      .attr('height', proportionHeight);
+
+  console.log(window.innerHeight);
+  console.log(companyKey);
   let regions = comparisonData[companyKey].sort(function (a, b) {
     return b['numSquares'] - a['numSquares'];
   });
@@ -70,7 +66,7 @@ let getGridPoints = function (numSquares, squareLength, rowLength) {
 }
 
 let bindMouseEvent = function (squareLength, rowLength) {
-  d3.select('.prop-canvas').on('mousemove', function() {
+  d3.select('.proportion-graph').on('mousemove', function() {
     let mouseX = d3.event.offsetX,
       mouseY = d3.event.offsetY,
       column = Math.floor(mouseX / squareLength),
@@ -107,7 +103,7 @@ let updateRegionColor = function(points, startSquareId, numOfSq, color) {
 }
 
 let drawCanvas = function(points, squareLength, proportionWidth, proportionHeight) {
-  let canvas = d3.select('.prop-canvas');
+  let canvas = d3.select('.proportion-graph');
   let ctx = canvas.node().getContext('2d');
   ctx.save();
 
