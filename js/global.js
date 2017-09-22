@@ -207,4 +207,18 @@ d3.queue()
     companiesLostEmployees,
     companiesForeignDiff,
     companiesCompetitors);
+
+  // window.addEventListener('resize', function () {
+  //   console.log('resize');
+  // // createProportionGraph();
+  //   createSlides(companies,
+  //   companiesYearsNoTax,
+  //   companiesTop25,
+  //   companiesRebates,
+  //   companiesIPS,
+  //   companiesTop3EmpChanges,
+  //   companiesLostEmployees,
+  //   companiesForeignDiff,
+  //   companiesCompetitors);
+  // })
 });
