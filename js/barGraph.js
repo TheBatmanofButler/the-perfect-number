@@ -7,11 +7,7 @@ let createSlides = function (data,
                              companiesLostEmployees,
                              companiesForeignDiff,
                              companiesCompetitors) {
-  
- 
-  // console.log($('.bar-graph-viewer').barGraphHeight())
-  // barGraphWidth = gridDiv.clientbarGraphWidth;
-  // barGraphHeight = gridDiv.clientbarGraphHeight;
+
   let margin = {
       top: 50,
       right: 80,
@@ -20,7 +16,6 @@ let createSlides = function (data,
   },
       barGraphWidth = $('.bar-graph-viewer').width() - margin.left - margin.right,
       barGraphHeight = $('.bar-graph-viewer').height() - margin.top - margin.bottom;
-  console.log(barGraphHeight)
 
   let barGraphSettings = initBarGraph(margin, barGraphWidth, barGraphHeight, data),
       x = barGraphSettings[0],
@@ -65,10 +60,6 @@ let createSlides = function (data,
     slide8(barGraphWidth, barGraphHeight, x, y, data, companiesForeignDiff);
     currentSlide = 8;
   });
-
-  // $('#slide8interim').click( function (e) {
-  //   slide8interim(barGraphWidth, barGraphHeight, x, y, data, companiesForeignDiff);
-  // });
 
   $('#slide9').click( function (e) {
     slide9(barGraphWidth, barGraphHeight, x, y, data, companiesCompetitors);
