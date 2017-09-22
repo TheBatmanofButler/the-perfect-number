@@ -6,7 +6,6 @@
  *
  */
 
-
 $('.about-button').click( function (e) {
   console.log('about clicked');
   getAboutDiv();
@@ -14,20 +13,17 @@ $('.about-button').click( function (e) {
 
 $('.slide-no').click( function (e) {
   $('.proportion-graph-viewer').hide();
-  $('.info').hide();
 });
 
 $('.slide-explore').click( function (e) {
-  $('.proportion-graph-viewer').show();
+  $('.proportion-graph-viewer').css('display', 'flex');
   $('.proportion-graph-viewer').animate({'height': '60vh'}, function () {
     createProportionGraph('All Companies');
   });
-  $('.info').show();
 
   window.addEventListener('resize', function () {
     createProportionGraph('All Companies');
-    // createProportionGraph();
-    // createSlides();
+
   })
 });
 

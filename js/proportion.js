@@ -19,23 +19,16 @@ let getSquareLength = function (width, height, numSquares) {
   let sx = getSquareLengthHelper(height, width, numSquares),
       sy = getSquareLengthHelper(width, height, numSquares);
 
-  return Math.floor( Math.max(sx, sy) );
+  return parseFloat(sx.toFixed(1));
 }
 
 let createProportionGraph = function (companyKey) {
-  $('.proportion-graph').show();
-
   let proportionWidth = $('.proportion-graph-wrapper').width(),
-      proportionHeight = $('.proportion-graph-wrapper').height();
+      proportionHeight = $('.proportion-graph-wrapper').height(),
+      canvas = d3.select('.proportion-graph')
+        .attr('width', proportionWidth)
+        .attr('height', proportionHeight);
 
-  let canvas = d3.select('.proportion-graph');
-
-  canvas
-      .attr('width', proportionWidth)
-      .attr('height', proportionHeight);
-
-  console.log(window.innerHeight);
-  console.log(companyKey);
   let regions = comparisonData[companyKey].sort(function (a, b) {
     return b['numSquares'] - a['numSquares'];
   });
@@ -46,7 +39,7 @@ let createProportionGraph = function (companyKey) {
 let drawProportionGraph = function(regions, proportionWidth, proportionHeight) {
   let numSquares = regions[0]['numSquares'],
       squareLength = getSquareLength(proportionWidth, proportionHeight, numSquares);
-
+  console.log(squareLength);
   let rowLength = Math.floor(proportionHeight / squareLength),
       points = getGridPoints(numSquares, squareLength, rowLength);
 
@@ -111,7 +104,7 @@ let drawCanvas = function(points, squareLength, proportionWidth, proportionHeigh
 
   for (let i = 0; i < points.length; ++i) {
     let point = points[i];
-    drawBorder(ctx, point.x, point.y, squareLength, squareLength, '#000', 0.1);
+    drawBorder(ctx, point.x, point.y, squareLength, squareLength, '#000', 0.4);
     ctx.fillStyle = point.color;
     ctx.fillRect(point.x, point.y, squareLength, squareLength);
   }
