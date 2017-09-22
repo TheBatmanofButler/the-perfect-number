@@ -7,8 +7,9 @@
  */
 
 
-$('.about').click( function (e) {
+$('.about-button').click( function (e) {
   console.log('about clicked');
+  getAboutDiv();
 });
 
 $('.slide-no').click( function (e) {
@@ -69,4 +70,8 @@ var closeProportionGraph = function () {
   $('.proportion-graph-viewer').animate({'height': '0vh'});
 }
 
+// window.addEventListener('resize', function () {
+// 	// createProportionGraph();
+// 	createSlides();
+// })
 // openProportionGraph();
