@@ -35,17 +35,13 @@ let loadInfo = function (infoBoxData) {
   $('.note').text(infoBoxData['note']);
 }
 
-let changeDynamicText = function (newText, duration) {
-  return new Promise( function (resolve, reject) {
-      d3.select('.dynamic-text')
-        .transition()
-        .duration(duration)
-        .style('opacity',0)
-        .transition()
-        .duration(duration)
-        .text(newText)
-        .style('opacity',1)
-        .end(resolve);
-    });
+let changeDynamicText = function (duration, newText, imgSrc) {
+	return new Promise( function (resolve, reject) {
+		$('.dynamic-text').fadeOut(duration, function(){
+    		$(this).html(newText).fadeIn(duration);
+    		if (imgSrc)
+    			$(this).prepend('<img src=' + imgSrc + ' class="dynamic-text-img"/>').fadeIn(duration);
+		}).end(resolve)
+  	});
 };
 
