@@ -147,12 +147,14 @@ html, body {
           display: flex;
           flex-grow: 1;
           align-items: center;
+          z-index: 3;
 
           /*background: #511730;*/
         }
 
           .proportion-graph {
             position: absolute;
+            
           }
 
         .info {
@@ -161,6 +163,7 @@ html, body {
           padding: 10px 30px 10px 30px;
           width: 300px;
           overflow-y: scroll; 
+          z-index: 2;
         }
           .company-name {
             font-size: 28px;
@@ -216,7 +219,7 @@ html, body {
   height: 100vh;
   width: 0vw;
   background: green;
-  z-index:2;
+  z-index: 4;
   top: 5vh; right: 0vw;
   margin: 5px;
 }

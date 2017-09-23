@@ -65,20 +65,32 @@ let bindMouseEvent = function (points, squareLength, rowLength, regions, proport
       column = Math.floor(mouseX / squareLength),
       row = Math.floor(mouseY / squareLength),
       sqId = column * rowLength + row + 1;
-      if(sqId <= regions[0]['numSquares'])
+      if(sqId <= regions[0]['numSquares']) {
         drawHoveredRegions(regions, points, squareLength, rowLength, proportionWidth, proportionHeight, points[sqId - 1]['text']);
+        addToolTip(points[sqId - 1]['text'], mouseX, mouseY);
+      }
+        
   });
-  // $('.proportion-graph').mouseleave(function() {
-  //     drawRegions(regions, points, squareLength, rowLength, proportionWidth, proportionHeight);
-  // });
+  $('.proportion-graph').mouseleave(function() {
+      drawRegions(regions, points, squareLength, rowLength, proportionWidth, proportionHeight);
+  });
 }
 
 let changeColorOpacity = function(color, opacity) {
   return color.replace(/[\d\.]+\)$/g, opacity+')');
 }
 
+let addToolTip = function (text, x, y) {
+  let canvas = d3.select('.proportion-graph');
+  let ctx = canvas.node().getContext('2d');
+  ctx.fillStyle = '#222';  
+  ctx.fillRect(x + 5, y + 5, ctx.measureText(text).width, ctx.measureText(text).height);
+  ctx.font = 'bold 15px arial';
+  ctx.fillStyle = '#000';
+  ctx.fillText(text, x + 10, y + 20, 160);
+}
+
 let drawHoveredRegions = function(regions, points, squareLength, rowLength, proportionWidth, proportionHeight, hoveredRegion) {
-  console.log(hoveredRegion);
   let region = regions[0];
   if(region['text']==hoveredRegion) {
     
@@ -139,7 +151,6 @@ let updateSquareColor = function(points, squareId, color) {
 }
 
 let updateRegionColorText = function(points, startSquareId, numOfSq, color, text, rowLength, direction) {
-  console.log(color);
   for (let i = 0; i < numOfSq; i++) {
     sqId = startSquareId + i;
     if (direction) {
