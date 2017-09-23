@@ -157,7 +157,7 @@ let fadeInPercentLine = function (y, percent, duration, barGraphWidth) {
 
     if (d3.select(percentClass).empty()) {
       addPercentLine(y, percent, duration, barGraphWidth);
-      
+
       d3.select(percentClass)
         .attr('x1', 0)
         .attr('x2', barGraphWidth)

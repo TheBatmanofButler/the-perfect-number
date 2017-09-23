@@ -39,12 +39,12 @@ let createProportionGraph = function (companyKey) {
 let drawProportionGraph = function(regions, proportionWidth, proportionHeight) {
   let numSquares = regions[0]['numSquares'],
       squareLength = getSquareLength(proportionWidth, proportionHeight, numSquares);
-  console.log(squareLength);
+
   let rowLength = Math.floor(proportionHeight / squareLength),
       points = getGridPoints(numSquares, squareLength, rowLength);
 
   bindMouseEvent(squareLength, rowLength);
-  drawRegions(regions, points, squareLength, proportionWidth, proportionHeight);
+  drawRegions(regions, points, squareLength, rowLength, proportionWidth, proportionHeight);
 }
 
 let getGridPoints = function (numSquares, squareLength, rowLength) {
@@ -66,18 +66,24 @@ let bindMouseEvent = function (squareLength, rowLength) {
       row = Math.floor(mouseY / squareLength),
       sqId = column * rowLength + row + 1;
 
-    // console.log(column, row);
+      console.log(sqId -1);
   });
 }
 
-let drawRegions = function(regions, points, squareLength, proportionWidth, proportionHeight) {
+let drawRegions = function(regions, points, squareLength, rowLength, proportionWidth, proportionHeight) {
   let startSquareId = 0;
+  let direction = 1;
+  console.log('rowLength: ' + rowLength)
 
-  for (let i = 0; i < regions.length; i++) {
+  for (let i = 0; i < regions[0]['numSquares']; i++) {
+    updateSquareColor(points, startSquareId + i, regions[0]['color'])
+  }
+
+  for (let i = 1; i < regions.length; i++) {
     let region = regions[i],
         numSquares = region['numSquares'];
 
-    updateRegionColor(points, startSquareId, numSquares, region['color']);
+    direction = updateRegionColor(points, startSquareId, numSquares, region['color'], rowLength, direction);
     drawCanvas(points, squareLength, proportionWidth, proportionHeight);
 
     if (i > 1)
@@ -89,10 +95,22 @@ let updateSquareColor = function(points, squareId, color) {
   points[squareId]['color'] = color;
 }
 
-let updateRegionColor = function(points, startSquareId, numOfSq, color) {
+let updateRegionColor = function(points, startSquareId, numOfSq, color, rowLength, direction) {
   for (let i = 0; i < numOfSq; i++) {
-    updateSquareColor(points, startSquareId + i, color);
-  };
+    sqId = startSquareId + i;
+    if (direction) {
+      updateSquareColor(points, sqId, color);
+      if((sqId + 1) % rowLength == 0)
+        direction = 0;
+    }
+    else {
+      newSqId = (Math.floor(sqId/rowLength) + 1)  * rowLength - (sqId % rowLength);
+      updateSquareColor(points, newSqId - 1, color);
+      if((sqId + 1) % rowLength == 0)
+        direction = 1;
+    } 
+  }
+  return direction;
 }
 
 let drawCanvas = function(points, squareLength, proportionWidth, proportionHeight) {
