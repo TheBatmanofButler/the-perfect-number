@@ -43,7 +43,7 @@ let drawProportionGraph = function(regions, proportionWidth, proportionHeight) {
   let rowLength = Math.floor(proportionHeight / squareLength),
       points = getGridPoints(numSquares, squareLength, rowLength);
 
-  bindMouseEvent(squareLength, rowLength);
+  // drawCanvas(points, squareLength, proportionWidth, proportionHeight);
   drawRegions(regions, points, squareLength, rowLength, proportionWidth, proportionHeight);
 }
 
@@ -51,61 +51,107 @@ let getGridPoints = function (numSquares, squareLength, rowLength) {
   return d3.range(0, numSquares).map( function(index) {
     return {
       id: index,
-      color: 'rgba(0, 0, 0, 0.3)',
+      color: 'rgba(0,0,0,0.3)',
       x: squareLength * Math.floor(index / rowLength),
       y: squareLength * (index % rowLength)
     }
   });
 }
 
-let bindMouseEvent = function (squareLength, rowLength) {
+let bindMouseEvent = function (points, squareLength, rowLength, regions, proportionWidth, proportionHeight) {
   d3.select('.proportion-graph').on('mousemove', function() {
     let mouseX = d3.event.offsetX,
       mouseY = d3.event.offsetY,
       column = Math.floor(mouseX / squareLength),
       row = Math.floor(mouseY / squareLength),
       sqId = column * rowLength + row + 1;
-
-      console.log(sqId -1);
+      if(sqId <= regions[0]['numSquares'])
+        drawHoveredRegions(regions, points, squareLength, rowLength, proportionWidth, proportionHeight, points[sqId - 1]['text']);
   });
+  // $('.proportion-graph').mouseleave(function() {
+  //     drawRegions(regions, points, squareLength, rowLength, proportionWidth, proportionHeight);
+  // });
+}
+
+let changeColorOpacity = function(color, opacity) {
+  return color.replace(/[\d\.]+\)$/g, opacity+')');
+}
+
+let drawHoveredRegions = function(regions, points, squareLength, rowLength, proportionWidth, proportionHeight, hoveredRegion) {
+  console.log(hoveredRegion);
+  let region = regions[0];
+  if(region['text']==hoveredRegion) {
+    
+    for (let i = 0; i < region['numSquares']; i++) {
+      updateSquareColor(points, i, region['color']);
+    }
+  } 
+  else {
+    for (let i = 0; i < region['numSquares']; i++) {
+      updateSquareColor(points, i, changeColorOpacity(region['color'],0.3));
+    }
+  }
+  
+  for (let i = 1; i < regions.length; i++) {
+    let region = regions[i];
+    if(region['text'] == hoveredRegion) 
+      updateRegionColorText(points, region['startSquareId'], region['numSquares'], region['color'], region['text'],rowLength, region['direction']);
+    else
+      updateRegionColorText(points, region['startSquareId'], region['numSquares'], changeColorOpacity(region['color'],0.3), region['text'],rowLength, region['direction']);
+  }
+  
+  drawCanvas(points, squareLength, proportionWidth, proportionHeight);
 }
 
 let drawRegions = function(regions, points, squareLength, rowLength, proportionWidth, proportionHeight) {
   let startSquareId = 0;
   let direction = 1;
-  console.log('rowLength: ' + rowLength)
-
-  for (let i = 0; i < regions[0]['numSquares']; i++) {
-    updateSquareColor(points, startSquareId + i, regions[0]['color'])
-  }
+  let region = regions[0];
+  for (let i = 0; i < region['numSquares']; i++) {
+    updateSquareColor(points, i, region['color']);
+    updateSquareText(points,i, region['text']);
+  };
+  region['startSquareId'] = startSquareId;
+  region['direction'] = 1;
 
   for (let i = 1; i < regions.length; i++) {
     let region = regions[i],
         numSquares = region['numSquares'];
 
-    direction = updateRegionColor(points, startSquareId, numSquares, region['color'], rowLength, direction);
+    regions[i]['startSquareId'] = startSquareId;
+    regions[i]['direction'] = direction;
+
+    direction = updateRegionColorText(points, startSquareId, numSquares, region['color'], region['text'],rowLength, direction);
     drawCanvas(points, squareLength, proportionWidth, proportionHeight);
 
     if (i > 1)
       startSquareId += numSquares;
   }
+  bindMouseEvent(points,squareLength, rowLength, regions, proportionWidth, proportionHeight);
+}
+
+let updateSquareText = function(points, squareId, text) {
+  points[squareId]['text'] = text;
 }
 
 let updateSquareColor = function(points, squareId, color) {
   points[squareId]['color'] = color;
 }
 
-let updateRegionColor = function(points, startSquareId, numOfSq, color, rowLength, direction) {
+let updateRegionColorText = function(points, startSquareId, numOfSq, color, text, rowLength, direction) {
+  console.log(color);
   for (let i = 0; i < numOfSq; i++) {
     sqId = startSquareId + i;
     if (direction) {
       updateSquareColor(points, sqId, color);
+      updateSquareText(points, sqId, text);
       if((sqId + 1) % rowLength == 0)
         direction = 0;
     }
     else {
       newSqId = (Math.floor(sqId/rowLength) + 1)  * rowLength - (sqId % rowLength);
       updateSquareColor(points, newSqId - 1, color);
+      updateSquareText(points, newSqId - 1, text);
       if((sqId + 1) % rowLength == 0)
         direction = 1;
     } 
@@ -122,7 +168,7 @@ let drawCanvas = function(points, squareLength, proportionWidth, proportionHeigh
 
   for (let i = 0; i < points.length; ++i) {
     let point = points[i];
-    drawBorder(ctx, point.x, point.y, squareLength, squareLength, '#000', 0.4);
+    drawBorder(ctx, point.x, point.y, squareLength, squareLength, '#fff', 0.4);
     ctx.fillStyle = point.color;
     ctx.fillRect(point.x, point.y, squareLength, squareLength);
   }

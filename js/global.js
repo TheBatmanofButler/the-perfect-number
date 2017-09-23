@@ -31,7 +31,7 @@ var createProportionAreas = function (comparisons, profit, taxBreak, convertCons
     {
       'text': 'Company Tax if rate is 35%',
       'numSquares': num35PercentSquares,
-      'color': 'rgba(255, 0, 0, 0.4)'
+      'color': 'rgba(128,0,0,0.8)'
     },
     {
       'text': 'Company Tax Break',
