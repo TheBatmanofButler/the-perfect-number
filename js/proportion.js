@@ -38,9 +38,8 @@ let createProportionGraph = function (companyKey) {
 
 let drawProportionGraph = function (regions, proportionWidth, proportionHeight) {
   let numSquares = regions[0]['numSquares'],
-      squareLength = getSquareLength(proportionWidth, proportionHeight, numSquares);
-
-  let rowLength = Math.floor(proportionHeight / squareLength),
+      squareLength = getSquareLength(proportionWidth, proportionHeight, numSquares),
+      rowLength = Math.floor(proportionHeight / squareLength),
       points = getGridPoints(numSquares, squareLength, rowLength);
 
   // drawCanvas(points, squareLength, proportionWidth, proportionHeight);
@@ -131,10 +130,10 @@ let drawRegions = function (regions, points, squareLength, rowLength, proportion
 let bindMouseEvent = function (points, squareLength, rowLength, regions, proportionWidth, proportionHeight) {
   d3.select('.proportion-graph').on('mousemove', function() {
     let mouseX = d3.event.offsetX,
-      mouseY = d3.event.offsetY,
-      column = Math.floor(mouseX / squareLength),
-      row = Math.floor(mouseY / squareLength),
-      sqId = column * rowLength + row;
+        mouseY = d3.event.offsetY,
+        column = Math.floor(mouseX / squareLength),
+        row = Math.floor(mouseY / squareLength),
+        sqId = column * rowLength + row;
     if(sqId < regions[0]['numSquares']) {
       drawHoveredRegions(regions, points, squareLength, proportionWidth, proportionHeight, points[sqId]['text']);
       addToolTip(points[sqId]['text'], mouseX, mouseY);

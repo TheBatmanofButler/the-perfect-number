@@ -24,11 +24,15 @@ let createSlides = function (data,
   $('#slide1').click( function (e) {
     slide1(barGraphWidth, barGraphHeight);
     currentSlide = 1;
+    $('active-slide-no-square').removeClass('active-slide-no-square');
+    // $('active-slide-no-square')..addClass('active-slide-no-square');
   });
 
   $('#slide2').click( function (e) {
     slide2(barGraphWidth, x, y, data);
     currentSlide = 2;
+    jQuery('.slide-no-square').removeClass('active-slide-no-square');
+    jQuery(this).addClass('active-slide-no-square');
   });
 
   $('#slide3').click( function (e) {

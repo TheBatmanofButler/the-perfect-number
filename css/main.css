@@ -79,8 +79,13 @@ html, body {
 
         .slide-no-square {
           background: #D0CCD0;
+          color: black;
         }
         .slide-no-square:hover {
+          background: #8E8B8E;
+          color: white;
+        }
+        .active-slide-no-square {
           background: #8E8B8E;
           color: white;
         }
