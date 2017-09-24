@@ -52,7 +52,7 @@ html, body {
       line-height: 24px;
     }
 
-    .tt-suggestion:hover { 
+    .tt-suggestion:hover .tt-hint { 
       background-color: #0097cf;
       opacity: 0.4; 
 

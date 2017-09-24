@@ -551,6 +551,26 @@ let showAll = function () {
   });
 }
 
+let fadeOpeningScreen = function(duration) {
+  return new Promise( function (resolve, reject) {
+    d3.select('.opening-screen')
+      .transition()
+      .duration(duration)
+      .style('opacity', 0)
+      .end(resolve);
+  });
+}
+
+let showOpeningScreen = function(duration) {
+  return new Promise( function (resolve, reject) {
+    d3.select('.opening-screen')
+      .transition()
+      .duration(1000)
+      .style('opacity', 1)
+      .end(resolve);
+  });
+}
+
 let slide1 = function () {
   let barGraphWidth = barGraphParams['barGraphWidth'],
       barGraphHeight = barGraphParams['barGraphHeight'];
