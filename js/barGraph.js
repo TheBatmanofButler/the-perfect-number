@@ -4,7 +4,11 @@ let barGraphParams = {
   x: null,
   y: null,
   yParam: null,
-  data: null
+  data: null,
+  marginTop: 50,
+  marginRight: 80,
+  marginBottom: 150,
+  marginLeft: 80
 }
 
 let createSlides = function (data,
@@ -19,19 +23,18 @@ let createSlides = function (data,
 
   barGraphParams['data'] = data;
 
-  let margin = {
-      top: 50,
-      right: 80,
-      bottom: 100,
-      left: 80
-  },
-      barGraphWidth = $('.bar-graph-viewer').width() - margin.left - margin.right,
-      barGraphHeight = $('.bar-graph-viewer').height() - margin.top - margin.bottom;
+  let marginTop = barGraphParams['marginTop'],
+      marginRight = barGraphParams['marginRight'],
+      marginBottom = barGraphParams['marginBottom'],
+      marginLeft = barGraphParams['marginLeft'];
+
+  let barGraphWidth = $('.bar-graph-viewer').width() - marginLeft - marginRight,
+      barGraphHeight = $('.bar-graph-viewer').height() - marginTop - marginBottom;
 
   barGraphParams['barGraphWidth'] = barGraphWidth;
   barGraphParams['barGraphHeight'] = barGraphHeight;
 
-  let barGraphSettings = initBarGraph(margin);
+  initBarGraph();
 
   $('#slide1').click( function (e) {
     slide1(barGraphWidth, barGraphHeight);
@@ -80,14 +83,19 @@ let createSlides = function (data,
 }
 
 let initBarGraph = function (margin) {
+  let marginTop = barGraphParams['marginTop'],
+      marginRight = barGraphParams['marginRight'],
+      marginBottom = barGraphParams['marginBottom'],
+      marginLeft = barGraphParams['marginLeft'];
+
   let barGraphWidth = barGraphParams['barGraphWidth'];
   let barGraphHeight = barGraphParams['barGraphHeight'];
 
   updateXScale(barGraphWidth);
   updateYScale(-15, 50);
 
-  let totalWidth = barGraphWidth + margin.left + margin.right,
-      totalHeight = barGraphHeight + margin.top + margin.bottom;
+  let totalWidth = barGraphWidth + marginLeft + marginRight,
+      totalHeight = barGraphHeight + marginTop + marginBottom;
 
   let barGraph = d3.select('.bar-graph-wrapper')
       .append('svg')
@@ -96,7 +104,7 @@ let initBarGraph = function (margin) {
         .attr('height', totalHeight)
       .append('g')
         .attr('class', 'bar-graph-elements')
-        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+        .attr('transform', 'translate(' + marginLeft + ',' + marginTop + ')');
 
   barGraph
     .append('g')
@@ -138,10 +146,10 @@ let resizeBarGraph2 = function (data, duration, ogBarGraphViewerHeight) {
       bottom: 100,
       left: 80
   };
-  let barGraphWidth = $('.bar-graph-viewer').width() - margin.left - margin.right,
+  let barGraphWidth = $('.bar-graph-viewer').width() - marginLeft - marginRight,
       barGraphHeight = $('.bar-graph-viewer').height() - 15 - 30;
 
-  let totalWidth = barGraphWidth + margin.left + margin.right,
+  let totalWidth = barGraphWidth + marginLeft + marginRight,
       totalHeight = barGraphHeight + 15 + 30;
 
   d3.select('.bar-graph')
@@ -152,7 +160,7 @@ let resizeBarGraph2 = function (data, duration, ogBarGraphViewerHeight) {
   updateYScale(-15, 50);
 
   d3.select('.bar-graph-elements')
-      .attr('transform', 'translate(' + margin.left + ',' + 15 + ')');
+      .attr('transform', 'translate(' + marginLeft + ',' + 15 + ')');
 
   Promise.all([
     highlightAllBars('#000', 1000),
@@ -176,21 +184,20 @@ let updateBarGraphText = function (text) {
 }
 
 let resizeBarGraph = function () {
-  let margin = {
-      top: 50,
-      right: 80,
-      bottom: 0,
-      left: 80
-  };
 
-  let barGraphWidth = $('.bar-graph-viewer').width() - margin.left - margin.right;
-  let barGraphHeight = $('.bar-graph-viewer').height() - margin.top - margin.bottom;
+  let marginTop = barGraphParams['marginTop'],
+      marginRight = barGraphParams['marginRight'],
+      marginBottom = barGraphParams['marginBottom'],
+      marginLeft = barGraphParams['marginLeft'];
+
+  let barGraphWidth = $('.bar-graph-viewer').width() - marginLeft - marginRight;
+  let barGraphHeight = $('.bar-graph-viewer').height() - marginTop - marginBottom;
 
   barGraphParams['barGraphWidth'] = barGraphWidth;
   barGraphParams['barGraphHeight'] = barGraphHeight;
 
-  let totalWidth = barGraphWidth + margin.left + margin.right,
-      totalHeight = barGraphHeight + margin.top + margin.bottom;
+  let totalWidth = barGraphWidth + marginLeft + marginRight,
+      totalHeight = barGraphHeight + marginTop + marginBottom;
 
   if (barGraphHeight < 0)
     return;
