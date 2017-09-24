@@ -38,13 +38,14 @@ $('.slide-explore').click( function (e) {
       $('.company-bar-name').text(suggestion);
       loadInfo(companyInfo);
       createProportionGraph(suggestion);
-      currentCompany = suggestion;
+      
     } 
+    currentCompany = suggestion;
     // $('.typeahead').typeahead('val','');
   });
 
   window.addEventListener('resize', function () {
-    createProportionGraph(currentCompany);
+    createProportionGraph(currentCompany, true);
 
   })
 });
