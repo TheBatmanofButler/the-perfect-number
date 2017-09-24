@@ -26,17 +26,24 @@ var createProportionAreas = function (comparisons, profit, taxBreak, convertCons
 
   var num35PercentSquares = Math.floor(profit * 0.35 / convertConst);
   var numTaxBreakSquares = Math.floor(taxBreak / convertConst);
+  var unit;
+  if(convertConst == 1e3)
+    unit = ' billion';
+  else
+    unit = ' million';
 
   var proportionAreas = [
     {
       'text': 'Company Tax if rate is 35%',
       'numSquares': num35PercentSquares,
-      'color': 'rgba(128,0,0,0.8)'
+      'color': 'rgba(128,0,0,0.8)',
+      'money': String((profit * 0.35 / convertConst).toFixed(2)) + unit
     },
     {
       'text': 'Company Tax Break',
       'numSquares': numTaxBreakSquares,
-      'color': 'rgba(255, 0, 0, 0.8)'
+      'color': 'rgba(255, 0, 0, 0.8)',
+      'money': String((taxBreak / convertConst).toFixed(2)) + unit
     }
   ]
 
@@ -49,7 +56,8 @@ var createProportionAreas = function (comparisons, profit, taxBreak, convertCons
       proportionAreas.push({
         'text': comparison['text'],
         'numSquares': numComparisonSquares,
-        'color': comparison['color']
+        'color': comparison['color'],
+        'money': String((comparison['money'] / convertConst).toFixed(2)) + unit 
       });
 
       filled += numComparisonSquares;

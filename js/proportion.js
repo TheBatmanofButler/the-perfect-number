@@ -39,12 +39,13 @@ let createProportionGraph = function (companyKey) {
 let drawProportionGraph = function (regions, proportionWidth, proportionHeight) {
   let numSquares = regions[0]['numSquares'],
       squareLength = getSquareLength(proportionWidth, proportionHeight, numSquares),
-      rowLength = Math.floor(proportionHeight / squareLength),
+      rowLength = Math.ceil(proportionHeight / squareLength),
       points = getGridPoints(numSquares, squareLength, rowLength);
 
   // drawCanvas(points, squareLength, proportionWidth, proportionHeight);
   getAllRegionSquares(regions, rowLength);
   drawRegions(regions, points, squareLength, rowLength, proportionWidth, proportionHeight);
+
   bindMouseEvent(points, squareLength, rowLength, regions, proportionWidth, proportionHeight);
 }
 
@@ -109,23 +110,59 @@ let shuffleArray = function(a) {
   return a;
 }
 
-let updateRegionColorText = function (region, points, color, squareLength, proportionWidth, proportionHeight) {
-  let regionSquareIds = region['squares'];
+let updateRegions = function(regions, points, squareLength, rowLength, proportionWidth, proportionHeight) {
+  for (let i in regions) {
+    let region = regions[i];
+    let regionSquareIds = region['squares'];
     for (let j in regionSquareIds) {
       let squareId = regionSquareIds[j];
+      updateSquareColor(points, squareId, region['color']);
+      updateSquareText(points, squareId,region['text'], region['money']);
+    }
+  }
+  drawCanvas(points, squareLength, proportionWidth, proportionHeight);
+}
+
+let drawRegionColorText = function (region, points, color, squareLength, proportionWidth, proportionHeight, shuffle) {
+  let canvas = d3.select('.proportion-graph');
+  let ctx = canvas.node().getContext('2d');
+  let regionSquareIds = region['squares'];
+  if(shuffle) regionSquareIds = shuffleArray(region['squares']);
+  let count = 0;
+  // let chain = Promise.resolve();
+    for (let j in regionSquareIds) {
+      let squareId = regionSquareIds[j];
+      let point = points[squareId];
       updateSquareColor(points, squareId, color);
-      updateSquareText(points, squareId,region['text']);
-      // drawCanvas(points, squareLength, proportionWidth, proportionHeight);
+      updateSquareText(points, squareId,region['text'],region['money']);
+      setTimeout(function() {
+        drawBorder(ctx, point.x, point.y, squareLength, squareLength, '#fff', 0.4);
+        ctx.fillStyle = point.color;
+        ctx.fillRect(point.x, point.y, squareLength, squareLength);
+      }, 150/regionSquareIds.length * count);
+      count++;
+      // drawCanvas([points[j]], squareLength, proportionWidth, proportionHeight);
+      // setTimeout(drawCanvas([points[j]], squareLength, proportionWidth, proportionHeight), 15);
+      // chain = chain.then( function () {
+      //   return drawCanvas([points[j]], squareLength, proportionWidth, proportionHeight);
+      // })
     }
 }
 
 let drawRegions = function (regions, points, squareLength, rowLength, proportionWidth, proportionHeight) {
+  // let region = regions[0];
+  // updateRegionColorText(region, points, region['color'], squareLength, proportionWidth, proportionHeight);
+  let count = 0;
   for (let i in regions) {
     let region = regions[i];
-    updateRegionColorText(region, points, region['color'], squareLength, proportionWidth, proportionHeight);
-    drawCanvas(points, squareLength, proportionWidth, proportionHeight);
+    setTimeout(function() {
+        drawRegionColorText(region, points, region['color'], squareLength, proportionWidth, proportionHeight, true);
+    }, 1000 * count);
+    count++;
   }
+  drawCanvas(points, squareLength, proportionWidth, proportionHeight);
 }
+
 
 let bindMouseEvent = function (points, squareLength, rowLength, regions, proportionWidth, proportionHeight) {
   d3.select('.proportion-graph').on('mousemove', function() {
@@ -136,11 +173,13 @@ let bindMouseEvent = function (points, squareLength, rowLength, regions, proport
         sqId = column * rowLength + row;
     if(sqId < regions[0]['numSquares']) {
       drawHoveredRegions(regions, points, squareLength, proportionWidth, proportionHeight, points[sqId]['text']);
-      addToolTip(points[sqId]['text'], mouseX, mouseY);
+      // updateSquareColor(points, sqId, 'black')
+      // drawCanvas(points, squareLength, proportionWidth, proportionHeight);
+      addToolTip(points[sqId]['text'], points[sqId]['money'], mouseX, mouseY);
     }      
   });
   $('.proportion-graph').mouseleave(function() {
-      drawRegions(regions, points, squareLength, rowLength, proportionWidth, proportionHeight);
+    updateRegions(regions, points, squareLength, rowLength, proportionWidth, proportionHeight); 
   });
 }
 
@@ -148,14 +187,14 @@ let changeColorOpacity = function (color, opacity) {
   return color.replace(/[\d\.]+\)$/g, opacity+')');
 }
 
-let addToolTip = function (text, x, y) {
+let addToolTip = function (text, money, x, y) {
   let canvas = d3.select('.proportion-graph');
-  let ctx = canvas.node().getContext('2d');
-  ctx.fillStyle = '#222';  
+  let ctx = canvas.node().getContext('2d'); 
   ctx.fillRect(x + 5, y + 5, ctx.measureText(text).width, ctx.measureText(text).height);
   ctx.font = 'bold 15px arial';
   ctx.fillStyle = '#000';
-  ctx.fillText(text, x + 10, y + 20, 160);
+  ctx.fillText(text, x + 10, y + 15, 160);
+  ctx.fillText(money, x + 10, y + 30, 160);
 }
 
 let drawHoveredRegions = function (regions, points, squareLength, proportionWidth, proportionHeight, hoveredRegion) {
@@ -167,13 +206,14 @@ let drawHoveredRegions = function (regions, points, squareLength, proportionWidt
     else
       color = region['color'];
     
-    updateRegionColorText(region, points, color);
+      drawRegionColorText(region, points, color);
   }
   drawCanvas(points, squareLength, proportionWidth, proportionHeight);
 }
 
-let updateSquareText = function (points, squareId, text) {
+let updateSquareText = function (points, squareId, text, money) {
   points[squareId]['text'] = text;
+  points[squareId]['money'] = money;
 }
 
 let updateSquareColor = function (points, squareId, color) {
@@ -181,21 +221,24 @@ let updateSquareColor = function (points, squareId, color) {
 }
 
 let drawCanvas = function (points, squareLength, proportionWidth, proportionHeight) {
-  let canvas = d3.select('.proportion-graph');
-  let ctx = canvas.node().getContext('2d');
-  ctx.save();
+  return new Promise( function (resolve, reject) {
+    let canvas = d3.select('.proportion-graph');
+    let ctx = canvas.node().getContext('2d');
+    ctx.save();
 
-  ctx.clearRect(0, 0, proportionWidth, proportionHeight);
+    ctx.clearRect(0, 0, proportionWidth, proportionHeight);
 
-  for (let i = 0; i < points.length; ++i) {
-    let point = points[i];
-    drawBorder(ctx, point.x, point.y, squareLength, squareLength, '#000', 0.4);
-    ctx.fillStyle = point.color;
-    ctx.fillRect(point.x, point.y, squareLength, squareLength);
-    // break;
-  }
-
-  ctx.restore();
+    for (let i = 0; i < points.length; ++i) {
+      let point = points[i];
+      // console.log(point);
+      drawBorder(ctx, point.x, point.y, squareLength, squareLength, '#fff', 0.4);
+      ctx.fillStyle = point.color;
+      ctx.fillRect(point.x, point.y, squareLength, squareLength);
+    }
+    // console.log(45678)
+    ctx.restore();
+    resolve();
+  });
 }
 
 let drawBorder = function (ctx, xPos, yPos, width, height, borderColor, thickness) {

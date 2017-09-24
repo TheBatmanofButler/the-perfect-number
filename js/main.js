@@ -16,6 +16,7 @@ $('.slide-no').click( function (e) {
 });
 
 $('.slide-explore').click( function (e) {
+  $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
   let currentCompany = 'All Companies';
   $('.proportion-graph-viewer').css('display', 'flex');
 
@@ -39,6 +40,7 @@ $('.slide-explore').click( function (e) {
       createProportionGraph(suggestion);
       currentCompany = suggestion;
     } 
+    // $('.typeahead').typeahead('val','');
   });
 
   window.addEventListener('resize', function () {
@@ -48,7 +50,7 @@ $('.slide-explore').click( function (e) {
 });
 
 $('.bar-graph-viewer').click( function (e) {
-  if(currentSlide == 9) { currentSlide = 0; }
+  // if(currentSlide == 9) { currentSlide = 0; }
   currentSlide += 1;
   switch (currentSlide) {
     case 1: $("#slide1").trigger( "click" ); 
@@ -69,6 +71,8 @@ $('.bar-graph-viewer').click( function (e) {
             break;
     case 9: $("#slide9").trigger( "click" );
             break;
+    case 10: $('.slide-explore').trigger( "click" );
+             break;
   }
 });
 

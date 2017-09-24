@@ -52,11 +52,20 @@ html, body {
       line-height: 24px;
     }
 
-    .tt-suggestion:hover .tt-hint { 
+    .tt-suggestion:hover { 
       background-color: #0097cf;
       opacity: 0.4; 
-
     }
+
+    .tt-suggestion.tt-cursor {
+      background-color: #0097cf;
+    }
+
+    .tt-input {
+      background-color: #0097cf;
+      opacity: 1;
+    }
+
     .search-wrapper {
       flex: 2;
       float: right;
@@ -65,7 +74,6 @@ html, body {
         width: 385px;
         margin: 7px;
       }
-
 
     .slide-no {
       display: flex;
