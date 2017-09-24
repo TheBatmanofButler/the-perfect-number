@@ -7,7 +7,6 @@ let getAboutDiv = function () {
 
 $(document).mouseup(function(e) {
     var aboutDiv = $('.about');
-    // if the target of the click isn't the container nor a descendant of the container
     if (!aboutDiv.is(e.target) && aboutDiv.has(e.target).length === 0) 
     	aboutDiv.animate({'width': '0vw'});
 });
