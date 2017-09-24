@@ -102,7 +102,25 @@ let initBarGraph = function (margin) {
     .append('g')
     .attr('class', 'y-axis axis');
 
-  let y = barGraphParams['y'];
+  let y = barGraphParams['y'],
+      x = barGraphParams['x'];
+
+  barGraph
+    .append('text')
+    .attr('class', 'company-label')
+    .attr('dx', 5)
+    .attr('y', y(-7))
+    .style('font-size', '50px');
+
+  let yDomain = barGraphParams['y'].domain(),
+      barGraphTextY = yDomain[yDomain.length - 1];
+
+  barGraph
+    .append('text')
+    .attr('class', 'bar-graph-text')
+    .attr('y', y(barGraphTextY))
+    .style('font-size', '50px');
+
   barGraph
     .append('g')
       .attr('class', 'x-axis axis')
@@ -113,39 +131,28 @@ let initBarGraph = function (margin) {
       .style('opacity', 0);
 }
 
-let resizeBarGraph = function (data, duration, ogBarGraphViewerHeight) {
+let resizeBarGraph2 = function (data, duration, ogBarGraphViewerHeight) {
   let margin = {
       top: 50,
       right: 80,
       bottom: 100,
       left: 80
   };
-  let barGraphWidth = $('.bar-graph-viewer').width() - margin.left - margin.right;
+  let barGraphWidth = $('.bar-graph-viewer').width() - margin.left - margin.right,
+      barGraphHeight = $('.bar-graph-viewer').height() - 15 - 30;
 
-  let barGraphHeight = $('.bar-graph-viewer').height() - 15 - 30;
-
-  let viewBoxWidth = barGraphWidth + margin.left + margin.right,
-      viewBoxHeight = barGraphHeight + 15 + 30;
+  let totalWidth = barGraphWidth + margin.left + margin.right,
+      totalHeight = barGraphHeight + 15 + 30;
 
   d3.select('.bar-graph')
-      .attr('width', viewBoxWidth)
-      .attr('height', viewBoxHeight);
+    .attr('width', totalWidth)
+    .attr('height', totalHeight);
 
   updateXScale(barGraphWidth);
   updateYScale(-15, 50);
 
   d3.select('.bar-graph-elements')
       .attr('transform', 'translate(' + margin.left + ',' + 15 + ')');
-
-
-  // updateXAxis(x, y, 'rate', data, duration);
-
-  // highlightAllBars('#000', 1000),
-  // updateYAxis([35], y, 1000),
-  // updateXAxis(x, y, 'rate', data, 1000)
-  // updateBars(data,'rate', x, y, 0, 1000, 1000);
-  // // slidePercentLine(y, 35, 1000, barGraphWidth)
-
 
   Promise.all([
     highlightAllBars('#000', 1000),
@@ -158,11 +165,21 @@ let resizeBarGraph = function (data, duration, ogBarGraphViewerHeight) {
 
 }
 
-let resizeBarGraph2 = function (data) {
+let updateBarGraphText = function (text) {
+  let barGraphWidth = barGraphParams['barGraphWidth'];
+  d3.select('.bar-graph-text')
+    .text(text)
+    .attr('dx', function () {
+      console.log(this.getComputedTextLength());
+      return barGraphWidth - this.getComputedTextLength();
+    });
+}
+
+let resizeBarGraph = function () {
   let margin = {
       top: 50,
       right: 80,
-      bottom: 100,
+      bottom: 0,
       left: 80
   };
 
@@ -189,14 +206,14 @@ let resizeBarGraph2 = function (data) {
 
   d3.selectAll('.percent-line')
       .attr('x1', 0)
-      .attr('x2', 0)
-      .attr('y1', y(35))
-      .attr('y2', y(35))
-      .transition()
       .attr('x2', barGraphWidth)
-      .end(function () {
-        console.log(d3.selectAll('.percent-line'))
-      })
+      .attr('y1', y(35))
+      .attr('y2', y(35));
+
+  d3.select('.bar-graph-text')
+    .attr('dx', function () {
+      return barGraphWidth - this.getComputedTextLength();
+    });
 
   Promise.all([
     updateYAxis([-15, 35, 50], 0),
@@ -204,8 +221,7 @@ let resizeBarGraph2 = function (data) {
   ])
   .then( function () {
     return updateBars(0, 0, 0);
-  })
-
+  });
 }
 
 
@@ -372,7 +388,14 @@ let updateBars = function (exitTime, enterTime, updateTime) {
                         .append('rect')
                         .attr('class', 'bar')
                         .on('mouseover', function(d){
-                          console.log(d['company_name']);
+                          d3.select('.company-label')
+                            .transition()
+                            .text(d['company_name']);
+                        })
+                        .on('mouseout', function(d){
+                          d3.select('.company-label')
+                            .transition()
+                            .text('');
                         })
                         .call(updateBarSize)
                         .style('opacity', 0)

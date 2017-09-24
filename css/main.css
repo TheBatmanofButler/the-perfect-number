@@ -211,13 +211,6 @@ html, body {
           position: absolute;
         }
 
-        .company-bar-name {
-          position: absolute;
-          bottom: 0; left: 0;
-
-          /*background: #AEB4A9;*/
-        }
-
 .about {
   position: absolute;
   height: 100vh;
