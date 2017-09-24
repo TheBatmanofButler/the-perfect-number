@@ -45,6 +45,7 @@ let drawProportionGraph = function (regions, proportionWidth, proportionHeight) 
   // drawCanvas(points, squareLength, proportionWidth, proportionHeight);
   getAllRegionSquares(regions, rowLength);
   drawRegions(regions, points, squareLength, rowLength, proportionWidth, proportionHeight);
+  bindMouseEvent(points, squareLength, rowLength, regions, proportionWidth, proportionHeight);
 }
 
 let getGridPoints = function (numSquares, squareLength, rowLength) {
@@ -108,23 +109,22 @@ let shuffleArray = function(a) {
   return a;
 }
 
-let updateRegionColorText = function (region, points, color) {
-  let regionSquareIds = shuffleArray(region['squares']);
+let updateRegionColorText = function (region, points, color, squareLength, proportionWidth, proportionHeight) {
+  let regionSquareIds = region['squares'];
     for (let j in regionSquareIds) {
       let squareId = regionSquareIds[j];
       updateSquareColor(points, squareId, color);
       updateSquareText(points, squareId,region['text']);
+      // drawCanvas(points, squareLength, proportionWidth, proportionHeight);
     }
 }
 
 let drawRegions = function (regions, points, squareLength, rowLength, proportionWidth, proportionHeight) {
   for (let i in regions) {
     let region = regions[i];
-    updateRegionColorText(region, points, region['color']);
+    updateRegionColorText(region, points, region['color'], squareLength, proportionWidth, proportionHeight);
     drawCanvas(points, squareLength, proportionWidth, proportionHeight);
   }
-  bindMouseEvent(points, squareLength, rowLength, regions, proportionWidth, proportionHeight);
-
 }
 
 let bindMouseEvent = function (points, squareLength, rowLength, regions, proportionWidth, proportionHeight) {
@@ -189,9 +189,10 @@ let drawCanvas = function (points, squareLength, proportionWidth, proportionHeig
 
   for (let i = 0; i < points.length; ++i) {
     let point = points[i];
-    drawBorder(ctx, point.x, point.y, squareLength, squareLength, '#fff', 0.4);
+    drawBorder(ctx, point.x, point.y, squareLength, squareLength, '#000', 0.4);
     ctx.fillStyle = point.color;
     ctx.fillRect(point.x, point.y, squareLength, squareLength);
+    // break;
   }
 
   ctx.restore();

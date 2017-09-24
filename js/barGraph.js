@@ -39,50 +39,64 @@ let createSlides = function (data,
   $('#slide1').click( function (e) {
     slide1(barGraphWidth, barGraphHeight);
     currentSlide = 1;
-    $('active-slide-no-square').removeClass('active-slide-no-square');
-    // $('active-slide-no-square')..addClass('active-slide-no-square');
+    $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
+    $('#slide1 div:first').addClass('active-slide-no-square');
   });
 
   $('#slide2').click( function (e) {
     slide2();
     currentSlide = 2;
-    jQuery('.slide-no-square').removeClass('active-slide-no-square');
-    jQuery(this).addClass('active-slide-no-square');
+    $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
+    $('#slide2 div:first').addClass('active-slide-no-square');
   });
 
   $('#slide3').click( function (e) {
     slide3(companiesYearsNoTax);
     currentSlide = 3;
+    $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
+    $('#slide3 div:first').addClass('active-slide-no-square');
   });
 
   $('#slide4').click( function (e) {
     slide4(companiesTop25);
     currentSlide = 4;
+    $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
+    $('#slide4 div:first').addClass('active-slide-no-square');
   });
 
   $('#slide5').click( function (e) {
     slide5(companiesRebates);
     currentSlide = 5;
+    $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
+    $('#slide5 div:first').addClass('active-slide-no-square');
   });
 
   $('#slide6').click( function (e) {
     slide6(companiesIPS, companiesTop3EmpChanges, companiesLostEmployees);
     currentSlide = 6;
+    $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
+    $('#slide6 div:first').addClass('active-slide-no-square');
   });
 
   $('#slide7').click( function (e) {
     slide7(data);
     currentSlide = 7;
+    $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
+    $('#slide7 div:first').addClass('active-slide-no-square');
   });
 
   $('#slide8').click( function (e) {
     slide8(companiesForeignDiff);
     currentSlide = 8;
+    $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
+    $('#slide8 div:first').addClass('active-slide-no-square');
   });
 
   $('#slide9').click( function (e) {
     slide9(data, companiesCompetitors);
     currentSlide = 9;
+    $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
+    $('#slide9 div:first').addClass('active-slide-no-square');
   });
 }
 
