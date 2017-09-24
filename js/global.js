@@ -67,6 +67,7 @@ var isValidComparison = function (comparison, numTaxBreakSquares, numComparisonS
     return (enough && notTooMany);
 }
 
+var allCompanyData;
 var infoBoxData = {};
 var comparisonData = {};
 var totalProfits = 0;
@@ -112,6 +113,9 @@ d3.queue()
 .defer(d3.csv, '../csv/dv_data/interactive_data.csv', type)
 .defer(d3.csv, '../csv/dv_data/comparison_data.csv', type)
 .await( function (error, companies, comparisons) {
+
+  allCompanyData = companies;
+
   companies.map(function (d) {
 
     var slugName = slugify(d['company_name']);
@@ -207,10 +211,5 @@ d3.queue()
     companiesLostEmployees,
     companiesForeignDiff,
     companiesCompetitors);
-
-  window.addEventListener('resize', function () {
-    console.log('resize')
-    resizeBarGraph(companies, 100);
-  });
 
 });

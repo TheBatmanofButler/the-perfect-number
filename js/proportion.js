@@ -39,7 +39,7 @@ let createProportionGraph = function (companyKey) {
 let drawProportionGraph = function(regions, proportionWidth, proportionHeight) {
   let numSquares = regions[0]['numSquares'],
       squareLength = getSquareLength(proportionWidth, proportionHeight, numSquares);
-  console.log(squareLength);
+
   let rowLength = Math.floor(proportionHeight / squareLength),
       points = getGridPoints(numSquares, squareLength, rowLength);
 
