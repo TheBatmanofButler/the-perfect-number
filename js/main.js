@@ -20,12 +20,18 @@ $('.slide-explore').click( function (e) {
   let currentCompany = 'All Companies';
   $('.proportion-graph-viewer').css('display', 'flex');
 
-  let ogBarGraphViewerHeight = $('.bar-graph-viewer').height();
-  $('.proportion-graph-viewer').animate({'height': '45vh'}, 1000, function () {
-    createProportionGraph('All Companies');
-    // resizeBarGraph2(allCompanyData, 100, ogBarGraphViewerHeight);
 
-  });
+  let newHeight = $(".visualization").outerHeight() 
+                  - ($(".top").outerHeight() 
+                  + $(".dynamic-text").outerHeight()
+                  + $(window).outerHeight() * 0.45);
+  isMapMode = true;
+  resizeBarGraph(newHeight);
+  $('.proportion-graph-viewer').animate({'height': '45vh'}, 1000);
+  createProportionGraph('All Companies');
+  //   console.log($('.bar-graph-viewer').css('height'));
+
+  // });
 
   $('.typeahead').bind('typeahead:select', function(ev, suggestion) {
     if(suggestion == 'All companies'){

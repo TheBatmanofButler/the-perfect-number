@@ -1,14 +1,17 @@
+let margin = {
+  top: 50,
+  right: 80,
+  bottom: 100,
+  left: 80
+};
+
 let barGraphParams = {
   barGraphWidth: null,
   barGraphHeight: null,
   x: null,
   y: null,
   yParam: null,
-  data: null,
-  marginTop: 50,
-  marginRight: 80,
-  marginBottom: 150,
-  marginLeft: 80
+  data: null
 }
 
 let createSlides = function (data,
@@ -23,13 +26,8 @@ let createSlides = function (data,
 
   barGraphParams['data'] = data;
 
-  let marginTop = barGraphParams['marginTop'],
-      marginRight = barGraphParams['marginRight'],
-      marginBottom = barGraphParams['marginBottom'],
-      marginLeft = barGraphParams['marginLeft'];
-
-  let barGraphWidth = $('.bar-graph-viewer').width() - marginLeft - marginRight,
-      barGraphHeight = $('.bar-graph-viewer').height() - marginTop - marginBottom;
+  let barGraphWidth = $('.bar-graph-viewer').width() - margin.left - margin.right,
+      barGraphHeight = $('.bar-graph-viewer').height() - margin.top - margin.bottom;
 
   barGraphParams['barGraphWidth'] = barGraphWidth;
   barGraphParams['barGraphHeight'] = barGraphHeight;
@@ -100,11 +98,7 @@ let createSlides = function (data,
   });
 }
 
-let initBarGraph = function (margin) {
-  let marginTop = barGraphParams['marginTop'],
-      marginRight = barGraphParams['marginRight'],
-      marginBottom = barGraphParams['marginBottom'],
-      marginLeft = barGraphParams['marginLeft'];
+let initBarGraph = function () {
 
   let barGraphWidth = barGraphParams['barGraphWidth'];
   let barGraphHeight = barGraphParams['barGraphHeight'];
@@ -112,8 +106,8 @@ let initBarGraph = function (margin) {
   updateXScale(barGraphWidth);
   updateYScale(-15, 50);
 
-  let totalWidth = barGraphWidth + marginLeft + marginRight,
-      totalHeight = barGraphHeight + marginTop + marginBottom;
+  let totalWidth = barGraphWidth + margin.left + margin.right,
+      totalHeight = barGraphHeight + margin.top + margin.bottom;
 
   let barGraph = d3.select('.bar-graph-wrapper')
       .append('svg')
@@ -122,7 +116,7 @@ let initBarGraph = function (margin) {
         .attr('height', totalHeight)
       .append('g')
         .attr('class', 'bar-graph-elements')
-        .attr('transform', 'translate(' + marginLeft + ',' + marginTop + ')');
+        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
   barGraph
     .append('g')
@@ -157,40 +151,6 @@ let initBarGraph = function (margin) {
       .style('opacity', 0);
 }
 
-let resizeBarGraph2 = function (data, duration, ogBarGraphViewerHeight) {
-  let margin = {
-      top: 50,
-      right: 80,
-      bottom: 100,
-      left: 80
-  };
-  let barGraphWidth = $('.bar-graph-viewer').width() - marginLeft - marginRight,
-      barGraphHeight = $('.bar-graph-viewer').height() - 15 - 30;
-
-  let totalWidth = barGraphWidth + marginLeft + marginRight,
-      totalHeight = barGraphHeight + 15 + 30;
-
-  d3.select('.bar-graph')
-    .attr('width', totalWidth)
-    .attr('height', totalHeight);
-
-  updateXScale(barGraphWidth);
-  updateYScale(-15, 50);
-
-  d3.select('.bar-graph-elements')
-      .attr('transform', 'translate(' + marginLeft + ',' + 15 + ')');
-
-  Promise.all([
-    highlightAllBars('#000', 1000),
-    updateYAxis([-15, 35, 50], y, 1000),
-    updateXAxis(x, y, 'rate', data, 1000)
-  ])
-  .then( function () {
-    return updateBars(data,'rate', x, y, 0, 1000, 1000);
-  })
-
-}
-
 let updateBarGraphText = function (text) {
   let barGraphWidth = barGraphParams['barGraphWidth'];
   d3.select('.bar-graph-text')
@@ -201,24 +161,94 @@ let updateBarGraphText = function (text) {
     });
 }
 
-let resizeBarGraph = function () {
+let resizeBarGraph = function (newHeight) {
 
-  let marginTop = barGraphParams['marginTop'],
-      marginRight = barGraphParams['marginRight'],
-      marginBottom = barGraphParams['marginBottom'],
-      marginLeft = barGraphParams['marginLeft'];
+  margin = {
+    top: 50,
+    right: 80,
+    left: 80
+  };
 
-  let barGraphWidth = $('.bar-graph-viewer').width() - marginLeft - marginRight;
-  let barGraphHeight = $('.bar-graph-viewer').height() - marginTop - marginBottom;
+  margin.bottom = isMapMode ? 40 : 100;
+
+  let barGraphWidth = $('.bar-graph-viewer').width() - margin.left - margin.right,
+      barGraphHeight;
+
+  if (newHeight)
+    barGraphHeight = newHeight - margin.top - margin.bottom;
+  else
+    barGraphHeight = $('.bar-graph-viewer').height() - margin.top - margin.bottom;
+
+  if (barGraphHeight < 0)
+    return;
 
   barGraphParams['barGraphWidth'] = barGraphWidth;
   barGraphParams['barGraphHeight'] = barGraphHeight;
 
-  let totalWidth = barGraphWidth + marginLeft + marginRight,
-      totalHeight = barGraphHeight + marginTop + marginBottom;
+  let totalWidth = barGraphWidth + margin.left + margin.right,
+      totalHeight = barGraphHeight + margin.top + margin.bottom;
+
+  // d3.select('.bar-graph-elements')
+    // .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+  updateXScale(barGraphWidth);
+  updateYScale(-15, 50);
+
+  d3.select('.bar-graph')
+      // .transition()
+      // .duration(1000)
+      .attr('width', totalWidth)
+      .attr('height', totalHeight);
+
+  let y = barGraphParams['y'];
+
+  d3.select('.bar-graph-text')
+    .attr('dx', function () {
+      return barGraphWidth - this.getComputedTextLength();
+    });
+
+  let chain = Promise.resolve();
+
+  if (newHeight) {
+    chain = chain.then( function () {
+      highlightAllBars('#000', 0);
+    });
+  }
+
+  chain
+  .then( function () {
+    Promise.all([
+      updatePercentLine('35', 1000),
+      updateYAxis([-15, 35, 50], 1000),
+      updateXAxis(1000),
+      updateBars(0, 1000, 1000)
+    ])
+  });
+}
+
+let resizeBarGraph3 = function () {
+
+  margin = {
+    top: 50,
+    right: 80,
+    bottom: 100,
+    left: 80
+  };
+
+  let barGraphWidth = $('.bar-graph-viewer').width() - margin.left - margin.right;
+  let barGraphHeight = $('.bar-graph-viewer').height() - margin.top - margin.bottom;
+
+  barGraphParams['barGraphWidth'] = barGraphWidth;
+  barGraphParams['barGraphHeight'] = barGraphHeight;
+
+  let totalWidth = barGraphWidth + margin.left + margin.right,
+      totalHeight = barGraphHeight + margin.top + margin.bottom;
 
   if (barGraphHeight < 0)
     return;
+
+  d3.select('.bar-graph-elements')
+    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
   updateXScale(barGraphWidth);
   updateYScale(-15, 50);
@@ -229,12 +259,6 @@ let resizeBarGraph = function () {
 
   let y = barGraphParams['y'];
 
-  d3.selectAll('.percent-line')
-      .attr('x1', 0)
-      .attr('x2', barGraphWidth)
-      .attr('y1', y(35))
-      .attr('y2', y(35));
-
   d3.select('.bar-graph-text')
     .attr('dx', function () {
       return barGraphWidth - this.getComputedTextLength();
@@ -243,13 +267,12 @@ let resizeBarGraph = function () {
   Promise.all([
     updateYAxis([-15, 35, 50], 0),
     updateXAxis(0),
+    updateBars(0, 0, 0)
   ])
   .then( function () {
-    return updateBars(0, 0, 0);
+    // return updateBars(0, 0, 0);
   });
 }
-
-
 
 let updateXScale = function () {
   let barGraphWidth = barGraphParams['barGraphWidth'];
@@ -288,6 +311,21 @@ let slidePercentLine = function (percent, duration) {
       .duration(duration)
       .attr('x2', barGraphWidth)
       .end(resolve);
+  });
+}
+
+let updatePercentLine = function (percent, duration) {
+  return new Promise( function (resolve, reject) {
+    let barGraphWidth = barGraphParams['barGraphWidth'],
+        y = barGraphParams['y'];
+
+    d3.selectAll('.percent-line')
+        .transition()
+        .duration(duration)
+        .attr('x1', 0)
+        .attr('x2', barGraphWidth)
+        .attr('y1', y(35))
+        .attr('y2', y(35));
   });
 }
 
@@ -454,6 +492,7 @@ let updateBars = function (exitTime, enterTime, updateTime) {
 }
 
 let updateBarSize = function (bars) {
+
     let x = barGraphParams['x'],
         y = barGraphParams['y'],
         yParam = barGraphParams['yParam'],
