@@ -22,7 +22,7 @@ let getSquareLength = function (width, height, numSquares) {
   return parseFloat(sx.toFixed(1));
 }
 
-let createProportionGraph = function (companyKey) {
+let createProportionGraph = function (companyKey, noRedo) {
   let proportionWidth = $('.proportion-graph-wrapper').width(),
       proportionHeight = $('.proportion-graph-wrapper').height(),
       canvas = d3.select('.proportion-graph')
@@ -33,10 +33,10 @@ let createProportionGraph = function (companyKey) {
     return b['numSquares'] - a['numSquares'];
   });
 
-  drawProportionGraph(regions, proportionWidth, proportionHeight);
+  drawProportionGraph(regions, proportionWidth, proportionHeight, noRedo);
 }
 
-let drawProportionGraph = function (regions, proportionWidth, proportionHeight) {
+let drawProportionGraph = function (regions, proportionWidth, proportionHeight, noRedo) {
   let numSquares = regions[0]['numSquares'],
       squareLength = getSquareLength(proportionWidth, proportionHeight, numSquares),
       rowLength = Math.ceil(proportionHeight / squareLength),
@@ -44,7 +44,10 @@ let drawProportionGraph = function (regions, proportionWidth, proportionHeight) 
 
   // drawCanvas(points, squareLength, proportionWidth, proportionHeight);
   getAllRegionSquares(regions, rowLength);
-  drawRegions(regions, points, squareLength, rowLength, proportionWidth, proportionHeight);
+  if(noRedo)
+    updateRegions(regions, points, squareLength, rowLength, proportionWidth, proportionHeight);
+  else
+    drawRegions(regions, points, squareLength, rowLength, proportionWidth, proportionHeight);
 
   bindMouseEvent(points, squareLength, rowLength, regions, proportionWidth, proportionHeight);
 }
@@ -69,15 +72,20 @@ let getAllRegionSquares = function (regions, rowLength) {
   for (let i = 1; i < regions.length; i++) {
     let region = regions[i],
         numSquares = region['numSquares'];
+    console.log('region: ' + region['text']);
+    console.log('direction: ' + direction);
+    console.log('start: '+startSquareId);
 
     direction = getRegionSquares(region, startSquareId, numSquares, rowLength, direction)
 
     if (i > 1)
       startSquareId += numSquares;
   }
+  console.log(regions);
 }
 
 let getRegionSquares = function (region, startSquareId, numOfSq, rowLength, direction) {
+  console.log(rowLength);
   region['squares'] = [];
   if(!direction) {
     for (let i = 0; i < numOfSq; i++) 
@@ -85,12 +93,13 @@ let getRegionSquares = function (region, startSquareId, numOfSq, rowLength, dire
     return 1;
   }
 
+  let sqId;
   for (let i = 0; i < numOfSq; i++) {
-    let sqId = startSquareId + i;
-    if (direction) {
+    sqId = startSquareId + i;
+    if (direction == 1) {
       region['squares'].push(sqId);
       if((sqId + 1) % rowLength == 0)
-        direction = 0;
+        direction = 2;
     }
     else {
       newSqId = (Math.floor(sqId/rowLength) + 1)  * rowLength - (sqId % rowLength) - 1;
@@ -99,6 +108,8 @@ let getRegionSquares = function (region, startSquareId, numOfSq, rowLength, dire
         direction = 1;
     } 
   }
+  // if((sqId) % rowLength == 0)
+  //   return !direction;
   return direction;
 }
 
@@ -123,13 +134,11 @@ let updateRegions = function(regions, points, squareLength, rowLength, proportio
   drawCanvas(points, squareLength, proportionWidth, proportionHeight);
 }
 
-let drawRegionColorText = function (region, points, color, squareLength, proportionWidth, proportionHeight, shuffle) {
+let drawRegionColorText = function (region, points, color, squareLength, proportionWidth, proportionHeight) {
   let canvas = d3.select('.proportion-graph');
   let ctx = canvas.node().getContext('2d');
-  let regionSquareIds = region['squares'];
-  if(shuffle) regionSquareIds = shuffleArray(region['squares']);
+  let regionSquareIds = shuffleArray(region['squares']);
   let count = 0;
-  // let chain = Promise.resolve();
     for (let j in regionSquareIds) {
       let squareId = regionSquareIds[j];
       let point = points[squareId];
@@ -141,22 +150,15 @@ let drawRegionColorText = function (region, points, color, squareLength, proport
         ctx.fillRect(point.x, point.y, squareLength, squareLength);
       }, 150/regionSquareIds.length * count);
       count++;
-      // drawCanvas([points[j]], squareLength, proportionWidth, proportionHeight);
-      // setTimeout(drawCanvas([points[j]], squareLength, proportionWidth, proportionHeight), 15);
-      // chain = chain.then( function () {
-      //   return drawCanvas([points[j]], squareLength, proportionWidth, proportionHeight);
-      // })
     }
 }
 
 let drawRegions = function (regions, points, squareLength, rowLength, proportionWidth, proportionHeight) {
-  // let region = regions[0];
-  // updateRegionColorText(region, points, region['color'], squareLength, proportionWidth, proportionHeight);
   let count = 0;
   for (let i in regions) {
     let region = regions[i];
     setTimeout(function() {
-        drawRegionColorText(region, points, region['color'], squareLength, proportionWidth, proportionHeight, true);
+        drawRegionColorText(region, points, region['color'], squareLength, proportionWidth, proportionHeight);
     }, 1000 * count);
     count++;
   }
@@ -173,8 +175,6 @@ let bindMouseEvent = function (points, squareLength, rowLength, regions, proport
         sqId = column * rowLength + row;
     if(sqId < regions[0]['numSquares']) {
       drawHoveredRegions(regions, points, squareLength, proportionWidth, proportionHeight, points[sqId]['text']);
-      // updateSquareColor(points, sqId, 'black')
-      // drawCanvas(points, squareLength, proportionWidth, proportionHeight);
       addToolTip(points[sqId]['text'], points[sqId]['money'], mouseX, mouseY);
     }      
   });
@@ -230,12 +230,10 @@ let drawCanvas = function (points, squareLength, proportionWidth, proportionHeig
 
     for (let i = 0; i < points.length; ++i) {
       let point = points[i];
-      // console.log(point);
       drawBorder(ctx, point.x, point.y, squareLength, squareLength, '#fff', 0.4);
       ctx.fillStyle = point.color;
       ctx.fillRect(point.x, point.y, squareLength, squareLength);
     }
-    // console.log(45678)
     ctx.restore();
     resolve();
   });
