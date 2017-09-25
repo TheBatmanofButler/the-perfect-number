@@ -169,7 +169,7 @@ let resizeBarGraph = function (newHeight) {
     left: 80
   };
 
-  margin.bottom = isMapMode ? 40 : 100;
+  margin.bottom = inMapMode ? 40 : 100;
 
   let barGraphWidth = $('.bar-graph-viewer').width() - margin.left - margin.right,
       barGraphHeight;
@@ -195,8 +195,8 @@ let resizeBarGraph = function (newHeight) {
   updateYScale(-15, 50);
 
   d3.select('.bar-graph')
-      // .transition()
-      // .duration(1000)
+      .transition()
+      .duration(1000)
       .attr('width', totalWidth)
       .attr('height', totalHeight);
 
@@ -418,6 +418,7 @@ let updateYAxis = function (tickValues, duration) {
 
 let updateBars = function (exitTime, enterTime, updateTime) {
   return new Promise( function (resolve, reject) {
+
     let data = barGraphParams['data'],
         x = barGraphParams['x'],
         y = barGraphParams['y'],
@@ -465,7 +466,10 @@ let updateBars = function (exitTime, enterTime, updateTime) {
                         .transition()
                         .duration(enterTime)
                         .style('opacity', 1)
-                        .end(function () {
+                        .each( function () {
+                          console.log(this.__transition__);
+                        })
+                        .end( function () {
                           resolve();
                         });
       });
