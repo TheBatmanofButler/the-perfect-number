@@ -77,7 +77,6 @@ var isValidComparison = function (comparison, numTaxBreakSquares, numComparisonS
 
 var allCompanyData;
 let inMapMode = false;
-let barGraphTransitionInProgress = false;
 var infoBoxData = {};
 var comparisonData = {};
 var totalProfits = 0;
