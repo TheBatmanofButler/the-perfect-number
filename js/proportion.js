@@ -16,10 +16,32 @@ let getSquareLengthHelper = function (p1, p2, numSquares) {
 }
 
 let getSquareLength = function (width, height, numSquares) {
-  let sx = getSquareLengthHelper(height, width, numSquares),
+  let squareSpacing = 0.4,
+      squareLength,
+      sx = getSquareLengthHelper(height, width, numSquares),
       sy = getSquareLengthHelper(width, height, numSquares);
 
-  return parseFloat(sx.toFixed(1));
+  squareLength = Math.max(parseFloat(sx.toFixed(1)),parseFloat(sy.toFixed(1)));
+  console.log(numSquares);
+  
+  if(numSquares<5000) {
+    if (squareLength < 5) 
+      squareSpacing = 0.3; 
+    else 
+      squareSpacing = 1;
+
+    let rowLength = Math.floor(height / (squareLength + squareSpacing)),
+        columnLength = Math.floor(width / (squareLength + squareSpacing));
+
+    while(rowLength * columnLength < numSquares) {
+      squareLength--;
+      rowLength = Math.floor(height / (squareLength + squareSpacing));
+      columnLength = Math.floor(width / (squareLength + squareSpacing));
+    }
+    console.log(squareLength);
+  }
+  
+  return squareLength;
 }
 
 let createProportionGraph = function (companyKey, noRedo) {
@@ -28,7 +50,7 @@ let createProportionGraph = function (companyKey, noRedo) {
       canvas = d3.select('.proportion-graph')
         .attr('width', proportionWidth)
         .attr('height', proportionHeight);
-
+  console.log(proportionHeight);
   let regions = comparisonData[companyKey].sort(function (a, b) {
     return b['numSquares'] - a['numSquares'];
   });
@@ -39,11 +61,12 @@ let createProportionGraph = function (companyKey, noRedo) {
 let drawProportionGraph = function (regions, proportionWidth, proportionHeight, noRedo) {
   let numSquares = regions[0]['numSquares'],
       squareLength = getSquareLength(proportionWidth, proportionHeight, numSquares),
-      rowLength = Math.ceil(proportionHeight / squareLength),
+      rowLength = Math.floor(proportionHeight / squareLength),
       points = getGridPoints(numSquares, squareLength, rowLength);
 
   // drawCanvas(points, squareLength, proportionWidth, proportionHeight);
   getAllRegionSquares(regions, rowLength);
+  
   if(noRedo)
     updateRegions(regions, points, squareLength, rowLength, proportionWidth, proportionHeight);
   else
@@ -72,20 +95,15 @@ let getAllRegionSquares = function (regions, rowLength) {
   for (let i = 1; i < regions.length; i++) {
     let region = regions[i],
         numSquares = region['numSquares'];
-    console.log('region: ' + region['text']);
-    console.log('direction: ' + direction);
-    console.log('start: '+startSquareId);
 
     direction = getRegionSquares(region, startSquareId, numSquares, rowLength, direction)
 
     if (i > 1)
       startSquareId += numSquares;
   }
-  console.log(regions);
 }
 
 let getRegionSquares = function (region, startSquareId, numOfSq, rowLength, direction) {
-  console.log(rowLength);
   region['squares'] = [];
   if(!direction) {
     for (let i = 0; i < numOfSq; i++) 
@@ -96,7 +114,7 @@ let getRegionSquares = function (region, startSquareId, numOfSq, rowLength, dire
   let sqId;
   for (let i = 0; i < numOfSq; i++) {
     sqId = startSquareId + i;
-    if (direction == 1) {
+    if (direction==1) {
       region['squares'].push(sqId);
       if((sqId + 1) % rowLength == 0)
         direction = 2;
@@ -145,9 +163,12 @@ let drawRegionColorText = function (region, points, color, squareLength, proport
       updateSquareColor(points, squareId, color);
       updateSquareText(points, squareId,region['text'],region['money']);
       setTimeout(function() {
-        drawBorder(ctx, point.x, point.y, squareLength, squareLength, '#fff', 0.4);
+        // drawBorder(ctx, point.x, point.y, squareLength, squareLength, '#fff', 0.4);
         ctx.fillStyle = point.color;
         ctx.fillRect(point.x, point.y, squareLength, squareLength);
+        ctx.lineWidth = 0.4;
+        ctx.strokeStyle = "white";
+        ctx.strokeRect(point.x, point.y, squareLength, squareLength);
       }, 150/regionSquareIds.length * count);
       count++;
     }
@@ -230,9 +251,12 @@ let drawCanvas = function (points, squareLength, proportionWidth, proportionHeig
 
     for (let i = 0; i < points.length; ++i) {
       let point = points[i];
-      drawBorder(ctx, point.x, point.y, squareLength, squareLength, '#fff', 0.4);
+      // drawBorder(ctx, point.x, point.y, squareLength, squareLength, '#fff', 0.4);
       ctx.fillStyle = point.color;
       ctx.fillRect(point.x, point.y, squareLength, squareLength);
+      ctx.lineWidth = 0.4;
+      ctx.strokeStyle = "white";
+      ctx.strokeRect(point.x, point.y, squareLength, squareLength);
     }
     ctx.restore();
     resolve();

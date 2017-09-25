@@ -22,13 +22,14 @@ $('.slide-explore').click( function (e) {
 
 
   let newHeight = $(".visualization").outerHeight() 
-                  - ($(".top").outerHeight() 
-                  + $(".dynamic-text").outerHeight()
-                  + $(window).outerHeight() * 0.45);
+                  - $(".top").outerHeight() 
+                  - $(".dynamic-text").outerHeight()
+                  - $(window).outerHeight() * 0.45;
   isMapMode = true;
   resizeBarGraph(newHeight);
-  $('.proportion-graph-viewer').animate({'height': '45vh'}, 1000);
-  createProportionGraph('All Companies');
+  $('.proportion-graph-viewer').animate({'height': '45vh'}, 1000, function () {
+    createProportionGraph('All Companies');
+  });
   //   console.log($('.bar-graph-viewer').css('height'));
 
   // });
