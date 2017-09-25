@@ -139,7 +139,7 @@ let shuffleArray = function(a) {
   return a;
 }
 
-let updateRegions = function(regions, points, squareLength, rowLength, proportionWidth, proportionHeight) {
+let updateRegionsColorText = function (regions, points, squareLength, rowLength, proportionWidth, proportionHeight) {
   for (let i in regions) {
     let region = regions[i];
     let regionSquareIds = region['squares'];
@@ -200,7 +200,7 @@ let bindMouseEvent = function (points, squareLength, rowLength, regions, proport
     }      
   });
   $('.proportion-graph').mouseleave(function() {
-    updateRegions(regions, points, squareLength, rowLength, proportionWidth, proportionHeight); 
+    updateRegionsColorText(regions, points, squareLength, rowLength, proportionWidth, proportionHeight); 
   });
 }
 
@@ -218,16 +218,23 @@ let addToolTip = function (text, money, x, y) {
   ctx.fillText(money, x + 10, y + 30, 160);
 }
 
-let drawHoveredRegions = function (regions, points, squareLength, proportionWidth, proportionHeight, hoveredRegion) {
-  for(let i in regions) {
-    let region = regions[i];
-    let color;
-    if(region['text'] != hoveredRegion) 
-      color = changeColorOpacity(region['color'],0.3);
-    else
-      color = region['color'];
-    
-      drawRegionColorText(region, points, color);
+let drawHoveredRegions = function (regions, points, squareLength, proportionWidth, proportionHeight, hoveredRegionText) {
+  let hoveredRegionSquareIds;
+  let regionSquareIds;
+  let i = 0;
+  let region = regions[i];
+  while (region['text'] != hoveredRegionText) {
+    regionSquareIds = region['squares'];
+    for (let j in regionSquareIds) {
+      let squareId = regionSquareIds[j];
+      updateSquareColor(points, squareId, changeColorOpacity(region['color'],0.2));     
+    }
+    region = regions[i++];
+  }
+  regionSquareIds = region['squares'];
+  for (let j in regionSquareIds) {
+    let squareId = regionSquareIds[j];
+    updateSquareColor(points, squareId, region['color']);     
   }
   drawCanvas(points, squareLength, proportionWidth, proportionHeight);
 }
