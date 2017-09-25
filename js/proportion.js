@@ -24,22 +24,22 @@ let getSquareLength = function (width, height, numSquares) {
   squareLength = Math.max(parseFloat(sx.toFixed(1)),parseFloat(sy.toFixed(1)));
   console.log(numSquares);
   
-  if(numSquares<5000) {
-    if (squareLength < 5) 
-      squareSpacing = 0.3; 
-    else 
-      squareSpacing = 1;
+  // if(numSquares<5000) {
+  //   if (squareLength < 5) 
+  //     squareSpacing = 0.3; 
+  //   else 
+  //     squareSpacing = 1;
 
-    let rowLength = Math.floor(height / (squareLength + squareSpacing)),
-        columnLength = Math.floor(width / (squareLength + squareSpacing));
+  //   let rowLength = Math.floor(height / (squareLength + squareSpacing)),
+  //       columnLength = Math.floor(width / (squareLength + squareSpacing));
 
-    while(rowLength * columnLength < numSquares) {
-      squareLength--;
-      rowLength = Math.floor(height / (squareLength + squareSpacing));
-      columnLength = Math.floor(width / (squareLength + squareSpacing));
-    }
-    console.log(squareLength);
-  }
+  //   while(rowLength * columnLength < numSquares) {
+  //     squareLength--;
+  //     rowLength = Math.floor(height / (squareLength + squareSpacing));
+  //     columnLength = Math.floor(width / (squareLength + squareSpacing));
+  //   }
+  //   console.log(squareLength);
+  // }
   
   return squareLength;
 }
