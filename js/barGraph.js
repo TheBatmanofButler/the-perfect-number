@@ -209,6 +209,11 @@ let resizeBarGraph = function (newHeight) {
       return barGraphWidth - this.getComputedTextLength();
     });
 
+  d3.select('.company-label')
+    .attr('dx', 5)
+    .attr('y', y(-7))
+    .style('font-size', 50);
+
   let chain = Promise.resolve();
 
   if (newHeight) {
@@ -240,54 +245,6 @@ let resizeBarGraph = function (newHeight) {
       $('.bar-graph-viewer').trigger( "click" );
     }
   })
-}
-
-let resizeBarGraph3 = function () {
-
-  margin = {
-    top: 50,
-    right: 80,
-    bottom: 100,
-    left: 80
-  };
-
-  let barGraphWidth = $('.bar-graph-viewer').width() - margin.left - margin.right;
-  let barGraphHeight = $('.bar-graph-viewer').height() - margin.top - margin.bottom;
-
-  barGraphParams['barGraphWidth'] = barGraphWidth;
-  barGraphParams['barGraphHeight'] = barGraphHeight;
-
-  let totalWidth = barGraphWidth + margin.left + margin.right,
-      totalHeight = barGraphHeight + margin.top + margin.bottom;
-
-  if (barGraphHeight < 0)
-    return;
-
-  d3.select('.bar-graph-elements')
-    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-
-  updateXScale(barGraphWidth);
-  updateYScale(-15, 50);
-
-  d3.select('.bar-graph')
-      .attr('width', totalWidth)
-      .attr('height', totalHeight);
-
-  let y = barGraphParams['y'];
-
-  d3.select('.bar-graph-text')
-    .attr('dx', function () {
-      return barGraphWidth - this.getComputedTextLength();
-    });
-
-  Promise.all([
-    updateYAxis([-15, 35, 50], 0),
-    updateXAxis(0),
-    updateBars(0, 0, 0)
-  ])
-  .then( function () {
-    // return updateBars(0, 0, 0);
-  });
 }
 
 let updateXScale = function () {
