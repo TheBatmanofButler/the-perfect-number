@@ -50,7 +50,7 @@ let drawProportionGraph = function (regions, proportionWidth, proportionHeight, 
   getAllRegionSquares(regions, rowLength);
   
   if(noRedo)
-    updateRegions(regions, points, squareLength, rowLength, proportionWidth, proportionHeight);
+    updateRegionsColorText(regions, points, squareLength, rowLength, proportionWidth, proportionHeight);
   else
     drawRegions(regions, points, squareLength, rowLength, proportionWidth, proportionHeight);
 
