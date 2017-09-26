@@ -59,6 +59,7 @@ $('.slide-explore').click( function (e) {
 
 $('.bar-graph-viewer').click( function (e) {
   // if(currentSlide == 9) { currentSlide = 0; }
+  if (slideInProgress) return;
   currentSlide += 1;
   switch (currentSlide) {
     case 1: $("#slide1").trigger( "click" ); 

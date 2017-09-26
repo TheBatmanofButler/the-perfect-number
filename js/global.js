@@ -47,6 +47,16 @@ var createProportionAreas = function (comparisons, profit, taxBreak, convertCons
     }
   ]
 
+  if (taxBreak < 0) {
+    tax = (profit * 0.35 - taxBreak) / convertConst;
+    proportionAreas.push({
+      'text': 'Tax Paid',
+      'numSquares': Math.floor(tax),
+      'color': 'rgba(48, 0, 0, 0.8)',
+      'money': String((tax).toFixed(2)) + unit
+    })
+  }
+
   var filled = 0;
   for (let datum in comparisons) {
     let comparison = comparisons[datum],
@@ -75,13 +85,13 @@ var isValidComparison = function (comparison, numTaxBreakSquares, numComparisonS
     return (enough && notTooMany);
 }
 
-var allCompanyData;
 let inMapMode = false;
 var infoBoxData = {};
 var comparisonData = {};
 var totalProfits = 0;
 var totalTaxBreaks = 0;
 let currentSlide = 1;
+let shouldFade = false;
 var companyNames = ['All companies'],
     companiesIPS = [],
     companiesYearsNoTax = {
