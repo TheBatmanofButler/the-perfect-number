@@ -21,12 +21,12 @@ $('.slide-explore').click( function (e) {
   $('.proportion-graph-viewer').css('display', 'flex');
 
 
-  let newHeight = $(".visualization").outerHeight() 
-                  - $(".top").outerHeight() 
-                  - $(".dynamic-text").outerHeight()
-                  - $(window).outerHeight() * 0.45;
-  isMapMode = true;
-  resizeBarGraph(newHeight);
+  mapModeHeight = $(".visualization").outerHeight() 
+                - $(".top").outerHeight() 
+                - $(".dynamic-text").outerHeight()
+                - $(window).outerHeight() * 0.45;
+  
+  resizeBarGraph();
   $('.proportion-graph-viewer').animate({'height': '45vh'}, 1000, function () {
     createProportionGraph('All Companies');
   });
@@ -53,37 +53,46 @@ $('.slide-explore').click( function (e) {
 
   window.addEventListener('resize', function () {
     createProportionGraph(currentCompany, true);
+    console.log(123);
 
   })
 });
 
-$('.bar-graph-viewer').click( function (e) {
-  // if(currentSlide == 9) { currentSlide = 0; }
-  if (slideInProgress) return;
-  currentSlide += 1;
-  switch (currentSlide) {
-    case 1: $("#slide1").trigger( "click" ); 
-            break;
-    case 2: $("#slide2").trigger( "click" );
-            break;
-    case 3: $("#slide3").trigger( "click" );
-            break;
-    case 4: $("#slide4").trigger( "click" );
-            break;
-    case 5: $("#slide5").trigger( "click" );
-            break;
-    case 6: $("#slide6").trigger( "click" );
-            break;
-    case 7: $("#slide7").trigger( "click" );
-            break;
-    case 8: $("#slide8").trigger( "click" );
-            break;
-    case 9: $("#slide9").trigger( "click" );
-            break;
-    case 10: $('.slide-explore').trigger( "click" );
-             break;
-  }
-});
+let addBarGraphClicks = function () {
+  $('.bar-graph-viewer').click( function (e) {
+    // if(currentSlide == 9) { currentSlide = 0; }
+    if (slideInProgress) return;
+    currentSlide += 1;
+    switch (currentSlide) {
+      case 1: $("#slide1").trigger( "click" ); 
+              break;
+      case 2: $("#slide2").trigger( "click" );
+              break;
+      case 3: $("#slide3").trigger( "click" );
+              break;
+      case 4: $("#slide4").trigger( "click" );
+              break;
+      case 5: $("#slide5").trigger( "click" );
+              break;
+      case 6: $("#slide6").trigger( "click" );
+              break;
+      case 7: $("#slide7").trigger( "click" );
+              break;
+      case 8: $("#slide8").trigger( "click" );
+              break;
+      case 9: $("#slide9").trigger( "click" );
+              break;
+      case 10: $('.slide-explore').trigger( "click" );
+               break;
+    }
+  });
+}
+
+let removeBarGraphClicks = function () {
+  $('.bar-graph-viewer').off('click');
+}
+
+addBarGraphClicks();
 
 var openProportionGraph = function () {
   $('.proportion-graph-viewer').animate({'height': '60vh'});
