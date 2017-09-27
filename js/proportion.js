@@ -212,10 +212,7 @@ let drawHoveredRegions = function (regions, points, squareLength, proportionWidt
   let regionSquareIds;
   let i = 0;
   let region = regions[i];
-<<<<<<< HEAD
 
-=======
->>>>>>> 76e7cb8cb9febf64b9146bab9d8e094f5373a3c2
   while (region['text'] != hoveredRegionText) {
     regionSquareIds = region['squares'];
     for (let j in regionSquareIds) {
