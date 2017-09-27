@@ -16,6 +16,8 @@ $('.slide-no').click( function (e) {
 });
 
 $('.slide-explore').click( function (e) {
+  if(proportionInTransition)
+    return 0
   $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
   let currentCompany = 'All Companies';
   $('.proportion-graph-viewer').css('display', 'flex');
@@ -28,23 +30,28 @@ $('.slide-explore').click( function (e) {
   
   resizeBarGraph();
   $('.proportion-graph-viewer').animate({'height': '45vh'}, 1000, function () {
-    createProportionGraph('All Companies');
+    updateProportionGraph('All Companies');
   });
   //   console.log($('.bar-graph-viewer').css('height'));
 
   // });
 
   $('.typeahead').bind('typeahead:select', function(ev, suggestion) {
+    if(proportionInTransition) {
+      $('.typeahead').typeahead('val','');
+      // $('.typeahead').typeahead('setQuery', '');
+      return 0;
+    }
     if(suggestion == 'All companies'){
       $('.company-bar-name').text('All companies');
-      createProportionGraph('All Companies');
+      updateProportionGraph('All Companies');
     }
     else {
       slugifySuggestion = slugify(suggestion);
       companyInfo = infoBoxData[slugifySuggestion];
       $('.company-bar-name').text(suggestion);
       loadInfo(companyInfo);
-      createProportionGraph(suggestion);
+      updateProportionGraph(suggestion);
       
     } 
     currentCompany = suggestion;
@@ -52,9 +59,8 @@ $('.slide-explore').click( function (e) {
   });
 
   window.addEventListener('resize', function () {
-    createProportionGraph(currentCompany, true);
-    console.log(123);
-
+    // if(!proportionInTransition)
+    updateProportionGraph(currentCompany, true);
   })
 });
 
