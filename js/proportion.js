@@ -47,6 +47,10 @@ let drawProportionGraph = function (regions, proportionWidth, proportionHeight, 
       rowLength = Math.floor(proportionHeight / squareLength),
       points = getGridPoints(numSquares, squareLength, rowLength);
 
+  // console.log(rowLength);
+  // if (numSquares/rowLength * squareLength > proportionWidth) 
+  //   squareLength-=10;
+
   // drawCanvas(points, squareLength, proportionWidth, proportionHeight);
   getAllRegionSquares(regions, rowLength);
   

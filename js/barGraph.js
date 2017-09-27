@@ -62,10 +62,10 @@ let createSlides = function (data,
 
             // updateXScale(barGraphWidth);
             // updateYScale(-15, 50);
-            mapModeHeight = $('.graph-viewers').height();
-            // resizeBarGraph();
-          });
+            // mapModeHeight = $('.graph-viewers').height();
+          resizeBarGraph();
         });
+      });
     });
 
     slide3(data, companiesYearsNoTax);
