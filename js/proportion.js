@@ -6,6 +6,8 @@
  *
  */
 
+let proportionInTransition = false;
+
 let getSquareLengthHelper = function (p1, p2, numSquares) {
   let pxy = Math.ceil(Math.sqrt(numSquares * p2 / p1));
 
@@ -26,13 +28,12 @@ let getSquareLength = function (width, height, numSquares) {
   return squareLength;
 }
 
-let createProportionGraph = function (companyKey, noRedo) {
+let updateProportionGraph = function (companyKey, noRedo) {
   let proportionWidth = $('.proportion-graph-wrapper').width(),
       proportionHeight = $('.proportion-graph-wrapper').height(),
       canvas = d3.select('.proportion-graph')
         .attr('width', proportionWidth)
         .attr('height', proportionHeight);
-  console.log(proportionHeight);
   let regions = comparisonData[companyKey].sort(function (a, b) {
     return b['numSquares'] - a['numSquares'];
   });
@@ -108,8 +109,6 @@ let getRegionSquares = function (region, startSquareId, numOfSq, rowLength, dire
         direction = 1;
     } 
   }
-  // if((sqId) % rowLength == 0)
-  //   return !direction;
   return direction;
 }
 
@@ -140,6 +139,7 @@ let drawRegionColorText = function (region, points, color, squareLength, proport
   let regionSquareIds = shuffleArray(region['squares']);
   let count = 0;
     for (let j in regionSquareIds) {
+      // console.log(150/regionSquareIds.length)
       let squareId = regionSquareIds[j];
       let point = points[squareId];
       updateSquareColor(points, squareId, color);
@@ -158,14 +158,21 @@ let drawRegionColorText = function (region, points, color, squareLength, proport
 
 let drawRegions = function (regions, points, squareLength, rowLength, proportionWidth, proportionHeight) {
   let count = 0;
-  for (let i in regions) {
+  proportionInTransition = true;
+  for (let i = 0; i<=regions.length; i++) {
     let region = regions[i];
     setTimeout(function() {
+      if(i == regions.length) {
+        // drawCanvas(points, squareLength, proportionWidth, proportionHeight);
+        proportionInTransition = false;
+        console.log(proportionInTransition);
+      }
+      else
         drawRegionColorText(region, points, region['color'], squareLength, proportionWidth, proportionHeight);
     }, 1000 * count);
     count++;
   }
-  drawCanvas(points, squareLength, proportionWidth, proportionHeight);
+  
 }
 
 
@@ -205,7 +212,10 @@ let drawHoveredRegions = function (regions, points, squareLength, proportionWidt
   let regionSquareIds;
   let i = 0;
   let region = regions[i];
+<<<<<<< HEAD
 
+=======
+>>>>>>> 76e7cb8cb9febf64b9146bab9d8e094f5373a3c2
   while (region['text'] != hoveredRegionText) {
     regionSquareIds = region['squares'];
     for (let j in regionSquareIds) {
