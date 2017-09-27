@@ -27,8 +27,10 @@ var createProportionAreas = function (comparisons, profit, taxBreak, convertCons
   var num35PercentSquares = Math.floor(profit * 0.35 / convertConst);
   var numTaxBreakSquares = Math.floor(taxBreak / convertConst);
   var unit;
-  if(convertConst == 1e3)
+  if (convertConst == 1e3)
     unit = ' billion';
+  else if (convertConst == 10)
+    unit = ' ten-million';
   else
     unit = ' million';
 
@@ -207,10 +209,13 @@ d3.queue()
       companiesCompetitors[competitor].push(d);
     }
 
+    var convertConst = 1;
+    if (d['tax_break'] > 5000)
+      convertConst = 10;
     comparisonData[d['company_name']] = createProportionAreas(comparisons,
                                                                   d['profit'],
                                                                   d['tax_break'],
-                                                                  1);
+                                                                  convertConst);
 
     var taxBreak = d['tax_break'];
     if(taxBreak > 0) {
