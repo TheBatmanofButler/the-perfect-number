@@ -50,7 +50,7 @@ let drawProportionGraph = function (regions, proportionWidth, proportionHeight, 
   getAllRegionSquares(regions, rowLength);
   
   if(noRedo)
-    updateRegions(regions, points, squareLength, rowLength, proportionWidth, proportionHeight);
+    updateRegionsColorText(regions, points, squareLength, rowLength, proportionWidth, proportionHeight);
   else
     drawRegions(regions, points, squareLength, rowLength, proportionWidth, proportionHeight);
 
@@ -205,7 +205,7 @@ let drawHoveredRegions = function (regions, points, squareLength, proportionWidt
   let regionSquareIds;
   let i = 0;
   let region = regions[i];
-  console.log(region);
+
   while (region['text'] != hoveredRegionText) {
     regionSquareIds = region['squares'];
     for (let j in regionSquareIds) {

@@ -11,10 +11,6 @@ $('.about-button').click( function (e) {
   getAboutDiv();
 });
 
-$('.slide-no').click( function (e) {
-  $('.proportion-graph-viewer').hide();
-});
-
 $('.slide-explore').click( function (e) {
   $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
   let currentCompany = 'All Companies';
@@ -26,6 +22,7 @@ $('.slide-explore').click( function (e) {
                 - $(".dynamic-text").outerHeight()
                 - $(window).outerHeight() * 0.45;
   
+
   resizeBarGraph();
   $('.proportion-graph-viewer').animate({'height': '45vh'}, 1000, function () {
     createProportionGraph('All Companies');
