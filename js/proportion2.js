@@ -75,25 +75,65 @@ let updatePropGraph = function () {
                  .attr('height', propHeight);
 
   setAllRegionSquares();
+  createAllCanvases();
 
-  // let allCanvases = getAllCanvases(regions);
+  for (let ii = 0; ii < canvases.length; ii++) {
+    setTimeout(function () {
+      addCanvas(canvases[ii]);
+    }, ii * 1000);
+  }
+
 }
 
-let createCanvases = function () {
+let createAllCanvases = function () {
   let regions = propGraphParams['regions'],
       propWidth = propGraphParams['propWidth'],
-      propHeight = propGraphParams['propHeight'];
+      propHeight = propGraphParams['propHeight'],
+      squareLength = propGraphParams['squareOuterLength'],
+      rowLength = propGraphParams['rowLength'];
 
+  let canvasObj;
   for (let ii in regions) {
     let canvas = document.createElement('canvas');
+    canvases.push(canvas);
     
-    d3.select(canvas)
-      .attr('width', propWidth)
-      .attr('height', propHeight);
+    canvasObj = d3.select(canvas)
+                  .attr('width', propWidth)
+                  .attr('height', propHeight);
 
     drawRegion(canvas, regions[ii]);
-    canvases.push(canvas);
   }
+
+  canvasObj
+    .call(addMouseEvent);
+    
+}
+
+let addMouseEvent = function (canvasObj) {
+  canvasObj
+    .on('mousemove', function() {
+      let mouseX = d3.event.offsetX,
+          mouseY = d3.event.offsetY,
+          column = Math.floor(mouseX / squareOuterLength),
+          row = Math.floor(mouseY / squareOuterLength),
+          sqId = column * rowLength + row;
+      console.log(sqId);
+    });
+}
+
+let checkHoverMap = function () {
+  let hoverMap = {},
+      regions = propGraphParams['regions'];
+
+  for (let ii = regions.length - 1; ii > -1; ii--) {
+    let region = regions[ii];
+
+    for (let jj in region) {
+      hoverMap[jj] = ii;
+    }
+  }
+
+  console.log()
 }
 
 let addCanvas = function (canvas) {
