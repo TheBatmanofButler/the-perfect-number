@@ -54,9 +54,9 @@ var createProportionAreas = function (comparisons, profit, taxBreak, convertCons
     proportionAreas.push({
       'text': 'Tax Paid',
       'numSquares': Math.floor(tax),
-      'color': 'rgba(48, 0, 0, 0.8)',
+      'color': 'rgba(48, 0, 0, 1)',
       'money': String((tax).toFixed(2)) + unit
-    })
+    });
   }
 
   var filled = 0;
@@ -210,8 +210,8 @@ d3.queue()
     }
 
     var convertConst = 1;
-    if (d['tax_break'] > 5000)
-      convertConst = 10;
+    // if (d['tax_break'] > 5000)
+      // convertConst = 10;
     comparisonData[d['company_name']] = createProportionAreas(comparisons,
                                                                   d['profit'],
                                                                   d['tax_break'],
