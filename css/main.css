@@ -213,7 +213,7 @@ html, body {
 
       .bar-graph-wrapper {
         flex: 1;
-        background-color: yellow;
+        /*background-color: yellow;*/
       }
 
       .bar-graph {

@@ -63,7 +63,7 @@ let createSlides = function (data,
             // updateXScale(barGraphWidth);
             // updateYScale(-15, 50);
             // mapModeHeight = $('.graph-viewers').height();
-          resizeBarGraph();
+          // resizeBarGraph();
         });
       });
     });
