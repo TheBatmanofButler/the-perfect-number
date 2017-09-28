@@ -69,11 +69,6 @@ let updatePropGraph = function () {
   updatePropGraphParam('rowLength', rowLength);
   updatePropGraphParam('squares', squares);
 
-
-  let canvas = d3.select('.proportion-graph')
-                 .attr('width', propWidth)
-                 .attr('height', propHeight);
-
   setAllRegionSquares();
   getHoverMap();
   createAllCanvases();
@@ -94,7 +89,9 @@ let createAllCanvases = function () {
       propHeight = propGraphParams['propHeight'],
       squareLength = propGraphParams['squareOuterLength'],
       rowLength = propGraphParams['rowLength'],
-      canvases = propGraphParams['canvases'];
+      canvases = propGraphParams['canvases'] = [];
+
+  d3.selectAll('canvas').remove();
 
   let canvasObj;
   for (let ii in regions) {
@@ -241,7 +238,7 @@ let drawRegion = function (canvas, region) {
   ctx.fillStyle = region['color'];
   for (let i = 0; i < squares.length; ++i) {
     const point = squares[i];
-    let squareSpacing = Math.floor(squareOuterLength / 5),
+    let squareSpacing = Math.floor(squareOuterLength / 4),
         squareInnerLength = squareOuterLength - squareSpacing;
 
     ctx.fillRect(point.x,

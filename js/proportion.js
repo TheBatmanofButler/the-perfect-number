@@ -6,8 +6,6 @@
  *
  */
 
-let proportionInTransition = false;
-
 let getSquareLengthHelper = function (p1, p2, numSquares) {
   let pxy = Math.ceil(Math.sqrt(numSquares * p2 / p1));
 

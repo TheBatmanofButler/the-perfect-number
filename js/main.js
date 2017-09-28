@@ -13,7 +13,6 @@ $('.about-button').click( function (e) {
 
 $('.slide-explore').click( function (e) {
   $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
-  let currentCompany = 'All Companies';
   $('.proportion-graph-viewer').css('display', 'flex');
 
 
@@ -28,36 +27,28 @@ $('.slide-explore').click( function (e) {
     initPropGraph('All Companies');
     updatePropGraph();
   });
-  //   console.log($('.bar-graph-viewer').css('height'));
-
-  // });
 
   $('.typeahead').bind('typeahead:select', function(ev, suggestion) {
     if(proportionInTransition) {
-      $('.typeahead').typeahead('val','');
+      $('.typeahead').typeahead('val', '');
       // $('.typeahead').typeahead('setQuery', '');
       return 0;
     }
     if(suggestion == 'All companies'){
       $('.company-bar-name').text('All companies');
-      // updateProportionGraph('All Companies');
+      initPropGraph('All Companies');
+      updatePropGraph();
     }
     else {
       slugifySuggestion = slugify(suggestion);
       companyInfo = infoBoxData[slugifySuggestion];
       $('.company-bar-name').text(suggestion);
       loadInfo(companyInfo);
-      updateProportionGraph(suggestion);
+      initPropGraph(suggestion);
+      updatePropGraph();
       
-    } 
-    currentCompany = suggestion;
-    // $('.typeahead').typeahead('val','');
+    }
   });
-
-  window.addEventListener('resize', function () {
-    // if(!proportionInTransition)
-    // updateProportionGraph(currentCompany);
-  })
 });
 
 let addBarGraphClicks = function () {
