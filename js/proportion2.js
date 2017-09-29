@@ -11,7 +11,7 @@ let propGraphParams = {
   propWidth: null,
   propHeight: null,
   squareOuterLength: null,
-  rowLength: null,
+  columnLength: null,
   squares: [],
   canvases: []
 }
@@ -46,23 +46,23 @@ let updatePropGraphParams = function () {
       propHeight = $('.proportion-graph-wrapper').height(),
       numSquares = propGraphParams['regions'][0]['numSquares']
       squareOuterLength = getSquareOuterLength(propWidth, propHeight, numSquares),
-      rowLength = Math.floor(propHeight / squareOuterLength),
-      squares = getGridSquares(numSquares, squareOuterLength, rowLength);
+      columnLength = Math.floor(propHeight / squareOuterLength),
+      squares = getGridSquares(numSquares, squareOuterLength, columnLength);
 
       propGraphParams['propWidth'] = propWidth;
       propGraphParams['propHeight'] = propHeight;
       propGraphParams['numSquares'] = numSquares;
       propGraphParams['squareOuterLength'] = squareOuterLength;
-      propGraphParams['rowLength'] = rowLength;
+      propGraphParams['columnLength'] = columnLength;
       propGraphParams['squares'] = squares;
 }
 
-let getGridSquares = function (numSquares, squareOuterLength, rowLength) {
+let getGridSquares = function (numSquares, squareOuterLength, columnLength) {
   return d3.range(0, numSquares).map( function(index) {
     return {
       id: index,
-      x: squareOuterLength * Math.floor(index / rowLength),
-      y: squareOuterLength * (index % rowLength)
+      x: squareOuterLength * Math.floor(index / columnLength),
+      y: squareOuterLength * (index % columnLength)
     }
   });
 }
@@ -79,7 +79,7 @@ let updatePropGraph = function () {
   drawRegion(0);
   addCanvas(1);
   showCanvas(1);
-  animateCanvas(1);
+  drawRegionByColumn(1);
 
 }
 
@@ -130,7 +130,7 @@ let addMouseEvent = function (canvasObj) {
           mouseY = d3.event.offsetY,
           column = Math.floor(mouseX / squareOuterLength),
           row = Math.floor(mouseY / squareOuterLength),
-          squareId = column * rowLength + row;
+          squareId = column * columnLength + row;
       if (squareId < numSquares)
         showProperRegion(squareId);
       else
@@ -249,50 +249,72 @@ let changeOpacity = function (color, opacity) {
   return color.replace(/[\d\.]+\)$/g, opacity+')');
 }
 
-let drawRegion = function (regionId) {
-  let canvases = propGraphParams['canvases'],
-      regions = propGraphParams['regions'],
-      canvas = canvases[regionId],
-      region = regions[regionId],
-      squareOuterLength = propGraphParams['squareOuterLength'],
-      ctx = canvas.getContext('2d'),
-      squares = region['squares'];
-
-  ctx.fillStyle = region['color'];
-  for (let i = 0; i < squares.length; ++i) {
-    const point = squares[i];
-    let squareSpacing = Math.floor(squareOuterLength / 3),
-        squareInnerLength = squareOuterLength - squareSpacing;
-
-    ctx.fillRect(point.x,
-                 point.y,
-                 squareInnerLength,
-                 squareInnerLength);
-  }
-}
-
-let animateCanvas = function (regionId) {
-  let canvases = propGraphParams['canvases'],
-      squareOuterLength = propGraphParams['squareOuterLength'],
-      canvas = canvases[regionId],
+let drawRegion = function (regionId, sparkle = false) {
+  let canvas = propGraphParams['canvases'][regionId],
       region = propGraphParams['regions'][regionId],
-      squares = shuffleArray(region['squares']);
+      squareOuterLength = propGraphParams['squareOuterLength'],
+      squares = region['squares'],
+      numSquares = region['numSquares'],
+      ctx = canvas.getContext('2d'),
+      squareSpacing = Math.floor(squareOuterLength / 3),
+      squareInnerLength = squareOuterLength - squareSpacing;
 
-  let ctx = canvas.getContext('2d');
+  if (sparkle)
+    squares = shuffleArray(squares);
 
   ctx.fillStyle = region['color'];
-  for (let i = 0; i < squares.length; ++i) {
+  for (let i = 0; i < numSquares; ++i) {
     const point = squares[i];
-    let squareSpacing = Math.floor(squareOuterLength / 3),
-        squareInnerLength = squareOuterLength - squareSpacing;
 
-    setTimeout(function() {
+    if (sparkle) {
+      setTimeout(function() {
+        ctx.fillRect(point.x,
+                     point.y,
+                     squareInnerLength,
+                     squareInnerLength);
+      }, 0.01 * i);
+    }
+    else {
       ctx.fillRect(point.x,
                    point.y,
                    squareInnerLength,
                    squareInnerLength);
-    }, 0.01 * i);
+    }
   }
+}
+
+let drawRegionByColumn = function (regionId) {
+  let canvas = propGraphParams['canvases'][regionId],
+      region = propGraphParams['regions'][regionId],
+      squareOuterLength = propGraphParams['squareOuterLength'],
+      squares = region['squares'],
+      numSquares = region['numSquares'],
+      ctx = canvas.getContext('2d'),
+      squareSpacing = Math.floor(squareOuterLength / 3),
+      squareInnerLength = squareOuterLength - squareSpacing,
+      columnLength = propGraphParams['columnLength'];
+
+  ctx.fillStyle = region['color'];
+
+  let squaresRemaining = numSquares;
+  for (let i = 0; i < numSquares; i += columnLength) {
+
+    let squaresInColumn = squaresRemaining - columnLength > 0 ? columnLength : squaresRemaining;
+
+    setTimeout(function() {
+      for (let j = 0; j < squaresInColumn; ++j) {
+        const point = squares[i + j];
+
+        ctx.fillRect(point.x,
+                     point.y,
+                     squareInnerLength,
+                     squareInnerLength);
+      }
+    }, 10 * i);
+
+    squaresRemaining -= columnLength;
+  }
+
 }
 
 let setAllRegionSquares = function () {
@@ -301,7 +323,7 @@ let setAllRegionSquares = function () {
       direction = 1,
       regions = propGraphParams['regions'],
       squareOuterLength = propGraphParams['squareOuterLength'],
-      rowLength = propGraphParams['rowLength'];
+      columnLength = propGraphParams['columnLength'];
 
   for (let ii = 0; ii < regions.length; ii++) {
     let region = regions[ii],
@@ -311,8 +333,8 @@ let setAllRegionSquares = function () {
       region['squares'] = d3.range(0, numSquares).map( function(index) {
                             return {
                               id: index,
-                              x: squareOuterLength * Math.floor(index / rowLength),
-                              y: squareOuterLength * (index % rowLength)
+                              x: squareOuterLength * Math.floor(index / columnLength),
+                              y: squareOuterLength * (index % columnLength)
                             }
                           });
     }
@@ -329,7 +351,7 @@ let setSubregionSquares = function (region, numSquares, startSquareId, direction
 
   let squares = propGraphParams['squares'],
       regionSquares = region['squares'],
-      rowLength = region['rowLength'];
+      columnLength = region['columnLength'];
 
   for (let ii = 0; ii < numSquares; ii++) {
     let squareId = startSquareId + ii;
@@ -339,17 +361,17 @@ let setSubregionSquares = function (region, numSquares, startSquareId, direction
       let square = getSquareObject(squareId);
       regionSquares.push(square);
 
-      if ((squareId + 1) % rowLength == 0)
+      if ((squareId + 1) % columnLength == 0)
         direction = 2;
     }
     else {
       
-      let newSquareId = (Math.floor(squareId / rowLength) + 1)  * rowLength - (squareId % rowLength) - 1,
+      let newSquareId = (Math.floor(squareId / columnLength) + 1)  * columnLength - (squareId % columnLength) - 1,
           square = getSquareObject(newSquareId);
 
       regionSquares.push(square);
       
-      if ((squareId + 1) % rowLength == 0)
+      if ((squareId + 1) % columnLength == 0)
         direction = 1;
     } 
   }
@@ -358,11 +380,11 @@ let setSubregionSquares = function (region, numSquares, startSquareId, direction
 
 let getSquareObject = function (index) {
   let squareOuterLength = propGraphParams['squareOuterLength'],
-      rowLength = propGraphParams['rowLength'];
+      columnLength = propGraphParams['columnLength'];
 
   return {
     id: index,
-    x: squareOuterLength * Math.floor(index / rowLength),
-    y: squareOuterLength * (index % rowLength)
+    x: squareOuterLength * Math.floor(index / columnLength),
+    y: squareOuterLength * (index % columnLength)
   }
 }
