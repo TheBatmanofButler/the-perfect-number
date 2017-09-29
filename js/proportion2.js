@@ -79,7 +79,13 @@ let updatePropGraph = function () {
   drawRegion(0);
   addCanvas(1);
   showCanvas(1);
-  drawRegionByColumn(1);
+  drawRegion(1);
+  addCanvas(2);
+  showCanvas(2);
+  drawRegion(2);
+  addCanvas(3);
+  showCanvas(3);
+  drawRegion(3);
 
 }
 
@@ -163,39 +169,41 @@ let showProperRegion = function (squareId) {
   let hoverMap = propGraphParams['hoverMap'],
       regionId = hoverMap[squareId];
 
-      if (regionId == 0)
-        show35PercentRegion();
+  if (regionId == 0)
+    showOuterMainRegion();
 
-      else if (regionId == 1)
-        showTaxBreakRegion();
+  else if (regionId == 1)
+    showInnerMainRegion();
 
-      else
-        showComparisonRegion(regionId);
+  else
+    showComparisonRegion(regionId);
 }
 
 let showAllRegions = function () {
   let canvases = propGraphParams['canvases'];
 
   for (let ii = 0; ii < canvases.length; ii++)
-    showCanvas(canvases[ii]);
+    showCanvas(ii);
 }
 
-let show35PercentRegion = function () {
+let showOuterMainRegion = function () {
   let canvases = propGraphParams['canvases'];
 
-  showCanvas(canvases[0]);
-  for (let ii = 1; ii < canvases.length; ii++)
-    hideCanvas(canvases[ii]);
+  showCanvas(0);
+  for (let ii = 1; ii < canvases.length; ii++) {
+    hideCanvas(ii);
+  }
 }
 
-let showTaxBreakRegion = function () {
+let showInnerMainRegion = function () {
   let canvases = propGraphParams['canvases'];
 
-  showCanvas(canvases[1]);
-  makeCanvasOpaque(canvases[0], 0.3)
+  showCanvas(1);
+  makeCanvasOpaque(0, 0.3)
 
-  for (let ii = 2; ii < canvases.length; ii++)
-    hideCanvas(canvases[ii]);
+  for (let ii = 2; ii < canvases.length; ii++) {
+    hideCanvas(ii);
+  }
 }
 
 let showComparisonRegion = function (canvasId) {
@@ -203,9 +211,9 @@ let showComparisonRegion = function (canvasId) {
 
   for (let ii = 0; ii < canvases.length; ii++) {
     if (ii == canvasId)
-      showCanvas(canvases[ii]);
+      showCanvas(ii);
     else
-      makeCanvasOpaque(canvases[ii]);
+      makeCanvasOpaque(ii);
   }
 }
 
@@ -319,11 +327,11 @@ let drawRegionByColumn = function (regionId) {
 
 let setAllRegionSquares = function () {
 
-  let startSquareId = 0,
-      direction = 1,
+  let direction = 1,
       regions = propGraphParams['regions'],
       squareOuterLength = propGraphParams['squareOuterLength'],
-      columnLength = propGraphParams['columnLength'];
+      columnLength = propGraphParams['columnLength'],
+      startSquareId = regions[1]['numSquares'];
 
   for (let ii = 0; ii < regions.length; ii++) {
     let region = regions[ii],
@@ -350,8 +358,8 @@ let setSubregionSquares = function (region, numSquares, startSquareId, direction
   region['squares'] = [];
 
   let squares = propGraphParams['squares'],
-      regionSquares = region['squares'],
-      columnLength = region['columnLength'];
+      columnLength = propGraphParams['columnLength'],
+      regionSquares = region['squares'];
 
   for (let ii = 0; ii < numSquares; ii++) {
     let squareId = startSquareId + ii;
