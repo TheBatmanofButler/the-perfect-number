@@ -40,8 +40,21 @@ let initPropGraph = function (companyName) {
     });
 }
 
-let updatePropGraphParam = function (param, value) {
-  propGraphParams[param] = value;
+let updatePropGraphParams = function () {
+
+  let propWidth = $('.proportion-graph-wrapper').width(),
+      propHeight = $('.proportion-graph-wrapper').height(),
+      numSquares = propGraphParams['regions'][0]['numSquares']
+      squareOuterLength = getSquareOuterLength(propWidth, propHeight, numSquares),
+      rowLength = Math.floor(propHeight / squareOuterLength),
+      squares = getGridSquares(numSquares, squareOuterLength, rowLength);
+
+      propGraphParams['propWidth'] = propWidth;
+      propGraphParams['propHeight'] = propHeight;
+      propGraphParams['numSquares'] = numSquares;
+      propGraphParams['squareOuterLength'] = squareOuterLength;
+      propGraphParams['rowLength'] = rowLength;
+      propGraphParams['squares'] = squares;
 }
 
 let getGridSquares = function (numSquares, squareOuterLength, rowLength) {
@@ -55,40 +68,33 @@ let getGridSquares = function (numSquares, squareOuterLength, rowLength) {
 }
 
 let updatePropGraph = function () {
-  let propWidth = $('.proportion-graph-wrapper').width(),
-      propHeight = $('.proportion-graph-wrapper').height(),
-      numSquares = propGraphParams['regions'][0]['numSquares']
-      squareOuterLength = getSquareOuterLength(propWidth, propHeight, numSquares),
-      rowLength = Math.floor(propHeight / squareOuterLength),
-      squares = getGridSquares(numSquares, squareOuterLength, rowLength);
 
-  updatePropGraphParam('propWidth', propWidth);
-  updatePropGraphParam('propHeight', propHeight);
-  updatePropGraphParam('numSquares', numSquares);
-  updatePropGraphParam('squareOuterLength', squareOuterLength);
-  updatePropGraphParam('rowLength', rowLength);
-  updatePropGraphParam('squares', squares);
-
+  updatePropGraphParams();
   setAllRegionSquares();
   getHoverMap();
-  createAllCanvases();
+  createCanvases();
 
-  let canvases = propGraphParams['canvases'];
-  for (let ii = 0; ii < canvases.length; ii++) {
-    setTimeout(function () {
-      addCanvas(canvases[ii]);
-      showCanvas(canvases[ii]);
-    }, ii * 1000);
-  }
+  addCanvas(0);
+  showCanvas(0);
+  drawRegion(0);
+  addCanvas(1);
+  showCanvas(1);
+  animateCanvas(1);
 
 }
 
-let createAllCanvases = function () {
+let shuffleArray = function(a) {
+  for (let i = a.length; i; i--) {
+      let j = Math.floor(Math.random() * i);
+      [a[i - 1], a[j]] = [a[j], a[i - 1]];
+  }
+  return a;
+}
+
+let createCanvases = function () {
   let regions = propGraphParams['regions'],
       propWidth = propGraphParams['propWidth'],
       propHeight = propGraphParams['propHeight'],
-      squareLength = propGraphParams['squareOuterLength'],
-      rowLength = propGraphParams['rowLength'],
       canvases = propGraphParams['canvases'] = [];
 
   d3.selectAll('canvas').remove();
@@ -99,15 +105,18 @@ let createAllCanvases = function () {
     canvases.push(canvas);
     
     canvasObj = d3.select(canvas)
+                  .attr('class', function (d) {
+                    if (ii == 1)
+                      return 'animated';
+                    else
+                      return 'non-animated';
+                  })
                   .attr('width', propWidth)
                   .attr('height', propHeight);
-
-    drawRegion(canvas, regions[ii]);
   }
 
   canvasObj
     .call(addMouseEvent);
-    
 }
 
 let addMouseEvent = function (canvasObj) {
@@ -200,25 +209,37 @@ let showComparisonRegion = function (canvasId) {
   }
 }
 
-let addCanvas = function (canvas) {
+let addCanvas = function (canvasId) {
+  let canvases = propGraphParams['canvases'],
+      canvas = canvases[canvasId];
+
   d3.select(canvas)
     .style('opacity', '0');
   $('.proportion-graph-wrapper').append(canvas);
 }
 
-let showCanvas = function (canvas) {
+let showCanvas = function (canvasId) {
+  let canvases = propGraphParams['canvases'],
+      canvas = canvases[canvasId];
+
   d3.select(canvas)
     .transition()
     .style('opacity', '1');
 }
 
-let hideCanvas = function (canvas) {
+let hideCanvas = function (canvasId) {
+  let canvases = propGraphParams['canvases'],
+      canvas = canvases[canvasId];
+
   d3.select(canvas)
     .transition()
     .style('opacity', '0');
 }
 
-let makeCanvasOpaque = function (canvas) {
+let makeCanvasOpaque = function (canvasId) {
+  let canvases = propGraphParams['canvases'],
+      canvas = canvases[canvasId];
+
   d3.select(canvas)
     .transition()
     .style('opacity', '0.3');
@@ -228,23 +249,49 @@ let changeOpacity = function (color, opacity) {
   return color.replace(/[\d\.]+\)$/g, opacity+')');
 }
 
-let drawRegion = function (canvas, region) {
-  let squareOuterLength = propGraphParams['squareOuterLength'];
-
-  ctx = canvas.getContext('2d');
-
-  squares = region['squares'];
+let drawRegion = function (regionId) {
+  let canvases = propGraphParams['canvases'],
+      regions = propGraphParams['regions'],
+      canvas = canvases[regionId],
+      region = regions[regionId],
+      squareOuterLength = propGraphParams['squareOuterLength'],
+      ctx = canvas.getContext('2d'),
+      squares = region['squares'];
 
   ctx.fillStyle = region['color'];
   for (let i = 0; i < squares.length; ++i) {
     const point = squares[i];
-    let squareSpacing = Math.floor(squareOuterLength / 4),
+    let squareSpacing = Math.floor(squareOuterLength / 3),
         squareInnerLength = squareOuterLength - squareSpacing;
 
     ctx.fillRect(point.x,
                  point.y,
                  squareInnerLength,
                  squareInnerLength);
+  }
+}
+
+let animateCanvas = function (regionId) {
+  let canvases = propGraphParams['canvases'],
+      squareOuterLength = propGraphParams['squareOuterLength'],
+      canvas = canvases[regionId],
+      region = propGraphParams['regions'][regionId],
+      squares = shuffleArray(region['squares']);
+
+  let ctx = canvas.getContext('2d');
+
+  ctx.fillStyle = region['color'];
+  for (let i = 0; i < squares.length; ++i) {
+    const point = squares[i];
+    let squareSpacing = Math.floor(squareOuterLength / 3),
+        squareInnerLength = squareOuterLength - squareSpacing;
+
+    setTimeout(function() {
+      ctx.fillRect(point.x,
+                   point.y,
+                   squareInnerLength,
+                   squareInnerLength);
+    }, 0.01 * i);
   }
 }
 

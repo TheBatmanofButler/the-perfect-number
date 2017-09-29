@@ -164,9 +164,6 @@ canvas {
 
         flex-grow: 1;
         align-items: center;
-        z-index: 3;
-
-        /*background: #511730;*/
       }
 
         .proportion-graph {

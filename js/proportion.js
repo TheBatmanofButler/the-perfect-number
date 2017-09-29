@@ -188,15 +188,15 @@ let changeColorOpacity = function (color, opacity) {
   return color.replace(/[\d\.]+\)$/g, opacity+')');
 }
 
-// let addToolTip = function (text, money, x, y) {
-//   let canvas = d3.select('.proportion-graph');
-//   let ctx = canvas.node().getContext('2d'); 
-//   ctx.fillRect(x + 5, y + 5, ctx.measureText(text).width, ctx.measureText(text).height);
-//   ctx.font = 'bold 15px arial';
-//   ctx.fillStyle = '#000';
-//   ctx.fillText(text, x + 10, y + 15, 160);
-//   ctx.fillText(money, x + 10, y + 30, 160);
-// }
+let addToolTip = function (text, money, x, y) {
+  let canvas = d3.select('.proportion-graph');
+  let ctx = canvas.node().getContext('2d'); 
+  ctx.fillRect(x + 5, y + 5, ctx.measureText(text).width, ctx.measureText(text).height);
+  ctx.font = 'bold 15px arial';
+  ctx.fillStyle = '#000';
+  ctx.fillText(text, x + 10, y + 15, 160);
+  ctx.fillText(money, x + 10, y + 30, 160);
+}
 
 let drawHoveredRegions = function (regions, points, squareLength, proportionWidth, proportionHeight, hoveredRegionText) {
   let hoveredRegionSquareIds;
