@@ -62,8 +62,8 @@ let createSlides = function (data,
 
             // updateXScale(barGraphWidth);
             // updateYScale(-15, 50);
-            // mapModeHeight = $('.graph-viewers').height();
-          // resizeBarGraph();
+          mapModeHeight = $('.graph-viewers').height();
+          resizeBarGraph();
         });
       });
     });
@@ -149,6 +149,48 @@ let initBarGraph = function () {
       .append('g')
         .attr('class', 'bar-graph-elements')
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+  let barGraphSVG = d3.select('.bar-graph')
+
+  let openingScreen = barGraphSVG
+                          .append('g')
+                          .attr('class', 'opening-screen')
+                          .style('opacity', 0);
+
+
+    openingScreen
+      .append('text')
+      .attr('class', 'intro-text')
+      .attr('x', 20)
+      .attr('y', barGraphHeight * 0.7)
+      .style('font-size', '10px')
+      .text('by')
+
+    openingScreen
+      .append('text')
+      .attr('class', 'pedal')
+      .attr('x', 35)
+      .attr('y', barGraphHeight * 0.7)
+      .style('font-size', '20px')
+      .text('Pedal');
+
+    openingScreen
+      .append('text')
+      .attr('class', 'intro-text')
+      .attr('x', 20)
+      .attr('y', barGraphHeight * 0.5)
+      .style('font-size', '40px')
+      .text('Corporate Tax Reality');
+
+    openingScreen
+      .append('text')
+      .attr('class', 'intro-text')
+      .attr('x', 20)
+      // .attr('x', barGraphWidth * 0.5)
+      .attr('y', barGraphHeight * 0.5 + 40)
+      // .style('text-anchor', 'middle')
+      .style('font-size', '25px')
+      .text('Visualizing the Federal Tax Rates for 258 Fortune 500 Companies');
 
   barGraph
     .append('g')
@@ -584,6 +626,7 @@ let showAll = function (duration) {
 
 let fadeOpeningScreen = function(duration) {
   return new Promise( function (resolve, reject) {
+    // showAll(500);
     d3.select('.opening-screen')
       .transition()
       .duration(duration)
@@ -594,6 +637,7 @@ let fadeOpeningScreen = function(duration) {
 
 let showOpeningScreen = function(duration) {
   return new Promise( function (resolve, reject) {
+    fadeAll(500);
     d3.select('.opening-screen')
       .transition()
       .duration(1000)
@@ -602,53 +646,23 @@ let showOpeningScreen = function(duration) {
   });
 }
 
-let slide1 = function () {
-
-  fadeAll(500, data)
-  .then( function () {
-    d3.select('.bar-graph-elements')
-      .style('opacity', 0);
-    showAll(1000);
-  })
-  .then( function () {
-    let barGraphWidth = barGraphParams['barGraphWidth'],
-        barGraphHeight = barGraphParams['barGraphHeight'];
-
-    let barGraph = d3.select('.bar-graph-elements');
-
-    let openingScreen = barGraph
-                          .append('g')
-                          .attr('class', 'opening-screen');
-
-    openingScreen
-      .append('text')
-      .attr('class', 'intro-text')
-      .attr('x', barGraphWidth / 2)
-      .attr('y', barGraphHeight / 2)
-      .style('text-anchor', 'middle')
-      .style('font-size', '26px')
-      .text('Corporate Tax Reality');
-
-    openingScreen
-      .append('text')
-      .attr('class', 'intro-text')
-      .attr('x', barGraphWidth / 2)
-      .attr('y', barGraphHeight * 0.8)
-      .style('text-anchor', 'middle')
-      .style('font-size', '26px')
-      .text('Visualizing the Federal Tax Rates for 258 Fortune 500 Companies');
-  })
+let slide1 = function (data) {
+  showOpeningScreen()
 }
 
 let slide2 = function (data) {
   let barGraph = d3.select('.bar-graph-elements');
   slideInProgress = true;
 
-  d3.select('.intro-text')
-    .style('opacity', 0);
-
-  fadeStart(100, data)
+  fadeOpeningScreen()
   .then( function () {
+    return showAll(100);
+  })
+  .then( function () {
+    return fadeStart(100, data)
+  })
+  .then( function () {
+    console.log('here');
     return updateYAxis([0,35], 0);
   })
   .then( function () {
