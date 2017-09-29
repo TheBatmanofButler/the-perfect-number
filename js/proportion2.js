@@ -12,10 +12,10 @@ let propGraphParams = {
   propHeight: null,
   squareOuterLength: null,
   rowLength: null,
-  squares: []
+  squares: [],
+  canvases: []
 }
 
-let canvases = [];
 
 let getSquareOuterLengthHelper = function (p1, p2, numSquares) {
   let pxy = Math.ceil(Math.sqrt(numSquares * p2 / p1));
@@ -75,11 +75,14 @@ let updatePropGraph = function () {
                  .attr('height', propHeight);
 
   setAllRegionSquares();
+  getHoverMap();
   createAllCanvases();
 
+  let canvases = propGraphParams['canvases'];
   for (let ii = 0; ii < canvases.length; ii++) {
     setTimeout(function () {
       addCanvas(canvases[ii]);
+      showCanvas(canvases[ii]);
     }, ii * 1000);
   }
 
@@ -90,7 +93,8 @@ let createAllCanvases = function () {
       propWidth = propGraphParams['propWidth'],
       propHeight = propGraphParams['propHeight'],
       squareLength = propGraphParams['squareOuterLength'],
-      rowLength = propGraphParams['rowLength'];
+      rowLength = propGraphParams['rowLength'],
+      canvases = propGraphParams['canvases'];
 
   let canvasObj;
   for (let ii in regions) {
@@ -110,43 +114,120 @@ let createAllCanvases = function () {
 }
 
 let addMouseEvent = function (canvasObj) {
+  let hoverMap = propGraphParams['hoverMap'],
+      regions = propGraphParams['regions'],
+      numSquares = propGraphParams['numSquares'];
+
   canvasObj
     .on('mousemove', function() {
       let mouseX = d3.event.offsetX,
           mouseY = d3.event.offsetY,
           column = Math.floor(mouseX / squareOuterLength),
           row = Math.floor(mouseY / squareOuterLength),
-          sqId = column * rowLength + row;
-      console.log(sqId);
+          squareId = column * rowLength + row;
+      if (squareId < numSquares)
+        showProperRegion(squareId);
+      else
+        showAllRegions();
+    })
+    .on('mouseout', function () {
+      showAllRegions();
     });
 }
 
-let checkHoverMap = function () {
-  let hoverMap = {},
+let getHoverMap = function () {
+  let hoverMap = propGraphParams['hoverMap'] = {},
       regions = propGraphParams['regions'];
 
   for (let ii = regions.length - 1; ii > -1; ii--) {
-    let region = regions[ii];
+    let region = regions[ii],
+        regionSquares = region['squares'];
 
-    for (let jj in region) {
-      hoverMap[jj] = ii;
+    for (let jj in regionSquares) {
+      let square = regionSquares[jj],
+          squareId = square['id'];
+
+      if (!hoverMap.hasOwnProperty(squareId))
+        hoverMap[squareId] = ii;
     }
   }
+}
 
-  console.log()
+let showProperRegion = function (squareId) {
+  let hoverMap = propGraphParams['hoverMap'],
+      regionId = hoverMap[squareId];
+
+      if (regionId == 0)
+        show35PercentRegion();
+
+      else if (regionId == 1)
+        showTaxBreakRegion();
+
+      else
+        showComparisonRegion(regionId);
+}
+
+let showAllRegions = function () {
+  let canvases = propGraphParams['canvases'];
+
+  for (let ii = 0; ii < canvases.length; ii++)
+    showCanvas(canvases[ii]);
+}
+
+let show35PercentRegion = function () {
+  let canvases = propGraphParams['canvases'];
+
+  showCanvas(canvases[0]);
+  for (let ii = 1; ii < canvases.length; ii++)
+    hideCanvas(canvases[ii]);
+}
+
+let showTaxBreakRegion = function () {
+  let canvases = propGraphParams['canvases'];
+
+  showCanvas(canvases[1]);
+  makeCanvasOpaque(canvases[0], 0.3)
+
+  for (let ii = 2; ii < canvases.length; ii++)
+    hideCanvas(canvases[ii]);
+}
+
+let showComparisonRegion = function (canvasId) {
+  let canvases = propGraphParams['canvases'];
+
+  for (let ii = 0; ii < canvases.length; ii++) {
+    if (ii == canvasId)
+      showCanvas(canvases[ii]);
+    else
+      makeCanvasOpaque(canvases[ii]);
+  }
 }
 
 let addCanvas = function (canvas) {
-  $(canvas).css('opacity', '0');
+  d3.select(canvas)
+    .style('opacity', '0');
   $('.proportion-graph-wrapper').append(canvas);
-  $(canvas).animate({'opacity': '1'}, 'slow');
 }
 
-let removeCanvas = function (canvas) {
-  $(canvas).animate({'opacity': '0'}, 'slow');
+let showCanvas = function (canvas) {
+  d3.select(canvas)
+    .transition()
+    .style('opacity', '1');
 }
 
-let changeColorOpacity = function (color, opacity) {
+let hideCanvas = function (canvas) {
+  d3.select(canvas)
+    .transition()
+    .style('opacity', '0');
+}
+
+let makeCanvasOpaque = function (canvas) {
+  d3.select(canvas)
+    .transition()
+    .style('opacity', '0.3');
+}
+
+let changeOpacity = function (color, opacity) {
   return color.replace(/[\d\.]+\)$/g, opacity+')');
 }
 
