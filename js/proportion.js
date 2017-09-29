@@ -141,7 +141,6 @@ let drawRegion = function (region, points, color, squareLength, proportionWidth,
       updateSquareText(points, squareId,region['text'],region['money']);
       setTimeout(function() {
         ctx.fillRect(point.x, point.y, squareLength, squareLength);
-        console.log(point.x, point.y, squareLength, squareLength);
       }, 1);
       count++;
     }
