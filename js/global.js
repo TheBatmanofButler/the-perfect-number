@@ -22,11 +22,18 @@ var type = function (d) {
   return d;
 }
 
-var createProportionAreas = function (comparisons, profit, taxBreak, convertConst) {
+let createProportionAreas = function (comparisons, actualProfit, actualTaxBreak, convertConst) {
 
-  var num35PercentSquares = Math.floor(profit * 0.35 / convertConst);
-  var numTaxBreakSquares = Math.floor(taxBreak / convertConst);
-  var unit;
+  let money35 = actualProfit * 0.35 / convertConst,
+      num35PercentSquares = Math.floor(money35),
+
+      taxBreak = actualTaxBreak / convertConst,
+      numTaxBreakSquares = Math.floor(taxBreak),
+
+      taxPaid = money35 - taxBreak,
+      numTaxPaidSquares = Math.floor(taxPaid),
+      unit;
+
   if (convertConst == 1e3)
     unit = ' billion';
   else if (convertConst == 10)
@@ -34,42 +41,44 @@ var createProportionAreas = function (comparisons, profit, taxBreak, convertCons
   else
     unit = ' million';
 
-  var proportionAreas = [
+  let proportionAreas = [
     {
       'text': 'Company Tax if rate is 35%',
       'numSquares': num35PercentSquares,
-      'color': 'rgba(128,0,0,0.8)',
-      'money': String((profit * 0.35 / convertConst).toFixed(2)) + unit
+      'color': 'rgba(128, 0, 0, 0.8)',
+      'money': getMoneyString(money35, unit)
     },
     {
-      'text': 'Company Tax Break',
-      'numSquares': numTaxBreakSquares,
+      'text': 'Company Tax Paid',
+      'numSquares': numTaxPaidSquares,
       'color': 'rgba(255, 0, 0, 0.8)',
-      'money': String((taxBreak / convertConst).toFixed(2)) + unit
+      'money': getMoneyString(taxPaid, unit)
     }
   ]
 
-  if (taxBreak < 0) {
-    tax = (profit * 0.35 - taxBreak) / convertConst;
+  if (taxPaid < 0) {
     proportionAreas.push({
-      'text': 'Tax Paid',
-      'numSquares': Math.floor(tax),
+      'text': 'Tax Break',
+      'numSquares': numTaxBreakSquares,
       'color': 'rgba(48, 0, 0, 1)',
-      'money': String((tax).toFixed(2)) + unit
+      'money': getMoneyString(taxBreak, unit)
     });
   }
 
-  var filled = 0;
-  for (let datum in comparisons) {
-    let comparison = comparisons[datum],
-        numComparisonSquares = Math.floor(comparison['money'] / convertConst);
+  let filled = 0;
+  for (let ii in comparisons) {
+
+    let comparison = comparisons[ii],
+        comparisonMoney = comparison['money'] / convertConst,
+        numComparisonSquares = Math.floor(comparisonMoney);
 
     if (isValidComparison(comparison, numTaxBreakSquares, numComparisonSquares, filled)) {
+
       proportionAreas.push({
         'text': comparison['text'],
         'numSquares': numComparisonSquares,
         'color': comparison['color'],
-        'money': String((comparison['money'] / convertConst).toFixed(2)) + unit 
+        'money': getMoneyString(comparisonMoney, unit)
       });
 
       filled += numComparisonSquares;
@@ -77,6 +86,10 @@ var createProportionAreas = function (comparisons, profit, taxBreak, convertCons
   }
 
   return proportionAreas;
+}
+
+let getMoneyString = function (money, unit) {
+  return String(money.toFixed(2)) + unit;
 }
 
 var isValidComparison = function (comparison, numTaxBreakSquares, numComparisonSquares, filled) {
@@ -89,6 +102,7 @@ var isValidComparison = function (comparison, numTaxBreakSquares, numComparisonS
 
 let inMapMode = false;
 let mapModeHeight = null;
+let proportionInTransition = false;
 var infoBoxData = {};
 var comparisonData = {};
 var totalProfits = 0;
@@ -209,7 +223,7 @@ d3.queue()
       companiesCompetitors[competitor].push(d);
     }
 
-    var convertConst = 1;
+    let convertConst = 1;
     // if (d['tax_break'] > 5000)
       // convertConst = 10;
     comparisonData[d['company_name']] = createProportionAreas(comparisons,
@@ -217,7 +231,7 @@ d3.queue()
                                                                   d['tax_break'],
                                                                   convertConst);
 
-    var taxBreak = d['tax_break'];
+    let taxBreak = d['tax_break'];
     if(taxBreak > 0) {
       totalProfits += d['profit'];
       totalTaxBreaks += taxBreak;

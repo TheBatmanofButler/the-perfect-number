@@ -156,9 +156,6 @@ html, body {
         display: flex;
         flex-grow: 1;
         align-items: center;
-        z-index: 3;
-
-        /*background: #511730;*/
       }
 
         .proportion-graph {
@@ -213,7 +210,6 @@ html, body {
 
       .bar-graph-wrapper {
         flex: 1;
-        /*background-color: yellow;*/
       }
 
       .bar-graph {

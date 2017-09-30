@@ -6,8 +6,6 @@
  *
  */
 
-let proportionInTransition = false;
-
 let getSquareLengthHelper = function (p1, p2, numSquares) {
   let pxy = Math.ceil(Math.sqrt(numSquares * p2 / p1));
 
@@ -143,7 +141,6 @@ let drawRegion = function (region, points, color, squareLength, proportionWidth,
       updateSquareText(points, squareId,region['text'],region['money']);
       setTimeout(function() {
         ctx.fillRect(point.x, point.y, squareLength, squareLength);
-        console.log(point.x, point.y, squareLength, squareLength);
       }, 1);
       count++;
     }
@@ -190,15 +187,15 @@ let changeColorOpacity = function (color, opacity) {
   return color.replace(/[\d\.]+\)$/g, opacity+')');
 }
 
-// let addToolTip = function (text, money, x, y) {
-//   let canvas = d3.select('.proportion-graph');
-//   let ctx = canvas.node().getContext('2d'); 
-//   ctx.fillRect(x + 5, y + 5, ctx.measureText(text).width, ctx.measureText(text).height);
-//   ctx.font = 'bold 15px arial';
-//   ctx.fillStyle = '#000';
-//   ctx.fillText(text, x + 10, y + 15, 160);
-//   ctx.fillText(money, x + 10, y + 30, 160);
-// }
+let addToolTip = function (text, money, x, y) {
+  let canvas = d3.select('.proportion-graph');
+  let ctx = canvas.node().getContext('2d'); 
+  ctx.fillRect(x + 5, y + 5, ctx.measureText(text).width, ctx.measureText(text).height);
+  ctx.font = 'bold 15px arial';
+  ctx.fillStyle = '#000';
+  ctx.fillText(text, x + 10, y + 15, 160);
+  ctx.fillText(money, x + 10, y + 30, 160);
+}
 
 let drawHoveredRegions = function (regions, points, squareLength, proportionWidth, proportionHeight, hoveredRegionText) {
   let hoveredRegionSquareIds;

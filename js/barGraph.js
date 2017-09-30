@@ -56,20 +56,19 @@ let createSlides = function (data,
   $('#slide3').click( function (e) {
     if (slideInProgress) return;
 
-    $('.proportion-graph').animate({'opacity': '0'}, 500, function () {
-      $('.proportion-graph-viewer').animate({'height': '0'}, 1000, function () {
-        $('.proportion-graph-viewer').hide( function () {
+    closePropGraph();
+    // resizeBarGraph();
+      // $('.proportion-graph-viewer').animate({'height': '0'}, 1000, function () {
+      //   $('.proportion-graph-viewer').hide( function () {
 
-            // updateXScale(barGraphWidth);
-            // updateYScale(-15, 50);
-          mapModeHeight = $('.graph-viewers').height();
-          resizeBarGraph();
-        });
-      });
-    });
+      //       // updateXScale(barGraphWidth);
+      //       // updateYScale(-15, 50);
+      //     mapModeHeight = $('.graph-viewers').height();
+      //   });
+      // });
 
-    slide3(data, companiesYearsNoTax);
-    currentSlide = 3;
+    // slide3(data, companiesYearsNoTax);
+    // currentSlide = 3;
 
     $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
     $('#slide3 div:first').addClass('active-slide-no-square');
@@ -128,6 +127,19 @@ let createSlides = function (data,
     $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
     $('#slide9 div:first').addClass('active-slide-no-square');
   });
+}
+
+let closePropGraph = function () {
+    slideInProgress = true;
+    $.when(
+      $('.proportion-graph-wrapper').animate({'opacity': '0'}, 500).promise(),
+      $('.proportion-graph-viewer').animate({'height': '0'}, 1000).promise(),
+      $('.proportion-graph-viewer').hide(500).promise()
+    )
+    .done(function() {
+      mapModeHeight = $('.graph-viewers').height();
+      resizeBarGraph();
+    });
 }
 
 let initBarGraph = function () {
@@ -409,7 +421,6 @@ let resizeBarGraph = function () {
 
   chain
   .then( function () {
-    console.log(barGraphParams);
     Promise.all([
       updatePercentLine('35', 1000),
       updateYAxis([-15, 35, 50], 1000),
@@ -418,6 +429,7 @@ let resizeBarGraph = function () {
     ])
   })
 
+  console.log(slideInProgress, mapModeHeight);
   if (slideInProgress && !mapModeHeight) {
     chain = chain
     .then( function () {
