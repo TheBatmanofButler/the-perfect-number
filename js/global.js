@@ -100,7 +100,6 @@ var isValidComparison = function (comparison, numTaxBreakSquares, numComparisonS
     return (enough && notTooMany);
 }
 
-let inMapMode = false;
 let mapModeHeight = null;
 let proportionInTransition = false;
 var infoBoxData = {};
