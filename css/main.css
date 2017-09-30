@@ -5,12 +5,6 @@ html, body {
   color: #fff;
 }
 
-canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
 .visualization {
   display: flex;
   flex-direction: column;
@@ -160,8 +154,6 @@ canvas {
 
       .proportion-graph-wrapper {
         display: flex;
-        position: relative;
-
         flex-grow: 1;
         align-items: center;
       }
@@ -223,6 +215,19 @@ canvas {
       .bar-graph {
         position: absolute;
       }
+
+      .intro-text {
+        fill: #44005B;
+      }
+
+      .pedal {
+        font-size: 7rem;
+        font-family: 'Oxygen', sans-serif;
+        color: #224461;
+
+        padding: 1%;
+      }
+
 
 .about {
   position: absolute;
