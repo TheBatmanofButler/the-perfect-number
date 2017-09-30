@@ -5,6 +5,12 @@ html, body {
   color: #fff;
 }
 
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 .visualization {
   display: flex;
   flex-direction: column;
@@ -154,14 +160,11 @@ html, body {
 
       .proportion-graph-wrapper {
         display: flex;
+        position: relative;
+
         flex-grow: 1;
         align-items: center;
       }
-
-        .proportion-graph {
-          position: absolute;
-          
-        }
 
       .info {
         background: #4C2A85;
