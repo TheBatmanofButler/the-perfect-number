@@ -155,42 +155,42 @@ let initBarGraph = function () {
   let openingScreen = barGraphSVG
                           .append('g')
                           .attr('class', 'opening-screen')
-                          .style('opacity', 0);
+                          .style('opacity', 1);
+
+  createOpeningSlide();
 
 
-    openingScreen
-      .append('text')
-      .attr('class', 'intro-text')
-      .attr('x', 20)
-      .attr('y', barGraphHeight * 0.7)
-      .style('font-size', '10px')
-      .text('by')
+    // openingScreen
+    //   .append('text')
+    //   .attr('class', 'intro-text')
+    //   .attr('x', 20)
+    //   .attr('y', barGraphHeight * 0.7)
+    //   .style('font-size', '10px')
+    //   .text('by')
 
-    openingScreen
-      .append('text')
-      .attr('class', 'pedal')
-      .attr('x', 35)
-      .attr('y', barGraphHeight * 0.7)
-      .style('font-size', '20px')
-      .text('Pedal');
+    // openingScreen
+    //   .append('text')
+    //   .attr('class', 'pedal')
+    //   .attr('x', 35)
+    //   .attr('y', barGraphHeight * 0.7)
+    //   .style('font-size', '20px')
+    //   .text('Pedal');
 
-    openingScreen
-      .append('text')
-      .attr('class', 'intro-text')
-      .attr('x', 20)
-      .attr('y', barGraphHeight * 0.5)
-      .style('font-size', '40px')
-      .text('Corporate Tax Reality');
+    // openingScreen
+    //   .append('text')
+    //   .attr('class', 'intro-text')
+    //   .attr('x', 20)
+    //   .attr('y', barGraphHeight * 0.5)
+    //   .style('font-size', '40px')
+    //   .text('Corporate Tax Reality');
 
-    openingScreen
-      .append('text')
-      .attr('class', 'intro-text')
-      .attr('x', 20)
-      // .attr('x', barGraphWidth * 0.5)
-      .attr('y', barGraphHeight * 0.5 + 40)
-      // .style('text-anchor', 'middle')
-      .style('font-size', '25px')
-      .text('Visualizing the Federal Tax Rates for 258 Fortune 500 Companies');
+    // openingScreen
+    //   .append('text')
+    //   .attr('class', 'intro-text')
+    //   .attr('x', 20)
+    //   .attr('y', barGraphHeight * 0.5 + 40)
+    //   .style('font-size', '25px')
+    //   .text('Visualizing the Federal Tax Rates for 258 Fortune 500 Companies');
 
   barGraph
     .append('g')
@@ -233,6 +233,115 @@ let updateBarGraphText = function (text) {
       console.log(this.getComputedTextLength());
       return barGraphWidth - this.getComputedTextLength();
     });
+}
+
+let getWordX = function (arr, pos) {
+  let sum = 50;
+  for (let i = 0; i < pos; i++) {
+    sum += arr[i];
+  }
+  return sum;
+}
+
+let createOpeningSlide = function () {
+  // let quote = 'America is one of the highest-taxed nations in the world. Reducing taxes will cause new companies and new jobs to come roaring back into our country.',
+  //     quoteChars = 'America is'.split(''),
+  //     quoteCharMap = d3.range(quoteChars.length).map( function (d,i) {
+  //                       return { x: width/2, y: y(i+1)}
+  //                   })
+  //     wordWidths = [],
+  //     openingScreen = d3.select('.opening-screen'),
+  //     chars = openingScreen.selectAll('.char')
+  //               .data(textChars, function(d) {
+  //                 return d;
+  //               })
+  //               .enter()
+  //               .append('g');
+
+  // chars.append("rect");
+
+  // charG
+  //   .append('text')
+  //   .attr('x', function(d) { return d.x; })
+  //   .attr('y', function(d) { return d.y; })
+  //   .attr('fill', '#fff')
+  //   .attr('text-anchor', 'middle');
+
+  let quote = 'America is one of the highest-taxed nations in the world.',
+      quoteChars = quote.split(''),
+      wordWidths = [],
+      openingScreen = d3.select('.opening-screen');
+      
+  let chars = openingScreen.selectAll('.char')
+                .data(quoteChars, function(d) {
+                  return d;
+                })
+                .enter();
+      
+      chars.append('text')
+                      .attr('x', 50)
+                      .attr('y', 25)
+                      .style("font-size", "2vw")
+                      .style("fill", "red")
+                      .text(function(d) {
+                        console.log(d); 
+                        return d;
+                      })
+      
+      openingScreen.append('text')
+                      .attr('x', 200)
+                      .attr('y', 25)
+                      .style("font-size", "2vw")
+                      .style("fill", "red")
+                      .text(function(d) { 
+                        return 'is';
+                      })
+
+
+  // charRects
+  //   .enter()
+  //   .append("text")
+  //     .style("font-size", "20px")
+  //     .text(function(d) { return d})
+  //       .each(function(d,i) {
+  //           var thisWidth = this.getComputedTextLength()
+  //           wordWidths.push(thisWidth)
+  //           this.remove()
+  //       })
+  // console.log(wordWidths);
+
+  // charRects
+  //   .enter()
+  //   .append('rect')
+  //   .attr('class', 'char-rect')
+  //   .attr('width', function(d, i) {
+  //     return wordWidths[i] + 5;
+  //   })
+  //   .attr('height', 30)
+  //   .style('fill','green')
+  //   .attr('x', function(d, i) {
+  //     console.log(getWordPosition(wordWidths, i));
+  //     return getWordPosition(wordWidths, i) + 10 * (i - 1);
+  //   })
+
+  // charRects
+  //   .enter()
+  //   .append("text")
+  //     .attr('x', function(d, i) {
+  //       return getWordPosition(wordWidths, i) + 10.5 *  (i-1);
+  //     })
+  //     .attr('y', 25)
+  //     .style("font-size", "20px")
+  //     .style("fill", "red")
+  //     .text(function(d) { 
+  //       return d
+  //     })
+
+  // console.log(d3.select(charRects));
+  // console.log(d3.select(charRects._groups[0][4]));
+  // d3.select('.char-rect:nth-child(6)').attr('fill','yellow')
+  
+
 }
 
 let resizeBarGraph = function () {
