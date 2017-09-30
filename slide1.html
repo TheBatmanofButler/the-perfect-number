@@ -31,7 +31,7 @@ d3.text('nouns.txt')
             }
         }
         console.log(nouns);
-        nouns = 'president trump ate poop'.split(' ');
+        nouns = 'America is one of the highest-taxed nations in the world'.split(' ');
         initNames();
     });
 
@@ -40,6 +40,15 @@ var numberOfTexts = 10;
 var y = d3.scale.linear()
     .domain([0,numberOfTexts+1])
     .range([0,height]);
+
+var x = d3.scale.linear()
+        .domain([0,width])
+        .range([0,numberOfTexts+1]);
+
+var temp = d3.range(numberOfTexts).map(function(d,i) {
+    return { x: x(i)*100, y: 40}
+});
+console.log(temp);
 
 var texts = d3.range(numberOfTexts).map(function(d,i) {
     return { x: width/2, y: y(i+1)}
@@ -72,7 +81,7 @@ function initNames() {
         texts[i].bb = this.getBBox(); // get bounding box of text field and store it in texts array
     });
 
-    var paddingLeftRight = 18; // adjust the padding values depending on font and font size
+    var paddingLeftRight = 18; 
     var paddingTopBottom = 5;
 
     svg.selectAll("rect")
@@ -80,20 +89,6 @@ function initNames() {
         .attr("y", function(d) { return d.y - d.bb.height + paddingTopBottom/2;  })
         .attr("width", function(d) { return d.bb.width + paddingLeftRight; })
         .attr("height", function(d) { return d.bb.height + paddingTopBottom; });
-}
-
-function getRandomName() {
-    return nouns[randomInt(0, nouns.length-1)].capitalize() + " " + nouns[randomInt(0, nouns.length-1)].capitalize();
-}
-
-// http://stackoverflow.com/questions/1026069/capitalize-the-first-letter-of-string-in-javascript
-String.prototype.capitalize = function() {
-    return this.charAt(0).toUpperCase() + this.slice(1);
-}
-
-// http://stackoverflow.com/questions/1527803/generating-random-numbers-in-javascript-in-a-specific-range
-function randomInt (min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 </script>
