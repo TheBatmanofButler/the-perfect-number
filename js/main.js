@@ -93,6 +93,7 @@ var openProportionGraph = function () {
 
 window.addEventListener('resize', function () {
   resizeBarGraph();
+  updatePropGraph();
 })
 
 // openProportionGraph();
