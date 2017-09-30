@@ -6,7 +6,18 @@
  *
  */
 
-let getSquareLengthHelper = function (p1, p2, numSquares) {
+let propGraphParams = {
+  regions: {},
+  propWidth: null,
+  propHeight: null,
+  squareOuterLength: null,
+  columnLength: null,
+  squares: [],
+  canvases: []
+}
+
+
+let getSquareOuterLengthHelper = function (p1, p2, numSquares) {
   let pxy = Math.ceil(Math.sqrt(numSquares * p2 / p1));
 
   if (Math.floor(pxy * p1 / p2) * pxy < numSquares)
@@ -15,95 +26,67 @@ let getSquareLengthHelper = function (p1, p2, numSquares) {
     return p2 / pxy;
 }
 
-let getSquareLength = function (width, height, numSquares) {
-  let sx = getSquareLengthHelper(height, width, numSquares),
-      sy = getSquareLengthHelper(width, height, numSquares);
+let getSquareOuterLength = function (width, height, numSquares) {
+  let sx = getSquareOuterLengthHelper(height, width, numSquares),
+      sy = getSquareOuterLengthHelper(width, height, numSquares);
 
-  let squareLength = Math.floor( Math.max( parseFloat(sx),parseFloat(sy) ) );
-  
-  return squareLength;
+  return Math.floor( Math.max(sx, sy) );
 }
 
-let updateProportionGraph = function (companyKey, noRedo) {
-  let proportionWidth = $('.proportion-graph-wrapper').width(),
-      proportionHeight = $('.proportion-graph-wrapper').height(),
-      canvas = d3.select('.proportion-graph')
-        .attr('width', proportionWidth)
-        .attr('height', proportionHeight);
-  let regions = comparisonData[companyKey].sort(function (a, b) {
-    return b['numSquares'] - a['numSquares'];
-  });
+let initPropGraph = function (companyName) {
 
-  drawProportionGraph(regions, proportionWidth, proportionHeight, noRedo);
+    propGraphParams['regions'] = comparisonData[companyName].sort(function (a, b) {
+      return b['numSquares'] - a['numSquares'];
+    });
 }
 
-let drawProportionGraph = function (regions, proportionWidth, proportionHeight, noRedo) {
-  let numSquares = regions[0]['numSquares'],
-      squareLength = getSquareLength(proportionWidth, proportionHeight, numSquares),
-      rowLength = Math.floor(proportionHeight / squareLength),
-      points = getGridPoints(numSquares, squareLength, rowLength);
+let updatePropGraphParams = function () {
 
-  getAllRegionSquares(regions, rowLength);
-  
-  if(noRedo)
-    updateAllRegions(regions, points, squareLength, rowLength, proportionWidth, proportionHeight);
-  else
-    drawAllRegions(regions, points, squareLength, rowLength, proportionWidth, proportionHeight);
+  let propWidth = $('.proportion-graph-wrapper').width(),
+      propHeight = $('.proportion-graph-wrapper').height(),
+      numSquares = propGraphParams['regions'][0]['numSquares']
+      squareOuterLength = getSquareOuterLength(propWidth, propHeight, numSquares),
+      columnLength = Math.floor(propHeight / squareOuterLength),
+      squares = getGridSquares(numSquares, squareOuterLength, columnLength);
 
-  bindMouseEvent(points, squareLength, rowLength, regions, proportionWidth, proportionHeight);
+      propGraphParams['propWidth'] = propWidth;
+      propGraphParams['propHeight'] = propHeight;
+      propGraphParams['numSquares'] = numSquares;
+      propGraphParams['squareOuterLength'] = squareOuterLength;
+      propGraphParams['columnLength'] = columnLength;
+      propGraphParams['squares'] = squares;
 }
 
-let getGridPoints = function (numSquares, squareLength, rowLength) {
+let getGridSquares = function (numSquares, squareOuterLength, columnLength) {
   return d3.range(0, numSquares).map( function(index) {
     return {
       id: index,
-      color: 'rgba(0,0,0,0.3)',
-      x: squareLength * Math.floor(index / rowLength),
-      y: squareLength * (index % rowLength)
+      x: squareOuterLength * Math.floor(index / columnLength),
+      y: squareOuterLength * (index % columnLength)
     }
   });
 }
 
-let getAllRegionSquares = function (regions, rowLength) {
-  let startSquareId = 0,
-      direction = 1,
-      region = regions[0];
-  getRegionSquares(region, startSquareId, region['numSquares'], rowLength);
+let updatePropGraph = function () {
 
-  for (let i = 1; i < regions.length; i++) {
-    let region = regions[i],
-        numSquares = region['numSquares'];
+  updatePropGraphParams();
+  setAllRegionSquares();
+  getHoverMap();
+  createCanvases();
 
-    direction = getRegionSquares(region, startSquareId, numSquares, rowLength, direction)
+  addCanvas(0);
+  showCanvas(0);
+  drawRegion(0);
+  addCanvas(1);
+  showCanvas(1);
+  drawRegion(1);
+  addCanvas(2);
+  showCanvas(2);
+  drawRegion(2);
+  addCanvas(3);
+  showCanvas(3);
+  drawRegion(3);
 
-    if (i > 1)
-      startSquareId += numSquares;
-  }
-}
-
-let getRegionSquares = function (region, startSquareId, numOfSq, rowLength, direction) {
-  region['squares'] = [];
-  if(!direction) {
-    for (let i = 0; i < numOfSq; i++) 
-      region['squares'].push(i);
-    return 1;
-  }
-
-  for (let i = 0; i < numOfSq; i++) {
-    let sqId = startSquareId + i;
-    if (direction == 1) {
-      region['squares'].push(sqId);
-      if((sqId + 1) % rowLength == 0)
-        direction = 2;
-    }
-    else {
-      newSqId = (Math.floor(sqId / rowLength) + 1)  * rowLength - (sqId % rowLength) - 1;
-      region['squares'].push(newSqId);
-      if((sqId + 1) % rowLength == 0)
-        direction = 1;
-    } 
-  }
-  return direction;
 }
 
 let shuffleArray = function(a) {
@@ -114,142 +97,305 @@ let shuffleArray = function(a) {
   return a;
 }
 
-let updateAllRegions = function (regions, points, squareLength, rowLength, proportionWidth, proportionHeight) {
-  for (let i in regions) {
-    let region = regions[i],
-        regionSquareIds = region['squares'];
+let createCanvases = function () {
+  let regions = propGraphParams['regions'],
+      propWidth = propGraphParams['propWidth'],
+      propHeight = propGraphParams['propHeight'],
+      canvases = propGraphParams['canvases'] = [];
 
-    for (let j in regionSquareIds) {
-      let squareId = regionSquareIds[j];
-      updateSquareColor(points, squareId, region['color']);
-      updateSquareText(points, squareId,region['text'], region['money']);
+  d3.selectAll('canvas').remove();
+
+  let canvasObj;
+  for (let ii in regions) {
+    let canvas = document.createElement('canvas');
+    canvases.push(canvas);
+    
+    canvasObj = d3.select(canvas)
+                  .attr('class', function (d) {
+                    if (ii == 1)
+                      return 'animated';
+                    else
+                      return 'non-animated';
+                  })
+                  .attr('width', propWidth)
+                  .attr('height', propHeight);
+  }
+
+  canvasObj
+    .call(addMouseEvent);
+}
+
+let addMouseEvent = function (canvasObj) {
+  let hoverMap = propGraphParams['hoverMap'],
+      regions = propGraphParams['regions'],
+      numSquares = propGraphParams['numSquares'];
+
+  canvasObj
+    .on('mousemove', function() {
+      let mouseX = d3.event.offsetX,
+          mouseY = d3.event.offsetY,
+          column = Math.floor(mouseX / squareOuterLength),
+          row = Math.floor(mouseY / squareOuterLength),
+          squareId = column * columnLength + row;
+      if (squareId < numSquares)
+        showProperRegion(squareId);
+      else
+        showAllRegions();
+    })
+    .on('mouseout', function () {
+      showAllRegions();
+    });
+}
+
+let getHoverMap = function () {
+  let hoverMap = propGraphParams['hoverMap'] = {},
+      regions = propGraphParams['regions'];
+
+  for (let ii = regions.length - 1; ii > -1; ii--) {
+    let region = regions[ii],
+        regionSquares = region['squares'];
+
+    for (let jj in regionSquares) {
+      let square = regionSquares[jj],
+          squareId = square['id'];
+
+      if (!hoverMap.hasOwnProperty(squareId))
+        hoverMap[squareId] = ii;
     }
   }
-  drawCanvas(points, squareLength, proportionWidth, proportionHeight);
 }
 
-let drawRegion = function (region, points, color, squareLength, proportionWidth, proportionHeight) {
-  let canvas = d3.select('.proportion-graph');
-  let ctx = canvas.node().getContext('2d');
-  let regionSquareIds = shuffleArray(region['squares']);
-  let count = 0;
-  ctx.fillStyle = color;
-    for (let j in regionSquareIds) {
-      let squareId = regionSquareIds[j],
-          point = points[squareId];
-      updateSquareColor(points, squareId, color);
-      updateSquareText(points, squareId,region['text'],region['money']);
-      setTimeout(function() {
-        ctx.fillRect(point.x, point.y, squareLength, squareLength);
-      }, 1);
-      count++;
-    }
+let showProperRegion = function (squareId) {
+  let hoverMap = propGraphParams['hoverMap'],
+      regionId = hoverMap[squareId];
+
+  if (regionId == 0)
+    showOuterMainRegion();
+
+  else if (regionId == 1)
+    showInnerMainRegion();
+
+  else
+    showComparisonRegion(regionId);
 }
 
-let drawAllRegions = function (regions, points, squareLength, rowLength, proportionWidth, proportionHeight) {
-  let count = 0;
-  proportionInTransition = true;
-  for (let i = 0; i <= regions.length; i++) {
-    let region = regions[i];
-    setTimeout(function() {
+let showAllRegions = function () {
+  let canvases = propGraphParams['canvases'];
 
-      if (i == regions.length) 
-        proportionInTransition = false;
-      else
-        drawRegion(region, points, region['color'], squareLength, proportionWidth, proportionHeight);
-
-    }, 1000 * count);
-    count++;
-  }  
+  for (let ii = 0; ii < canvases.length; ii++)
+    showCanvas(ii);
 }
 
-let bindMouseEvent = function (points, squareLength, rowLength, regions, proportionWidth, proportionHeight) {
-  d3.select('.proportion-graph').on('mousemove', function() {
-    let mouseX = d3.event.offsetX,
-        mouseY = d3.event.offsetY,
-        column = Math.floor(mouseX / squareLength),
-        row = Math.floor(mouseY / squareLength),
-        sqId = column * rowLength + row;
-    if(sqId < regions[0]['numSquares']) {
-      drawHoveredRegions(regions, points, squareLength, proportionWidth, proportionHeight, points[sqId]['text']);
-      // addToolTip(points[sqId]['text'], points[sqId]['money'], mouseX, mouseY);
-    }
-    else {
-      updateAllRegions(regions, points, squareLength, rowLength, proportionWidth, proportionHeight);
-    }
-  });
-  $('.proportion-graph').mouseleave(function() {
-    updateAllRegions(regions, points, squareLength, rowLength, proportionWidth, proportionHeight); 
-  });
+let showOuterMainRegion = function () {
+  let canvases = propGraphParams['canvases'];
+
+  showCanvas(0);
+  for (let ii = 1; ii < canvases.length; ii++) {
+    hideCanvas(ii);
+  }
 }
 
-let changeColorOpacity = function (color, opacity) {
+let showInnerMainRegion = function () {
+  let canvases = propGraphParams['canvases'];
+
+  showCanvas(1);
+  makeCanvasOpaque(0, 0.3)
+
+  for (let ii = 2; ii < canvases.length; ii++) {
+    hideCanvas(ii);
+  }
+}
+
+let showComparisonRegion = function (canvasId) {
+  let canvases = propGraphParams['canvases'];
+
+  for (let ii = 0; ii < canvases.length; ii++) {
+    if (ii == canvasId)
+      showCanvas(ii);
+    else
+      makeCanvasOpaque(ii);
+  }
+}
+
+let addCanvas = function (canvasId) {
+  let canvases = propGraphParams['canvases'],
+      canvas = canvases[canvasId];
+
+  d3.select(canvas)
+    .style('opacity', '0');
+  $('.proportion-graph-wrapper').append(canvas);
+}
+
+let showCanvas = function (canvasId) {
+  let canvases = propGraphParams['canvases'],
+      canvas = canvases[canvasId];
+
+  d3.select(canvas)
+    .transition()
+    .duration(100)
+    .style('opacity', '1');
+}
+
+let hideCanvas = function (canvasId) {
+  let canvases = propGraphParams['canvases'],
+      canvas = canvases[canvasId];
+
+  d3.select(canvas)
+    .transition()
+    .duration(100)
+    .style('opacity', '0');
+}
+
+let makeCanvasOpaque = function (canvasId) {
+  let canvases = propGraphParams['canvases'],
+      canvas = canvases[canvasId];
+
+  d3.select(canvas)
+    .transition()
+    .duration(100)
+    .style('opacity', '0.3');
+}
+
+let changeOpacity = function (color, opacity) {
   return color.replace(/[\d\.]+\)$/g, opacity+')');
 }
 
-let addToolTip = function (text, money, x, y) {
-  let canvas = d3.select('.proportion-graph');
-  let ctx = canvas.node().getContext('2d'); 
-  ctx.fillRect(x + 5, y + 5, ctx.measureText(text).width, ctx.measureText(text).height);
-  ctx.font = 'bold 15px arial';
-  ctx.fillStyle = '#000';
-  ctx.fillText(text, x + 10, y + 15, 160);
-  ctx.fillText(money, x + 10, y + 30, 160);
-}
+let drawRegion = function (regionId, sparkle = false) {
+  let canvas = propGraphParams['canvases'][regionId],
+      region = propGraphParams['regions'][regionId],
+      squareOuterLength = propGraphParams['squareOuterLength'],
+      squares = region['squares'],
+      numSquares = region['numSquares'],
+      ctx = canvas.getContext('2d'),
+      squareSpacing = Math.floor(squareOuterLength / 3),
+      squareInnerLength = squareOuterLength - squareSpacing;
 
-let drawHoveredRegions = function (regions, points, squareLength, proportionWidth, proportionHeight, hoveredRegionText) {
-  let hoveredRegionSquareIds;
-  let regionSquareIds;
-  let i = 0;
-  let region = regions[i];
+  if (sparkle)
+    squares = shuffleArray(squares);
 
-  while (region['text'] != hoveredRegionText) {
-    regionSquareIds = region['squares'];
-    for (let j in regionSquareIds) {
-      let squareId = regionSquareIds[j];
-      updateSquareColor(points, squareId, changeColorOpacity(region['color'],0.2));     
+  ctx.fillStyle = region['color'];
+  for (let i = 0; i < numSquares; ++i) {
+    const point = squares[i];
+
+    if (sparkle) {
+      setTimeout(function() {
+        ctx.fillRect(point.x,
+                     point.y,
+                     squareInnerLength,
+                     squareInnerLength);
+      }, 0.01 * i);
     }
-    region = regions[i++];
-  }
-  regionSquareIds = region['squares'];
-  for (let j in regionSquareIds) {
-    let squareId = regionSquareIds[j];
-    updateSquareColor(points, squareId, region['color']);     
-  }
-  drawCanvas(points, squareLength, proportionWidth, proportionHeight);
-}
-
-let updateSquareText = function (points, squareId, text, money) {
-  points[squareId]['text'] = text;
-  points[squareId]['money'] = money;
-}
-
-let updateSquareColor = function (points, squareId, color) {
-  points[squareId]['color'] = color;
-}
-
-let drawCanvas = function (points, squareLength, proportionWidth, proportionHeight) {
-  return new Promise( function (resolve, reject) {
-    let canvas = d3.select('.proportion-graph');
-    let ctx = canvas.node().getContext('2d');
-    ctx.save();
-
-    let squareSpacing = squareLength / 5;
-
-    ctx.clearRect(0, 0, proportionWidth, proportionHeight);
-
-    for (let i = 0; i < points.length; ++i) {
-      let point = points[i];
-      ctx.fillStyle = point.color;
-      ctx.fillRect(point.x + squareSpacing, point.y + squareSpacing, squareLength - squareSpacing, 
-        squareLength - squareSpacing);
+    else {
+      ctx.fillRect(point.x,
+                   point.y,
+                   squareInnerLength,
+                   squareInnerLength);
     }
-    ctx.restore();
-    resolve();
-  });
+  }
 }
 
-let drawBorder = function (ctx, xPos, yPos, width, height, borderColor, thickness) {
-  ctx.fillStyle = borderColor;
-  ctx.fillRect(xPos - (thickness), yPos - (thickness), width + (thickness * 2), height + (thickness * 2));
+let drawRegionByColumn = function (regionId) {
+  let canvas = propGraphParams['canvases'][regionId],
+      region = propGraphParams['regions'][regionId],
+      squareOuterLength = propGraphParams['squareOuterLength'],
+      squares = region['squares'],
+      numSquares = region['numSquares'],
+      ctx = canvas.getContext('2d'),
+      squareSpacing = Math.floor(squareOuterLength / 3),
+      squareInnerLength = squareOuterLength - squareSpacing,
+      columnLength = propGraphParams['columnLength'];
+
+  ctx.fillStyle = region['color'];
+
+  let squaresRemaining = numSquares;
+  for (let i = 0; i < numSquares; i += columnLength) {
+
+    let squaresInColumn = squaresRemaining - columnLength > 0 ? columnLength : squaresRemaining;
+
+    setTimeout(function() {
+      for (let j = 0; j < squaresInColumn; ++j) {
+        const point = squares[i + j];
+
+        ctx.fillRect(point.x,
+                     point.y,
+                     squareInnerLength,
+                     squareInnerLength);
+      }
+    }, 10 * i);
+
+    squaresRemaining -= columnLength;
+  }
+
+}
+
+let setAllRegionSquares = function () {
+
+  let direction = 1,
+      regions = propGraphParams['regions'],
+      squareOuterLength = propGraphParams['squareOuterLength'],
+      columnLength = propGraphParams['columnLength'],
+      startSquareId = regions[1]['numSquares'];
+
+  for (let ii = 0; ii < regions.length; ii++) {
+    let region = regions[ii],
+        numSquares = region['numSquares'];
+
+    if (ii < 2) {
+      region['squares'] = d3.range(0, numSquares).map( function(index) {
+                            return {
+                              id: index,
+                              x: squareOuterLength * Math.floor(index / columnLength),
+                              y: squareOuterLength * (index % columnLength)
+                            }
+                          });
+    }
+    else
+      direction = setSubregionSquares(region, numSquares, startSquareId, direction);
+
+    if (ii > 1)
+      startSquareId += numSquares;
+  }
+}
+
+let setSubregionSquares = function (region, numSquares, startSquareId, direction) {
+  region['squares'] = [];
+
+  let squares = propGraphParams['squares'],
+      columnLength = propGraphParams['columnLength'],
+      regionSquares = region['squares'];
+
+  for (let ii = 0; ii < numSquares; ii++) {
+    let squareId = startSquareId + ii;
+
+    if (direction == 1) {
+      
+      let square = getSquareObject(squareId);
+      regionSquares.push(square);
+
+      if ((squareId + 1) % columnLength == 0)
+        direction = 2;
+    }
+    else {
+      
+      let newSquareId = (Math.floor(squareId / columnLength) + 1)  * columnLength - (squareId % columnLength) - 1,
+          square = getSquareObject(newSquareId);
+
+      regionSquares.push(square);
+      
+      if ((squareId + 1) % columnLength == 0)
+        direction = 1;
+    } 
+  }
+  return direction;
+}
+
+let getSquareObject = function (index) {
+  let squareOuterLength = propGraphParams['squareOuterLength'],
+      columnLength = propGraphParams['columnLength'];
+
+  return {
+    id: index,
+    x: squareOuterLength * Math.floor(index / columnLength),
+    y: squareOuterLength * (index % columnLength)
+  }
 }
