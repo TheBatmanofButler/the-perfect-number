@@ -226,15 +226,13 @@ let updateBarGraphDims = function (mapModeHeight) {
   let marginTop = barGraphParams['marginTop'],
       marginRight = barGraphParams['marginRight'],
       marginLeft = barGraphParams['marginLeft'],
+      marginBottom = barGraphParams['marginBottom'],
       barGraphWidth = $('.bar-graph-viewer').width() - marginLeft - marginRight;
 
-  if (mapModeHeight)
-    updateBarGraphParam('marginBottom', 40);
-  else
+  if (!mapModeHeight)
     mapModeHeight = $('.bar-graph-viewer').height();
 
-  let marginBottom = barGraphParams['marginBottom'],
-      barGraphHeight = mapModeHeight - marginTop - marginBottom,
+  let barGraphHeight = mapModeHeight - marginTop - marginBottom,
       totalWidth = barGraphWidth + marginLeft + marginRight,
       totalHeight = barGraphHeight + marginTop + marginBottom;
 
