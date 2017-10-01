@@ -85,7 +85,6 @@ let updateYAxis = function (duration) {
         .scale(y);
 
     d3.select('.y-axis')
-      .style('opacity', 0)
       .transition()
       .duration(duration)
       .call(yAxis)
