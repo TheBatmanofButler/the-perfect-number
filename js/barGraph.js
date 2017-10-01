@@ -218,11 +218,13 @@ let getWordX = function (arr, pos) {
 
 let createOpeningSlide = function () {
 
-  let quote = 'America is one of the highest-taxed nations in the world.|';
+  let quote1 = 'America is one of the highest-taxed nations in the world.';
+  let quote2 = 'America is one of the highest-taxed nations in the world.|';
 
-  let quoteChars = quote.split(''),
+  let quoteChars = quote1.split('').concat(quote2.split('')),
       wordWidths = [],
       openingScreen = d3.select('.opening-screen');
+
 
   let chars = openingScreen
                 .selectAll('.char')
@@ -236,32 +238,62 @@ let createOpeningSlide = function () {
               .append('text')
               .attr('class', 'quote-text');
 
-  let cursor = chars
-                 .append('text')
-                 .attr('class', 'quote-cursor')
-                 // .text('|')
-                 // .attr('y', function (d, i) {
-                 //   return 40;
-                 // });
 
-  updateQuoteText(100);
+  updateQuoteText(50, quote1.length);
 
+  setTimeout(function () {
+    let i = 0;
+    console.log(i);
+    d3.selectAll('.quote-text')
+      .transition()
+      .duration(1000)
+      .style('opacity', 0);
+    d3.selectAll('.highlight')
+      .transition()
+      .duration(1000)
+      .style('fill', 'red')
+      .style('opacity', 1);
+    // while(i < 10) {
+    //   d3.select('#cursor')
+    //     .transition()
+    //     .style('opacity', 0)
+    //     .on('end', function() {
+    //       console.log(i);
+    //       i += 1;
+    //       // d3.select('#cursor')
+    //       // .transition()
+    //       // .style('opacity', 1)
+    //       // .on('end', function() {
+    //       //   i += 1;
+    //       // })
+    //     })
+    // }
+  }, 50 * quoteChars.length);
 }
 
-let updateQuoteText = function (typeEffect) {
+let updateQuoteText = function (duration, lineBreak) {
   let barGraphWidth = barGraphParams['barGraphWidth'],
-      totalWidth = 0,
-      text = d3.selectAll('.quote-text'),
-      cursor = d3.select('.quote-cursor');
+      totalWidth1 = 20,
+      totalWidth2 = 100,
+      text = d3.selectAll('.quote-text');
 
   text
     .style('font-size', 0.04 * barGraphWidth)
     .style('opacity', 0)
-    .text( function (d) {
+    .text( function (d, i) {
+      if (d == '|')
+        d3.select(this).attr('id','cursor');
+      if (i >= 0 && i < 7)
+        d3.select(this).attr('class','highlight');
+      if (i > 21 && i < 35)
+        d3.select(this).attr('class','highlight');
       return d;
     })
     .attr('y', function (d, i) {
-      return 40;
+      if (i < lineBreak) 
+        return 40;
+      else
+        return 100;
     })
     .attr('x', function (d, i) {
       
@@ -271,8 +303,16 @@ let updateQuoteText = function (typeEffect) {
       else
         charWidth = this.getComputedTextLength();
 
-      let currentPosition = totalWidth;
-      totalWidth += charWidth;
+      let currentPosition;
+      if (i < lineBreak) {
+        currentPosition = totalWidth1;
+        totalWidth1 += charWidth;
+      }
+      else {
+        currentPosition = totalWidth2;
+        totalWidth2 += charWidth;
+      }
+      
 
       return currentPosition;
     })
@@ -281,12 +321,7 @@ let updateQuoteText = function (typeEffect) {
       setTimeout( function () {
         d3.select(element)
           .style('opacity', 1);
-
-        cursor.attr('x', function () {
-          console.log(d3.select(element).attr('x'));
-          return d3.select(element).attr('x') + 20;
-        });
-      }, i * 100);
+      }, i * duration);
     })
 }
 
