@@ -243,16 +243,34 @@ let createOpeningSlide = function () {
 
   setTimeout(function () {
     let i = 0;
+    let totalWidth = 150;
+    let barGraphWidth = barGraphParams['barGraphWidth'];
     console.log(i);
     d3.selectAll('.quote-text')
       .transition()
-      .duration(1000)
+      .duration(4000)
       .style('opacity', 0);
+    
     d3.selectAll('.highlight')
       .transition()
       .duration(1000)
       .style('fill', 'red')
-      .style('opacity', 1);
+      .style('opacity', 1)
+      .transition()
+      .delay(1000)
+      .attr('x', function (d, i) {
+        let charWidth;
+        if (d == ' ')
+          charWidth = 0.01 * barGraphWidth;
+        else
+          charWidth = this.getComputedTextLength();
+
+        let currentPosition = totalWidth;
+        totalWidth += charWidth;
+
+        return currentPosition;
+      })
+      .attr('y', 150);
     // while(i < 10) {
     //   d3.select('#cursor')
     //     .transition()
@@ -283,9 +301,7 @@ let updateQuoteText = function (duration, lineBreak) {
     .text( function (d, i) {
       if (d == '|')
         d3.select(this).attr('id','cursor');
-      if (i >= 0 && i < 7)
-        d3.select(this).attr('class','highlight');
-      if (i > 21 && i < 35)
+      if (i > -1 && i < 7 || i > 20 && i < 35)
         d3.select(this).attr('class','highlight');
       return d;
     })
@@ -299,7 +315,7 @@ let updateQuoteText = function (duration, lineBreak) {
       
       let charWidth;
       if (d == ' ')
-        charWidth = 0.005 * barGraphWidth;
+        charWidth = 0.01 * barGraphWidth;
       else
         charWidth = this.getComputedTextLength();
 
