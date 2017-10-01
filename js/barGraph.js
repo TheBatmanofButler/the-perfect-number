@@ -559,12 +559,12 @@ let fadeStart = function (duration, data) {
           slidePercentLine('35', 1000),
           highlightAllBars('#000', 1000),
           updateBarGraphParam('tickValues', [0,35]),
-          updateYAxis([0,35], 1000),
-          updateXAxis(1000)
+          updateYAxis(1000),
+          // updateXAxis(1000)
         ]);
       })
       .then( function () {
-        return updateBars(0, 1000, 1000);
+        // return updateBars(0, 1000, 1000);
       })
       .then( function () {
         if (shouldFade) {
