@@ -243,7 +243,7 @@ let createOpeningSlide = function () {
 
   setTimeout(function () {
     let i = 0;
-    let totalWidth = 150;
+    let totalWidth = 450;
     let barGraphWidth = barGraphParams['barGraphWidth'];
     console.log(i);
     d3.selectAll('.quote-text')
@@ -286,6 +286,16 @@ let createOpeningSlide = function () {
     //       // })
     //     })
     // }
+    chars.append('text')
+         .text('by Pedal')
+         .attr('class', 'pedal')
+         .attr('x', barGraphWidth * 0.5)
+         .attr('y', 190)
+         .style('opacity', 0)
+         .transition()
+         .delay(3500)
+         .duration(3000)
+         .style('opacity', 0.4);
   }, 50 * quoteChars.length);
 }
 
