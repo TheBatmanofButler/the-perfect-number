@@ -257,6 +257,7 @@ let createOpeningSlide = function () {
       .style('fill', 'red')
       .style('opacity', 1)
       .transition()
+      .delay(1000)
       .attr('x', function (d, i) {
         let charWidth;
         if (d == ' ')
