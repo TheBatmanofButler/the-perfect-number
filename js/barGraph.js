@@ -298,18 +298,18 @@ let resizeBarGraph = function () {
 
   updateXScale();
   updateYScale(-15, 50);
-  updateBarGraphSVG(100);
+  updateBarGraphSVG(1000);
 
-  updateBarGraphText(null, 100);
-  updateCompanyLabel(100);
+  updateBarGraphText(null, 1000);
+  updateCompanyLabel(1000);
   updateQuoteText();
 
-  updatePercentLine('35', 100);
-  updateYAxis([-15, 35, 50], 100);
-  updateXAxis(100);
-  updateBars(0, 0, 100);
+  updatePercentLine('35', 1000);
+  updateYAxis([-15, 35, 50], 1000);
+  updateXAxis(1000);
+  updateBars(0, 1000, 1000);
 
-  if (slideInProgress) restartSlide();
+  if (slideInProgress) restartSlide(1000);
 }
 
 let openMapView = function () {
@@ -318,45 +318,60 @@ let openMapView = function () {
                                        - $('.dynamic-text').outerHeight()
                                        - $(window).outerHeight() * 0.45;
 
-  updateBarGraphDims(mapModeHeight);
+  slideInProgress = false;
 
-  updateXScale();
-  updateYScale(-15, 50);
-  updateBarGraphSVG(1000);
+  return new Promise( function (resolve, reject) {
+    highlightAllBars('#000', 0)
+    .then( function () {
+        Promise.all([
+        updateBarGraphDims(mapModeHeight),
 
-  updateBarGraphText(null, 1000);
-  updateCompanyLabel(1000);
+        updateXScale(),
+        updateYScale(-15, 50),
+        updateBarGraphSVG(1000),
 
-  updatePercentLine('35', 1000);
-  updateYAxis([-15, 35, 50], 1000);
-  updateXAxis(1000);
-  updateBars(0, 0, 1000);
+        updateBarGraphText(null, 1000),
+        updateCompanyLabel(1000),
+
+        updatePercentLine('35', 1000),
+        updateYAxis([-15, 35, 50], 1000),
+        updateXAxis(1000),
+        updateBars(0, 0, 1000)
+      ])
+    })
+    .then(resolve);
+  });
 
 }
 
-let closeMapView = function (mapModeHeight) {
+let closeMapView = function () {
   return new Promise( function (resolve, reject) {
+    console.log(mapModeHeight);
     $.when(
       $('.proportion-graph-viewer').animate({'height': '0'}, 1000).promise(),
       $('.proportion-graph-viewer').hide(500).promise()
     )
     .then(function() {
       mapModeHeight = $('.graph-viewers').height();
-      updateBarGraphDims(mapModeHeight);
+      Promise.all([
+        updateBarGraphParam('marginBottom', 100),
+        updateBarGraphDims(mapModeHeight),
 
-      updateXScale();
-      // updateYScale(-15, 50);
-      updateBarGraphSVG(1000);
+        updateXScale(),
+        updateYScale(-15, 50),
+        updateBarGraphSVG(1000),
 
-      updateBarGraphText(null, 1000);
-      updateCompanyLabel(1000);
+        updateBarGraphText(null, 1000),
+        updateCompanyLabel(1000),
 
-      // updatePercentLine('35', 1000);
-      // updateYAxis([-15, 35, 50], 1000);
-      // updateXAxis(1000);
-      // updateBars(0, 0, 1000);
+        updatePercentLine('35', 1000),
+        updateYAxis([-15, 35, 50], 1000),
+        updateXAxis(1000),
+        // updateBars(0, 0, 1000)
+      ]);
     }).done(function () {
-      $('.bar-graph-viewer').trigger('click');
+      // $('.bar-graph-viewer').trigger('click');
+      resolve();
     });
   });
 }
@@ -506,8 +521,9 @@ let showOpeningScreen = function(duration) {
 
 let fadeStart = function (duration, data) {
   return new Promise( function (resolve, reject) {
-    Promise.resolve()
+    closeMapView()
       .then( function () {
+        console.log(123123);
         if (shouldFade)
           return fadeAll(duration);
       })
