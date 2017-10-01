@@ -6,7 +6,7 @@
  *
  */
 
-// $('#slide1').trigger( "click" );
+$('#slide1').trigger( "click" );
 
 $('.about-button').click( function (e) {
   console.log('about clicked');
@@ -19,8 +19,8 @@ $('.slide-explore').click( function (e) {
 
   openMapView();
   $('.proportion-graph-viewer').animate({'height': '45vh'}, 1000, function () {
-    // initPropGraph('All Companies');
-    // updatePropGraph();
+    initPropGraph('All Companies');
+    updatePropGraph();
   });
 
   $('.typeahead').bind('typeahead:select', function(ev, suggestion) {
