@@ -318,12 +318,13 @@ let openMapView = function () {
                                        - $('.dynamic-text').outerHeight()
                                        - $(window).outerHeight() * 0.45;
 
-  slideInProgress = false;
-
   return new Promise( function (resolve, reject) {
     highlightAllBars('#000', 0)
     .then( function () {
-        Promise.all([
+      slideInProgress = false;
+
+      Promise.all([
+        updateBarGraphParam('marginBottom', 40),
         updateBarGraphDims(mapModeHeight),
 
         updateXScale(),
@@ -346,31 +347,11 @@ let openMapView = function () {
 
 let closeMapView = function () {
   return new Promise( function (resolve, reject) {
-    console.log(mapModeHeight);
     $.when(
       $('.proportion-graph-viewer').animate({'height': '0'}, 1000).promise(),
       $('.proportion-graph-viewer').hide(500).promise()
     )
-    .then(function() {
-      mapModeHeight = $('.graph-viewers').height();
-      Promise.all([
-        updateBarGraphParam('marginBottom', 100),
-        updateBarGraphDims(mapModeHeight),
-
-        updateXScale(),
-        updateYScale(-15, 50),
-        updateBarGraphSVG(1000),
-
-        updateBarGraphText(null, 1000),
-        updateCompanyLabel(1000),
-
-        updatePercentLine('35', 1000),
-        updateYAxis([-15, 35, 50], 1000),
-        updateXAxis(1000),
-        // updateBars(0, 0, 1000)
-      ]);
-    }).done(function () {
-      // $('.bar-graph-viewer').trigger('click');
+    .done(function () {
       resolve();
     });
   });
@@ -523,13 +504,21 @@ let fadeStart = function (duration, data) {
   return new Promise( function (resolve, reject) {
     closeMapView()
       .then( function () {
-        console.log(123123);
         if (shouldFade)
           return fadeAll(duration);
       })
       .then( function () {
+        mapModeHeight = $('.graph-viewers').height();
         return Promise.all([
+          updateBarGraphParam('marginBottom', 100),
+          updateBarGraphDims(mapModeHeight),
+          updateXScale(),
           updateYScale(-15, 50),
+          updateBarGraphSVG(1000),
+          updateBarGraphText(null, 1000),
+          updateCompanyLabel(1000),
+          updatePercentLine('35', 1000),
+
           updateBarGraphParam('data', data),
           updateBarGraphParam('yParam', 'rate'),
           slidePercentLine('35', 1000),
