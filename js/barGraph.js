@@ -217,104 +217,82 @@ let getWordX = function (arr, pos) {
 }
 
 let createOpeningSlide = function () {
-  // let quote = 'America is one of the highest-taxed nations in the world. Reducing taxes will cause new companies and new jobs to come roaring back into our country.',
-  //     quoteChars = 'America is'.split(''),
-  //     quoteCharMap = d3.range(quoteChars.length).map( function (d,i) {
-  //                       return { x: width/2, y: y(i+1)}
-  //                   })
-  //     wordWidths = [],
-  //     openingScreen = d3.select('.opening-screen'),
-  //     chars = openingScreen.selectAll('.char')
-  //               .data(textChars, function(d) {
-  //                 return d;
-  //               })
-  //               .enter()
-  //               .append('g');
 
-  // chars.append("rect");
+  let quote = 'America is one of the highest-taxed nations in the world.|';
 
-  // charG
-  //   .append('text')
-  //   .attr('x', function(d) { return d.x; })
-  //   .attr('y', function(d) { return d.y; })
-  //   .attr('fill', '#fff')
-  //   .attr('text-anchor', 'middle');
-
-  let quote = 'America is one of the highest-taxed nations in the world.',
-      quoteChars = quote.split(''),
+  let quoteChars = quote.split(''),
       wordWidths = [],
       openingScreen = d3.select('.opening-screen');
-      
-  let chars = openingScreen.selectAll('.char')
+
+  let chars = openingScreen
+                .selectAll('.char')
                 .data(quoteChars, function(d) {
                   return d;
                 })
-                .enter();
+                .enter()
+                .append('g');
+
+  let text = chars
+              .append('text')
+              .attr('class', 'quote-text');
+
+  let cursor = chars
+                 .append('text')
+                 .attr('class', 'quote-cursor')
+                 // .text('|')
+                 // .attr('y', function (d, i) {
+                 //   return 40;
+                 // });
+
+  updateQuoteText(100);
+
+}
+
+let updateQuoteText = function (typeEffect) {
+  let barGraphWidth = barGraphParams['barGraphWidth'],
+      totalWidth = 0,
+      text = d3.selectAll('.quote-text'),
+      cursor = d3.select('.quote-cursor');
+
+  text
+    .style('font-size', 0.04 * barGraphWidth)
+    .style('opacity', 0)
+    .text( function (d) {
+      return d;
+    })
+    .attr('y', function (d, i) {
+      return 40;
+    })
+    .attr('x', function (d, i) {
       
-      chars.append('text')
-                      .attr('x', 50)
-                      .attr('y', 25)
-                      .style("font-size", "2vw")
-                      .style("fill", "red")
-                      .text(function(d) {
-                        return d;
-                      })
-      
-      openingScreen.append('text')
-                      .attr('x', 200)
-                      .attr('y', 25)
-                      .style("font-size", "2vw")
-                      .style("fill", "red")
-                      .text(function(d) { 
-                        return 'is';
-                      })
+      let charWidth;
+      if (d == ' ')
+        charWidth = 0.005 * barGraphWidth;
+      else
+        charWidth = this.getComputedTextLength();
 
+      let currentPosition = totalWidth;
+      totalWidth += charWidth;
 
-  // charRects
-  //   .enter()
-  //   .append("text")
-  //     .style("font-size", "20px")
-  //     .text(function(d) { return d})
-  //       .each(function(d,i) {
-  //           var thisWidth = this.getComputedTextLength()
-  //           wordWidths.push(thisWidth)
-  //           this.remove()
-  //       })
-  // console.log(wordWidths);
+      return currentPosition;
+    })
+    .each( function (d,i) {
+      let element = this;
+      setTimeout( function () {
+        d3.select(element)
+          .style('opacity', 1);
 
-  // charRects
-  //   .enter()
-  //   .append('rect')
-  //   .attr('class', 'char-rect')
-  //   .attr('width', function(d, i) {
-  //     return wordWidths[i] + 5;
-  //   })
-  //   .attr('height', 30)
-  //   .style('fill','green')
-  //   .attr('x', function(d, i) {
-  //     console.log(getWordPosition(wordWidths, i));
-  //     return getWordPosition(wordWidths, i) + 10 * (i - 1);
-  //   })
-
-  // charRects
-  //   .enter()
-  //   .append("text")
-  //     .attr('x', function(d, i) {
-  //       return getWordPosition(wordWidths, i) + 10.5 *  (i-1);
-  //     })
-  //     .attr('y', 25)
-  //     .style("font-size", "20px")
-  //     .style("fill", "red")
-  //     .text(function(d) { 
-  //       return d
-  //     })
-
-  // console.log(d3.select(charRects));
-  // console.log(d3.select(charRects._groups[0][4]));
-  // d3.select('.char-rect:nth-child(6)').attr('fill','yellow')
+        cursor.attr('x', function () {
+          console.log(d3.select(element).attr('x'));
+          return d3.select(element).attr('x') + 20;
+        });
+      }, i * 100);
+    })
 }
 
 let resizeBarGraph = function () {
+
+  if (currentSlide == 1) return;
 
   updateBarGraphDims();
 
@@ -324,20 +302,20 @@ let resizeBarGraph = function () {
 
   updateBarGraphText(null, 100);
   updateCompanyLabel(100);
+  updateQuoteText();
 
   updatePercentLine('35', 100);
   updateYAxis([-15, 35, 50], 100);
   updateXAxis(100);
   updateBars(0, 0, 100);
 
-  if (slideInProgress)
-    restartSlide();
+  if (slideInProgress) restartSlide();
 }
 
 let openMapView = function () {
-  let mapModeHeight = $(".visualization").outerHeight() 
-                                       - $(".top").outerHeight() 
-                                       - $(".dynamic-text").outerHeight()
+  let mapModeHeight = $('.visualization').outerHeight() 
+                                       - $('.top').outerHeight() 
+                                       - $('.dynamic-text').outerHeight()
                                        - $(window).outerHeight() * 0.45;
 
   updateBarGraphDims(mapModeHeight);

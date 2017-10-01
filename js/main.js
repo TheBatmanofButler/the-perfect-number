@@ -6,7 +6,7 @@
  *
  */
 
-// $('#slide1').trigger( "click" );
+$('#slide1').trigger( "click" );
 
 $('.about-button').click( function (e) {
   console.log('about clicked');
