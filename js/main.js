@@ -18,9 +18,10 @@ $('.slide-explore').click( function (e) {
   $('.proportion-graph-viewer').css('display', 'flex');
 
   openMapView();
+  $('.proportion-graph-viewer').show(1000);
   $('.proportion-graph-viewer').animate({'height': '45vh'}, 1000, function () {
-    // initPropGraph('All Companies');
-    // updatePropGraph();
+    initPropGraph('All Companies');
+    updatePropGraph();
   });
 
   $('.typeahead').bind('typeahead:select', function(ev, suggestion) {
@@ -48,9 +49,9 @@ $('.slide-explore').click( function (e) {
 
 let addBarGraphClicks = function () {
   $('.bar-graph-viewer').click( function (e) {
-    // if(currentSlide == 9) { currentSlide = 0; }
     if (slideInProgress) return;
     currentSlide += 1;
+
     switch (currentSlide) {
       case 1: $("#slide1").trigger( "click" ); 
               break;
@@ -82,10 +83,6 @@ let removeBarGraphClicks = function () {
 
 addBarGraphClicks();
 
-var openProportionGraph = function () {
-  $('.proportion-graph-viewer').animate({'height': '60vh'});
-}
-
 let resizeTimer;
 window.addEventListener('resize', function () {
   $('.proportion-graph-wrapper').css('opacity', '0');
@@ -93,6 +90,6 @@ window.addEventListener('resize', function () {
   resizeTimer = setTimeout(function() {
     $('.proportion-graph-wrapper').css('opacity', '1');
     resizeBarGraph();
-    // updatePropGraph();
+    updatePropGraph();
   }, 250);
 })

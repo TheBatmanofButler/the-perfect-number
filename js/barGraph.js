@@ -109,19 +109,6 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
   });
 }
 
-let closePropGraph = function () {
-    slideInProgress = true;
-    $.when(
-      $('.proportion-graph-wrapper').animate({'opacity': '0'}, 500).promise(),
-      $('.proportion-graph-viewer').animate({'height': '0'}, 1000).promise(),
-      $('.proportion-graph-viewer').hide(500).promise()
-    )
-    .done(function() {
-      mapModeHeight = $('.graph-viewers').height();
-      resizeBarGraph();
-    });
-}
-
 let initBarGraph = function () {
 
   let barGraphWidth = barGraphParams['barGraphWidth'];
@@ -357,17 +344,45 @@ let openMapView = function () {
 
   updateXScale();
   updateYScale(-15, 50);
-  updateBarGraphSVG(100);
+  updateBarGraphSVG(1000);
 
-  updateBarGraphText(null, 100);
-  updateCompanyLabel(100);
+  updateBarGraphText(null, 1000);
+  updateCompanyLabel(1000);
 
-  updatePercentLine('35', 100);
-  updateYAxis([-15, 35, 50], 100);
-  updateXAxis(100);
-  updateBars(0, 0, 100);
+  updatePercentLine('35', 1000);
+  updateYAxis([-15, 35, 50], 1000);
+  updateXAxis(1000);
+  updateBars(0, 0, 1000);
 
 }
+
+let closeMapView = function (mapModeHeight) {
+  return new Promise( function (resolve, reject) {
+    $.when(
+      $('.proportion-graph-viewer').animate({'height': '0'}, 1000).promise(),
+      $('.proportion-graph-viewer').hide(500).promise()
+    )
+    .then(function() {
+      mapModeHeight = $('.graph-viewers').height();
+      updateBarGraphDims(mapModeHeight);
+
+      updateXScale();
+      // updateYScale(-15, 50);
+      updateBarGraphSVG(1000);
+
+      updateBarGraphText(null, 1000);
+      updateCompanyLabel(1000);
+
+      // updatePercentLine('35', 1000);
+      // updateYAxis([-15, 35, 50], 1000);
+      // updateXAxis(1000);
+      // updateBars(0, 0, 1000);
+    }).done(function () {
+      $('.bar-graph-viewer').trigger('click');
+    });
+  });
+}
+
 
 let addPercentLine = function (y, percent, duration, barGraphWidth) {
   d3.select('.bar-graph-elements')
