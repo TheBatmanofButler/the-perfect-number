@@ -374,7 +374,14 @@ let resizeBarGraph = function () {
   if (slideInProgress) restartSlide(1000);
 }
 
-let openMapView = function () {
+let openMapView = function (data) {
+
+  $('.proportion-graph-viewer').show(1000);
+  $('.proportion-graph-viewer').animate({'height': '45vh'}, 1000, 'linear', function () {
+    initPropGraph('All Companies');
+    updatePropGraph();
+  });
+  
   let mapModeHeight = $('.visualization').outerHeight() 
                                        - $('.top').outerHeight() 
                                        - $('.dynamic-text').outerHeight()
@@ -396,7 +403,10 @@ let openMapView = function () {
         updateBarGraphText(null, 1000),
         updateCompanyLabel(1000),
 
+        updateBarGraphParam('data', data),
+        updateBarGraphParam('yParam', 'rate'),
         updatePercentLine('35', 1000),
+
         updateBarGraphParam('tickValues', [-15, 35, 50]),
         updateYAxis(1000),
         updateXAxis(1000),
@@ -409,15 +419,8 @@ let openMapView = function () {
 }
 
 let closeMapView = function () {
-  return new Promise( function (resolve, reject) {
-    $.when(
-      $('.proportion-graph-viewer').animate({'height': '0'}, 1000).promise(),
-      $('.proportion-graph-viewer').hide(500).promise()
-    )
-    .done(function () {
-      resolve();
-    });
-  });
+  $('.proportion-graph-viewer').animate({'height': '0'}, 1000);
+  $('.proportion-graph-viewer').hide(500);
 }
 
 
@@ -564,35 +567,39 @@ let showOpeningScreen = function(duration) {
 }
 
 let fadeStart = function (duration, data) {
+
   return new Promise( function (resolve, reject) {
-    closeMapView()
+    Promise.resolve()
       .then( function () {
         if (shouldFade)
           return fadeAll(duration);
       })
       .then( function () {
+        return highlightAllBars('#000', 1000);
+      })
+      .then( function () {
         mapModeHeight = $('.graph-viewers').height();
+        closeMapView();
         return Promise.all([
           updateBarGraphParam('marginBottom', 100),
           updateBarGraphDims(mapModeHeight),
+
           updateXScale(),
           updateYScale(-15, 50),
           updateBarGraphSVG(1000),
+
           updateBarGraphText(null, 1000),
           updateCompanyLabel(1000),
-          updatePercentLine('35', 1000),
 
           updateBarGraphParam('data', data),
           updateBarGraphParam('yParam', 'rate'),
-          slidePercentLine('35', 1000),
-          highlightAllBars('#000', 1000),
+          updatePercentLine('35', 1000),
+
           updateBarGraphParam('tickValues', [0,35]),
           updateYAxis(1000),
-          updateXAxis(1000)
+          updateXAxis(1000),
+          updateBars(0, 1000, 1000)
         ]);
-      })
-      .then( function () {
-        return updateBars(0, 1000, 1000);
       })
       .then( function () {
         if (shouldFade) {

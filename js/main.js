@@ -17,34 +17,29 @@ $('.slide-explore').click( function (e) {
   $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
   $('.proportion-graph-viewer').css('display', 'flex');
 
-  openMapView();
-  $('.proportion-graph-viewer').show(1000);
-  $('.proportion-graph-viewer').animate({'height': '45vh'}, 1000, function () {
+  openMapView(allCompanyData);
+});
+
+$('.typeahead').bind('typeahead:select', function(ev, suggestion) {
+  if (proportionInTransition)
+    $('.typeahead').typeahead('val', '');
+
+  else if (suggestion == 'All companies') {
+    $('.company-bar-name').text('All companies');
     initPropGraph('All Companies');
     updatePropGraph();
-  });
+  }
 
-  $('.typeahead').bind('typeahead:select', function(ev, suggestion) {
-    if(proportionInTransition) {
-      $('.typeahead').typeahead('val', '');
-      // $('.typeahead').typeahead('setQuery', '');
-      return 0;
-    }
-    if(suggestion == 'All companies'){
-      $('.company-bar-name').text('All companies');
-      initPropGraph('All Companies');
-      updatePropGraph();
-    }
-    else {
-      slugifySuggestion = slugify(suggestion);
-      companyInfo = infoBoxData[slugifySuggestion];
-      $('.company-bar-name').text(suggestion);
-      loadInfo(companyInfo);
-      initPropGraph(suggestion);
-      updatePropGraph();
-      
-    }
-  });
+  else {
+    $('.company-bar-name').text(suggestion);
+
+    let slugifySuggestion = slugify(suggestion);
+    let companyInfo = infoBoxData[slugifySuggestion];
+
+    loadInfo(companyInfo);
+    initPropGraph(suggestion);
+    updatePropGraph();    
+  }
 });
 
 let addBarGraphClicks = function () {

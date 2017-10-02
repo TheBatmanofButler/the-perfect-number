@@ -5,6 +5,7 @@ let updateBarGraphText = function (text, duration) {
   barGraphText
     .transition()
     .duration(duration)
+    .ease(d3.easeLinear)
     .attr('dx', function () {
       return barGraphWidth - this.getComputedTextLength();
     });
@@ -36,6 +37,7 @@ let updatePercentLine = function (percent, duration) {
     d3.selectAll('.percent-line')
         .transition()
         .duration(duration)
+        .ease(d3.easeLinear)
         .attr('x1', 0)
         .attr('x2', barGraphWidth)
         .attr('y1', y(35))
@@ -64,6 +66,7 @@ let updateXAxis = function (duration) {
     d3.select('.x-axis')
       .transition()
       .duration(duration)
+      .ease(d3.easeLinear)
       .attr('transform', 'translate(0,' + y(0) + ')')
       .style('opacity', 1)
       .call(xAxis)
@@ -87,6 +90,7 @@ let updateYAxis = function (duration) {
     d3.select('.y-axis')
       .transition()
       .duration(duration)
+      .ease(d3.easeLinear)
       .call(yAxis)
       .style('opacity', 1)
       .end(resolve);
@@ -113,6 +117,7 @@ let updateBars = function (exitTime, enterTime, updateTime) {
           .exit()
           .transition()
           .duration(exitTime)
+          .ease(d3.easeLinear)
           .attr('y', y(0))
           .attr('height', 0)
           .remove()
@@ -131,17 +136,20 @@ let updateBars = function (exitTime, enterTime, updateTime) {
                         .on('mouseover', function(d){
                           d3.select('.company-label')
                             .transition()
+                            .ease(d3.easeLinear)
                             .text(d['company_name']);
                         })
                         .on('mouseout', function(d){
                           d3.select('.company-label')
                             .transition()
+                            .ease(d3.easeLinear)
                             .text('');
                         })
                         .call(updateBarSize)
                         .style('opacity', 0)
                         .transition()
                         .duration(enterTime)
+                        .ease(d3.easeLinear)
                         .style('opacity', 1)
                         .end( function () {
                           resolve();
@@ -155,6 +163,7 @@ let updateBars = function (exitTime, enterTime, updateTime) {
                         .transition()
                         .delay(exitTime)
                         .duration(updateTime)
+                        .ease(d3.easeLinear)
                         .call(updateBarSize)
                         .end(function () {
                           resolve();
@@ -209,6 +218,7 @@ let updateBarGraphSVG = function (duration) {
   d3.select('.bar-graph')
       .transition()
       .duration(duration)
+      .ease(d3.easeLinear)
       .attr('width', totalWidth)
       .attr('height', totalHeight);
 }
@@ -219,6 +229,7 @@ let updateCompanyLabel = function (duration) {
   d3.select('.company-label')
     .transition()
     .duration(duration)
+    .ease(d3.easeLinear)
     .attr('dx', 5)
     .attr('y', y(-7))
     .style('font-size', 50);
