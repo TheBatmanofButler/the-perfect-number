@@ -177,7 +177,8 @@ let initBarGraph = function () {
 
   barGraph
     .append('g')
-    .attr('class', 'y-axis axis');
+    .attr('class', 'y-axis axis')
+    .style('opacity', 0);
 
   let y = barGraphParams['y'],
       x = barGraphParams['x'];
@@ -405,7 +406,8 @@ let openMapView = function () {
         updateCompanyLabel(1000),
 
         updatePercentLine('35', 1000),
-        updateYAxis([-15, 35, 50], 1000),
+        updateBarGraphParam('tickValues', [-15, 35, 50]),
+        updateYAxis(1000),
         updateXAxis(1000),
         updateBars(0, 0, 1000)
       ])
@@ -594,7 +596,7 @@ let fadeStart = function (duration, data) {
           slidePercentLine('35', 1000),
           highlightAllBars('#000', 1000),
           updateBarGraphParam('tickValues', [0,35]),
-          updateYAxis([0,35], 1000),
+          updateYAxis(1000),
           updateXAxis(1000)
         ]);
       })

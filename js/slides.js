@@ -7,13 +7,7 @@ let slide2 = function (data) {
   let barGraph = d3.select('.bar-graph-elements');
   slideInProgress = true;
 
-  fadeStart(100, data)
-  .then( function () {
-    return Promise.all([
-      updateBarGraphParam('tickValues', [0,35]),
-      updateYAxis([0,35], 0)
-    ]);
-  })
+  fadeStart(1000, data)
   .then( function () {
     return highlightBarsSplit('rate', 35, 'red', 'green', 1000);
   })

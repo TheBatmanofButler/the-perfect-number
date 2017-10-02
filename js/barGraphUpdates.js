@@ -88,6 +88,7 @@ let updateYAxis = function (duration) {
       .transition()
       .duration(duration)
       .call(yAxis)
+      .style('opacity', 1)
       .end(resolve);
   });
 }
