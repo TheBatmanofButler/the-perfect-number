@@ -242,62 +242,70 @@ let createOpeningSlide = function () {
 
   updateQuoteText(50, quote1.length);
 
-  setTimeout(function () {
-    let i = 0;
-    let totalWidth = 450;
-    let barGraphWidth = barGraphParams['barGraphWidth'];
-    console.log(i);
-    d3.selectAll('.quote-text')
-      .transition()
-      .duration(4000)
-      .style('opacity', 0);
+  // setTimeout(function () {
+  //   let i = 0;
+  //   let totalWidth = 450;
+  //   let barGraphWidth = barGraphParams['barGraphWidth'];
+  //   console.log(i);
+  //   d3.selectAll('.quote-text')
+  //     .transition()
+  //     .duration(4000)
+  //     .style('opacity', 0);
     
-    d3.selectAll('.highlight')
-      .transition()
-      .duration(1000)
-      .style('fill', 'red')
-      .style('opacity', 1)
-      .transition()
-      .delay(1000)
-      .attr('x', function (d, i) {
-        let charWidth;
-        if (d == ' ')
-          charWidth = 0.01 * barGraphWidth;
-        else
-          charWidth = this.getComputedTextLength();
+  //   d3.selectAll('.highlight')
+  //     .transition()
+  //     .duration(1000)
+  //     .style('fill', 'red')
+  //     .style('opacity', 1)
+  //     .transition()
+  //     .delay(1000)
+  //     .attr('x', function (d, i) {
+  //       let charWidth;
+  //       if (d == ' ')
+  //         charWidth = 0.01 * barGraphWidth;
+  //       else
+  //         charWidth = this.getComputedTextLength();
 
-        let currentPosition = totalWidth;
-        totalWidth += charWidth;
+  //       let currentPosition = totalWidth;
+  //       totalWidth += charWidth;
 
-        return currentPosition;
-      })
-      .attr('y', 150);
-    // while(i < 10) {
-    //   d3.select('#cursor')
-    //     .transition()
-    //     .style('opacity', 0)
-    //     .on('end', function() {
-    //       console.log(i);
-    //       i += 1;
-    //       // d3.select('#cursor')
-    //       // .transition()
-    //       // .style('opacity', 1)
-    //       // .on('end', function() {
-    //       //   i += 1;
-    //       // })
-    //     })
-    // }
-    chars.append('text')
-         .text('by Pedal')
-         .attr('class', 'pedal')
-         .attr('x', barGraphWidth * 0.5)
-         .attr('y', 190)
-         .style('opacity', 0)
-         .transition()
-         .delay(3500)
-         .duration(3000)
-         .style('opacity', 0.4);
-  }, 50 * quoteChars.length);
+  //       return currentPosition;
+  //     })
+  //     .attr('y', 150);
+  //   // while(i < 10) {
+  //   //   d3.select('#cursor')
+  //   //     .transition()
+  //   //     .style('opacity', 0)
+  //   //     .on('end', function() {
+  //   //       console.log(i);
+  //   //       i += 1;
+  //   //       // d3.select('#cursor')
+  //   //       // .transition()
+  //   //       // .style('opacity', 1)
+  //   //       // .on('end', function() {
+  //   //       //   i += 1;
+  //   //       // })
+  //   //     })
+  //   // }
+  //   chars.append('text')
+  //        .text('by Pedal')
+  //        .attr('class', 'pedal')
+  //        .attr('x', barGraphWidth * 0.5)
+  //        .attr('y', 190)
+  //        .style('opacity', 0)
+  //        .transition()
+  //        .delay(3500)
+  //        .duration(3000)
+  //        .style('opacity', 0.4);
+  // }, 50 * quoteChars.length);
+}
+
+let sumTillPosition = function (arr, pos) {
+  let sum = 0;
+  for (let i = 0; i < pos; i++) {
+    sum += arr[i];
+  }
+  return sum;
 }
 
 let updateQuoteText = function (duration, lineBreak) {
@@ -328,9 +336,11 @@ let updateQuoteText = function (duration, lineBreak) {
       if (d == ' ')
         charWidth = 0.01 * barGraphWidth;
       else
-        charWidth = this.getComputedTextLength();
+        charWidth = this.getBBox().width;
+        // charWidth = this.getComputedTextLength();
 
       let currentPosition;
+      console.log(charWidth);
       if (i < lineBreak) {
         currentPosition = totalWidth1;
         totalWidth1 += charWidth;
@@ -340,7 +350,6 @@ let updateQuoteText = function (duration, lineBreak) {
         totalWidth2 += charWidth;
       }
       
-
       return currentPosition;
     })
     .each( function (d,i) {
