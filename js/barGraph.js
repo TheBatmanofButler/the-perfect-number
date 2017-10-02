@@ -428,7 +428,7 @@ let openMapView = function (data) {
 }
 
 let closeMapView = function () {
-  $('.proportion-graph-viewer').animate({'height': '0'}, 1000);
+  $('.proportion-graph-viewer').animate({'height': '0'}, 1000, 'linear');
   $('.proportion-graph-viewer').hide(500);
 }
 
@@ -584,7 +584,7 @@ let fadeStart = function (duration, data) {
           return fadeAll(duration);
       })
       .then( function () {
-        return highlightAllBars('#000', 1000);
+        return highlightAllBars('#000', 0);
       })
       .then( function () {
         mapModeHeight = $('.graph-viewers').height();
