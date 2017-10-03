@@ -33,8 +33,6 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
     if (slideInProgress) return;
     slide1(barGraphWidth, barGraphHeight);
     currentSlide = 1;
-    $('.proportion-graph-viewer').animate({'opacity': '0'});
-    $('.proportion-graph-viewer').animate({'height': '0'}, 1000);
     $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
     $('#slide1 div:first').addClass('active-slide-no-square');
   });
@@ -42,9 +40,6 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
   $('#slide2').click( function (e) {
     if (slideInProgress) return;
     fadeOpeningScreen(1000)
-    .then( function () {
-      return showAll(2000);
-    })
     .then( function () {
       slide2(data);
     });
@@ -57,9 +52,6 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
     if (slideInProgress) return;
     fadeOpeningScreen(1000)
     .then( function () {
-      return showAll(2000);
-    })
-    .then( function () {
       slide3(data, companiesYearsNoTax);
     });
     currentSlide = 3;
@@ -70,9 +62,6 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
   $('#slide4').click( function (e) {
     if (slideInProgress) return;
     fadeOpeningScreen(1000)
-    .then( function () {
-      return showAll(2000);
-    })
     .then( function () {
       slide4(data, companiesTop25);
     });
@@ -86,9 +75,6 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
     if (slideInProgress) return;
     fadeOpeningScreen(1000)
     .then( function () {
-      return showAll(2000);
-    })
-    .then( function () {
       slide5(data, companiesRebates);
     });
     currentSlide = 5;
@@ -100,9 +86,6 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
   $('#slide6').click( function (e) {
     if (slideInProgress) return;
     fadeOpeningScreen(1000)
-    .then( function () {
-      return showAll(2000);
-    })
     .then( function () {
       slide6(data, companiesIPS, companiesTop3EmpChanges, companiesLostEmployees);
     });
@@ -116,9 +99,6 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
     if (slideInProgress) return;
     fadeOpeningScreen(1000)
     .then( function () {
-      return showAll(2000);
-    })
-    .then( function () {
       slide7(data);
     });
     currentSlide = 7;
@@ -131,9 +111,6 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
     if (slideInProgress) return;
     fadeOpeningScreen(1000)
     .then( function () {
-      return showAll(2000);
-    })
-    .then( function () {
       slide8(data, companiesForeignDiff);
     });
     currentSlide = 8;
@@ -145,9 +122,6 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
   $('#slide9').click( function (e) {
     if (slideInProgress) return;
     fadeOpeningScreen(1000)
-    .then( function () {
-      return showAll(2000);
-    })
     .then( function () {
       slide9(data, companiesCompetitors);
     });
@@ -606,7 +580,8 @@ let showAll = function (duration) {
 
 let fadeOpeningScreen = function(duration) {
   return new Promise( function (resolve, reject) {
-    // showAll(500);
+    showAll(1000);
+    closeMapView();
     d3.select('.opening-screen')
       .transition()
       .duration(duration)

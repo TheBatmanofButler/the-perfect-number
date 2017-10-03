@@ -15,6 +15,7 @@ $('.about-button').click( function (e) {
 
 $('.slide-explore').click( function (e) {
   $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
+  // $('.proportion-graph-viewer').animate({'opacity': '1'});
   $('.proportion-graph-viewer').css('display', 'flex');
 
   openMapView(allCompanyData);
