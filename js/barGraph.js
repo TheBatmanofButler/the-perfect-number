@@ -406,8 +406,8 @@ let resizeBarGraph = function () {
 
 let openMapView = function (data) {
 
-  $('.proportion-graph-viewer').show(1000);
-  $('.proportion-graph-viewer').animate({'height': '45vh'}, 1000, 'linear', function () {
+  $('.proportion-graph-viewer').show(2000);
+  $('.proportion-graph-viewer').animate({'height': '45vh'}, 2000, 'linear', function () {
     initPropGraph('All Companies');
     updatePropGraph();
   });
@@ -417,9 +417,10 @@ let openMapView = function (data) {
                                        - $('.dynamic-text').outerHeight()
                                        - $(window).outerHeight() * 0.45;
 
+  // removeBarGraphClicks();
   return new Promise( function (resolve, reject) {
     // highlightAllBars('#000', 0)
-    fadeOpeningScreen(100)
+    fadeOpeningScreen(1000)
     .then( function () {
       slideInProgress = false;
 
@@ -450,7 +451,7 @@ let openMapView = function (data) {
 }
 
 let closeMapView = function () {
-  $('.proportion-graph-viewer').animate({'height': '0'}, 1000, 'linear');
+  $('.proportion-graph-viewer').animate({'height': '0'}, 2000, 'linear');
   $('.proportion-graph-viewer').hide(500);
 }
 
