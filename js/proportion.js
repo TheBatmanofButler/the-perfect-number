@@ -73,20 +73,18 @@ let updatePropGraph = function () {
   setAllRegionSquares();
   getHoverMap();
   createCanvases();
+  drawAllCanvases();
 
-  addCanvas(0);
-  showCanvas(0);
-  drawRegion(0);
-  addCanvas(1);
-  showCanvas(1);
-  drawRegion(1);
-  addCanvas(2);
-  showCanvas(2);
-  drawRegion(2);
-  addCanvas(3);
-  showCanvas(3);
-  drawRegion(3);
+}
 
+let drawAllCanvases = function () {
+  let regions = propGraphParams['regions'];
+
+  for (let regionId in regions) {
+    addCanvas(regionId);
+    showCanvas(regionId);
+    drawRegion(regionId);
+  }
 }
 
 let shuffleArray = function(a) {
@@ -129,6 +127,7 @@ let addMouseEvent = function (canvasObj) {
   let hoverMap = propGraphParams['hoverMap'],
       regions = propGraphParams['regions'],
       numSquares = propGraphParams['numSquares'];
+  console.log(regions);
 
   canvasObj
     .on('mousemove', function() {

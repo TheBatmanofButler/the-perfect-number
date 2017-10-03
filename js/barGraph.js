@@ -295,7 +295,7 @@ let createOpeningSlide = function () {
     let i = 0;
     let totalWidth = 450;
     let barGraphWidth = barGraphParams['barGraphWidth'];
-    console.log(i);
+
     d3.selectAll('.quote-text')
       .transition()
       .duration(4000)
@@ -638,7 +638,7 @@ let fadeStart = function (duration, data) {
         return highlightAllBars('#000', 0);
       })
       .then( function () {
-        mapModeHeight = $('.graph-viewers').height();
+        let mapModeHeight = $('.graph-viewers').height();
         closeMapView();
         return Promise.all([
           updateBarGraphParam('marginBottom', 100),
