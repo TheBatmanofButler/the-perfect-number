@@ -246,7 +246,6 @@ let createOpeningSlide = function () {
   let quote2 = 'America is one of the highest-taxed nations in the world.|';
 
   let quoteChars = quote1.split('').concat(quote2.split('')),
-      wordWidths = [],
       openingScreen = d3.select('.opening-screen');
 
 
@@ -419,7 +418,8 @@ let openMapView = function (data) {
                                        - $(window).outerHeight() * 0.45;
 
   return new Promise( function (resolve, reject) {
-    highlightAllBars('#000', 0)
+    // highlightAllBars('#000', 0)
+    fadeOpeningScreen(1000)
     .then( function () {
       slideInProgress = false;
 
@@ -581,7 +581,6 @@ let showAll = function (duration) {
 let fadeOpeningScreen = function(duration) {
   return new Promise( function (resolve, reject) {
     showAll(1000);
-    closeMapView();
     d3.select('.opening-screen')
       .transition()
       .duration(duration)
@@ -591,6 +590,7 @@ let fadeOpeningScreen = function(duration) {
 }
 
 let showOpeningScreen = function(duration) {
+  slideInProgress = false;
   return new Promise( function (resolve, reject) {
     fadeAll(500);
     d3.select('.opening-screen')

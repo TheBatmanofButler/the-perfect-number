@@ -1,5 +1,6 @@
 
 let slide1 = function (data) {
+  slideInProgress = true;
   showOpeningScreen()
 }
 
