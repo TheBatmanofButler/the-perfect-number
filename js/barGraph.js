@@ -419,7 +419,7 @@ let openMapView = function (data) {
 
   return new Promise( function (resolve, reject) {
     // highlightAllBars('#000', 0)
-    fadeOpeningScreen(1000)
+    fadeOpeningScreen(100)
     .then( function () {
       slideInProgress = false;
 
