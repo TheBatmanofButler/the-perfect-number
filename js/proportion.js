@@ -82,8 +82,16 @@ let drawAllCanvases = function () {
 
   for (let regionId in regions) {
     addCanvas(regionId);
-    showCanvas(regionId);
-    drawRegion(regionId);
+
+    if (regionId == 0)
+      showCanvas(regionId, 1000);
+    else
+      showCanvas(regionId);
+
+    if (regionId == 1)
+      drawRegionByColumn(regionId);
+    else
+      drawRegion(regionId);
   }
 }
 
@@ -225,13 +233,13 @@ let addCanvas = function (canvasId) {
   $('.proportion-graph-wrapper').append(canvas);
 }
 
-let showCanvas = function (canvasId) {
+let showCanvas = function (canvasId, duration = 100) {
   let canvases = propGraphParams['canvases'],
       canvas = canvases[canvasId];
 
   d3.select(canvas)
     .transition()
-    .duration(100)
+    .duration(duration)
     .style('opacity', '1');
 }
 
