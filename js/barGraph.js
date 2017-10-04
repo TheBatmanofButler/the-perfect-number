@@ -39,10 +39,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
 
   $('#slide2').click( function (e) {
     if (slideInProgress) return;
-    fadeOpeningScreen(1000)
-    .then( function () {
-      slide2(data);
-    });
+    slide2(data);
     currentSlide = 2;
     $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
     $('#slide2 div:first').addClass('active-slide-no-square');
@@ -50,10 +47,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
 
   $('#slide3').click( function (e) {
     if (slideInProgress) return;
-    fadeOpeningScreen(1000)
-    .then( function () {
-      slide3(data, companiesYearsNoTax);
-    });
+    slide3(data, companiesYearsNoTax);
     currentSlide = 3;
     $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
     $('#slide3 div:first').addClass('active-slide-no-square');
@@ -61,72 +55,48 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
 
   $('#slide4').click( function (e) {
     if (slideInProgress) return;
-    fadeOpeningScreen(1000)
-    .then( function () {
-      slide4(data, companiesTop25);
-    });
+    slide4(data, companiesTop25);
     currentSlide = 4;
-    $('.proportion-graph-viewer').animate({'height': '0'}, 1000);
     $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
     $('#slide4 div:first').addClass('active-slide-no-square');
   });
 
   $('#slide5').click( function (e) {
     if (slideInProgress) return;
-    fadeOpeningScreen(1000)
-    .then( function () {
-      slide5(data, companiesRebates);
-    });
+    slide5(data, companiesRebates);
     currentSlide = 5;
-    $('.proportion-graph-viewer').animate({'height': '0'}, 1000);
     $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
     $('#slide5 div:first').addClass('active-slide-no-square');
   });
 
   $('#slide6').click( function (e) {
     if (slideInProgress) return;
-    fadeOpeningScreen(1000)
-    .then( function () {
-      slide6(data, companiesIPS, companiesTop3EmpChanges, companiesLostEmployees);
-    });
+    slide6(data, companiesIPS, companiesTop3EmpChanges, companiesLostEmployees);
     currentSlide = 6;
-    $('.proportion-graph-viewer').animate({'height': '0'}, 1000);
     $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
     $('#slide6 div:first').addClass('active-slide-no-square');
   });
 
   $('#slide7').click( function (e) {
     if (slideInProgress) return;
-    fadeOpeningScreen(1000)
-    .then( function () {
-      slide7(data);
-    });
+    slide7(data);
     currentSlide = 7;
-    $('.proportion-graph-viewer').animate({'height': '0'}, 1000);
     $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
     $('#slide7 div:first').addClass('active-slide-no-square');
   });
 
   $('#slide8').click( function (e) {
     if (slideInProgress) return;
-    fadeOpeningScreen(1000)
-    .then( function () {
-      slide8(data, companiesForeignDiff);
-    });
+    slide8(data, companiesForeignDiff);
     currentSlide = 8;
-    $('.proportion-graph-viewer').animate({'height': '0'}, 1000);
     $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
     $('#slide8 div:first').addClass('active-slide-no-square');
   });
 
   $('#slide9').click( function (e) {
     if (slideInProgress) return;
-    fadeOpeningScreen(1000)
-    .then( function () {
-      slide9(data, companiesCompetitors);
-    });
+    slide9(data, companiesCompetitors);
     currentSlide = 9;
-    $('.proportion-graph-viewer').animate({'height': '0'}, 1000);
     $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
     $('#slide9 div:first').addClass('active-slide-no-square');
   });
@@ -309,16 +279,18 @@ let createOpeningSlide = function () {
     //       // })
     //     })
     // }
-    chars.append('text')
-         .text('by Pedal')
-         .attr('class', 'pedal')
-         .attr('x', barGraphWidth * 0.5)
-         .attr('y', 190)
-         .style('opacity', 0)
-         .transition()
-         .delay(3500)
-         .duration(3000)
-         .style('opacity', 0.4);
+    openingScreen
+        .append('g')
+        .append('text')
+        .text('by Pedal')
+        .attr('class', 'pedal')
+        .attr('x', barGraphWidth * 0.5)
+        .attr('y', 190)
+        .style('opacity', 0)
+        .transition()
+        .delay(3000)
+        .duration(3000)
+        .style('opacity', 1);
   }, 50 * quoteChars.length);
 }
 
@@ -406,8 +378,8 @@ let resizeBarGraph = function () {
 
 let openMapView = function (data) {
 
-  $('.proportion-graph-viewer').show(2000);
-  $('.proportion-graph-viewer').animate({'height': '45vh'}, 2000, 'linear', function () {
+  $('.proportion-graph-viewer').show(1000);
+  $('.proportion-graph-viewer').animate({'height': '45vh'}, 1000, 'linear', function () {
     initPropGraph('All Companies');
     updatePropGraph();
   });
@@ -419,12 +391,13 @@ let openMapView = function (data) {
 
   // removeBarGraphClicks();
   return new Promise( function (resolve, reject) {
-    // highlightAllBars('#000', 0)
-    fadeOpeningScreen(1000)
+    highlightAllBars('#000', 0)
     .then( function () {
       slideInProgress = false;
 
       Promise.all([
+        $('.bar-graph-elements').animate({'opacity': 1}),
+        $('.opening-screen').animate({'opacity': 0}),
         updateBarGraphParam('marginBottom', 40),
         updateBarGraphDims(mapModeHeight),
 
@@ -451,7 +424,7 @@ let openMapView = function (data) {
 }
 
 let closeMapView = function () {
-  $('.proportion-graph-viewer').animate({'height': '0'}, 2000, 'linear');
+  $('.proportion-graph-viewer').animate({'height': '0'}, 1000, 'linear');
   $('.proportion-graph-viewer').hide(500);
 }
 
@@ -594,6 +567,7 @@ let showOpeningScreen = function(duration) {
   slideInProgress = false;
   return new Promise( function (resolve, reject) {
     fadeAll(500);
+    console.log('here');
     d3.select('.opening-screen')
       .transition()
       .duration(1000)
@@ -611,12 +585,15 @@ let fadeStart = function (duration, data) {
           return fadeAll(duration);
       })
       .then( function () {
+        return fadeOpeningScreen(1000);
+      })
+      .then( function () {
         return highlightAllBars('#000', 0);
       })
       .then( function () {
         let mapModeHeight = $('.graph-viewers').height();
-        closeMapView();
         return Promise.all([
+          closeMapView(),
           updateBarGraphParam('marginBottom', 100),
           updateBarGraphDims(mapModeHeight),
 

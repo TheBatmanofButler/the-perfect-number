@@ -1,11 +1,16 @@
 
 let slide1 = function (data) {
   slideInProgress = true;
-  showOpeningScreen()
+  closeMapView();
+  let mapModeHeight = $('.graph-viewers').height();
+  updateBarGraphParam('marginBottom', 100);
+  updateBarGraphDims(mapModeHeight);
+  updateBarGraphSVG(1000);
+  showOpeningScreen();
 }
 
 let slide2 = function (data) {
-  let barGraph = d3.select('.bar-graph-elements');
+  // let barGraph = d3.select('.bar-graph-elements');
   slideInProgress = true;
 
   slidePercentLine('35', 1000)
