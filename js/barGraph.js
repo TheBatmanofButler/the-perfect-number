@@ -389,7 +389,7 @@ let openMapView = function (data) {
                                        - $('.dynamic-text').outerHeight()
                                        - $(window).outerHeight() * 0.45;
 
-  // removeBarGraphClicks();
+  removeBarGraphClicks();
   return new Promise( function (resolve, reject) {
     highlightAllBars('#000', 0)
     .then( function () {
@@ -426,6 +426,7 @@ let openMapView = function (data) {
 let closeMapView = function () {
   $('.proportion-graph-viewer').animate({'height': '0'}, 1000, 'linear');
   $('.proportion-graph-viewer').hide(500);
+  addBarGraphClicks();
 }
 
 

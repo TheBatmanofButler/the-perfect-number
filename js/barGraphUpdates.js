@@ -133,17 +133,28 @@ let updateBars = function (exitTime, enterTime, updateTime) {
                         .enter()
                         .append('rect')
                         .attr('class', 'bar')
-                        .on('mouseover', function(d){
+                        .on('mouseover', function (d) {
                           d3.select('.company-label')
                             .transition()
                             .ease(d3.easeLinear)
                             .text(d['company_name']);
                         })
-                        .on('mouseout', function(d){
+                        .on('mouseout', function (d) {
                           d3.select('.company-label')
                             .transition()
                             .ease(d3.easeLinear)
                             .text('');
+                        })
+                        .on('click', function (d) {
+                          if (inMapMode) {
+                            let companyName = d['company_name'];
+                            let slugifyCompanyName = slugify(companyName);
+                            let companyInfo = infoBoxData[slugifyCompanyName];
+
+                            loadInfo(companyInfo);
+                            initPropGraph(companyName);
+                            updatePropGraph();
+                          }
                         })
                         .call(updateBarSize)
                         .style('opacity', 0)

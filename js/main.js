@@ -42,6 +42,7 @@ $('.typeahead').bind('typeahead:select', function(ev, suggestion) {
 });
 
 let addBarGraphClicks = function () {
+  inMapMode = false;
   $('.bar-graph-viewer').click( function (e) {
     if (slideInProgress) return;
     currentSlide += 1;
@@ -72,6 +73,7 @@ let addBarGraphClicks = function () {
 }
 
 let removeBarGraphClicks = function () {
+  inMapMode = true;
   $('.bar-graph-viewer').off('click');
 }
 
