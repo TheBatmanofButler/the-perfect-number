@@ -79,7 +79,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
 
   $('#slide7').click( function (e) {
     if (slideInProgress) return;
-    slide7(data);
+    slide7(companiesLostEmployees);
     currentSlide = 7;
     $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
     $('#slide7 div:first').addClass('active-slide-no-square');
@@ -171,6 +171,11 @@ let initBarGraph = function () {
   barGraph
     .append('g')
     .attr('class', 'y-axis axis')
+    .style('opacity', 0);
+
+  d3.select('.bar-graph-elements')
+    .append('line')
+    .attr('class', 'percent-line')
     .style('opacity', 0);
 
   let y = barGraphParams['y'],
@@ -400,11 +405,18 @@ let resizeBarGraph = function () {
   if (slideInProgress) restartSlide(1000);
 }
 
-let openMapView = function (data) {
+let openMapView = function (data, company='All Companies') {
 
-  $('.proportion-graph-viewer').show(1000);
+  $('.proportion-graph-viewer').css('display', 'flex');
   $('.proportion-graph-viewer').animate({'height': '45vh'}, 1000, 'linear', function () {
-    initPropGraph('All Companies');
+
+    if (company != 'All Companies') {
+      let slugifiedCompanyName = slugify(company),
+          companyInfo = infoBoxData[slugifiedCompanyName];
+      loadInfo(companyInfo);
+    }
+
+    initPropGraph(company);
     updatePropGraph();
   });
   
@@ -453,45 +465,9 @@ let closeMapView = function () {
   addBarGraphClicks();
 }
 
-
-let addPercentLine = function (y, percent, duration, barGraphWidth) {
-  d3.select('.bar-graph-elements')
-    .append('line')
-    .attr('class', function () {
-      return 'percent-line percent' + percent;
-    })
-}
-
-let slidePercentLine = function (percent, duration) {
-  return new Promise( function (resolve, reject) {
-    let percentClass = '.percent' + percent;
-    let y = barGraphParams['y'];
-    let barGraphWidth = barGraphParams['barGraphWidth'];
-    if (d3.select(percentClass).empty()) {
-      addPercentLine(y, percent, duration, barGraphWidth);
-
-      d3.select('.percent' + percent)
-        .attr('x1', 0)
-        .attr('x2', 0)
-        .attr('y1', y(percent))
-        .attr('y2', y(percent))
-        .transition()
-        .duration(duration)
-        .attr('x2', barGraphWidth)
-        .end(resolve);
-    }
-    else {
-      resolve();
-    }
-
-  });
-}
-
 let fadeOutPercentLine = function (percent, duration) {
   return new Promise( function (resolve, reject) {
-    let percentClass = '.percent' + percent;
-
-    d3.select(percentClass)
+    d3.select('.percent-line')
       .transition()
       .duration(duration)
       .style('opacity', 0)
@@ -601,7 +577,7 @@ let showOpeningScreen = function(duration) {
   });
 }
 
-let fadeStart = function (duration, data) {
+let fadeStart = function (duration, data, yStart = -15, yEnd = 50, tickValues = [0,35]) {
 
   return new Promise( function (resolve, reject) {
     Promise.resolve()
@@ -623,7 +599,7 @@ let fadeStart = function (duration, data) {
           updateBarGraphDims(mapModeHeight),
 
           updateXScale(),
-          updateYScale(-15, 50),
+          updateYScale(yStart, yEnd),
           updateBarGraphSVG(1000),
 
           updateBarGraphText(null, 1000),
@@ -631,13 +607,15 @@ let fadeStart = function (duration, data) {
 
           updateBarGraphParam('data', data),
           updateBarGraphParam('yParam', 'rate'),
-          updatePercentLine('35', 1000),
 
-          updateBarGraphParam('tickValues', [0,35]),
+          updateBarGraphParam('tickValues', tickValues),
           updateYAxis(1000),
           updateXAxis(1000),
           updateBars(0, 1000, 1000)
         ]);
+      })
+      .then( function () {
+        return updatePercentLine(1000);
       })
       .then( function () {
         if (shouldFade) {

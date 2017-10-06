@@ -13,9 +13,6 @@ $('.about-button').click( function (e) {
 
 $('.slide-explore').click( function (e) {
   $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
-  $('.proportion-graph-viewer').css('display', 'flex');
-
-  // fadeOpeningScreen(1000);
   openMapView(allCompanyData);
 });
 
@@ -25,19 +22,12 @@ $('.typeahead').bind('typeahead:select', function(ev, suggestion) {
 
   else if (suggestion == 'All companies') {
     $('.company-bar-name').text('All companies');
-    initPropGraph('All Companies');
-    updatePropGraph();
+    openMapView(allCompanyData, 'All Companies');
   }
 
   else {
     $('.company-bar-name').text(suggestion);
-
-    let slugifySuggestion = slugify(suggestion);
-    let companyInfo = infoBoxData[slugifySuggestion];
-
-    loadInfo(companyInfo);
-    initPropGraph(suggestion);
-    updatePropGraph();  
+    openMapView(allCompanyData, suggestion);
   }
 });
 
