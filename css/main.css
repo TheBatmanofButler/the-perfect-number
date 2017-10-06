@@ -146,6 +146,22 @@ canvas {
       margin-right: 10px; 
     }
 
+    .key {
+      padding: 1%;
+      margin: 1%;
+      /*height: 5%;*/
+    }
+
+    .key-rect {
+      padding-left: 10px;
+      padding-right: 5px;
+    }
+
+    .key-text {
+      font-size: 1vw;
+    }
+
+
   .graph-viewers {
     display: flex;
     flex-direction: column;
@@ -168,7 +184,8 @@ canvas {
 
       .info {
         background: #4C2A85;
-        border-left: 5px solid white;
+        /*border-left: 5px solid white;*/
+        margin-right: 10px;
         padding: 10px 30px 10px 30px;
         width: 300px;
         overflow-y: scroll; 
