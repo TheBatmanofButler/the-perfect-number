@@ -140,6 +140,7 @@ let slide6 = function (data, companiesIPS, companiesTop3EmpChanges, companiesLos
     let chain = Promise.resolve();
     for (let rank in companiesTop3EmpChanges) {
       chain = chain.then( function () {
+                console.log(companiesTop3EmpChanges);
                 return highlightSomeBars(companiesTop3EmpChanges[rank], 'red', 1000);
               })
               .then( function () {
@@ -163,6 +164,10 @@ let slide6 = function (data, companiesIPS, companiesTop3EmpChanges, companiesLos
   })
   .then( function () {
     return highlightAllBars('#000', 1000);
+  })
+  .then( function () {
+    console.log(companiesLostEmployees);
+    return highlightSomeBars([companiesLostEmployees[1]], 'red', 1000);
   })
   .then( function () {
     slideInProgress = false;

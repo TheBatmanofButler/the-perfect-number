@@ -132,7 +132,9 @@ let updateBars = function (exitTime, enterTime, updateTime) {
                       bars
                         .enter()
                         .append('rect')
-                        .attr('class', 'bar')
+                        .attr('class', function (d) {
+                          return 'bar ' + slugify(d['company_name']);
+                        })
                         .on('mouseover', function (d) {
                           d3.select('.company-label')
                             .transition()

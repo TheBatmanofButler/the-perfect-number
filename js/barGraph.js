@@ -79,7 +79,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
 
   $('#slide7').click( function (e) {
     if (slideInProgress) return;
-    slide7(data);
+    slide7(companiesLostEmployees);
     currentSlide = 7;
     $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
     $('#slide7 div:first').addClass('active-slide-no-square');
@@ -376,11 +376,18 @@ let resizeBarGraph = function () {
   if (slideInProgress) restartSlide(1000);
 }
 
-let openMapView = function (data) {
+let openMapView = function (data, company='All Companies') {
 
-  $('.proportion-graph-viewer').show(1000);
+  $('.proportion-graph-viewer').css('display', 'flex');
   $('.proportion-graph-viewer').animate({'height': '45vh'}, 1000, 'linear', function () {
-    initPropGraph('All Companies');
+
+    if (company != 'All Companies') {
+      let slugifiedCompanyName = slugify(company),
+          companyInfo = infoBoxData[slugifiedCompanyName];
+      loadInfo(companyInfo);
+    }
+
+    initPropGraph(company);
     updatePropGraph();
   });
   
@@ -577,7 +584,7 @@ let showOpeningScreen = function(duration) {
   });
 }
 
-let fadeStart = function (duration, data) {
+let fadeStart = function (duration, data, yStart = -15, yEnd = 50, tickValues = [0,35]) {
 
   return new Promise( function (resolve, reject) {
     Promise.resolve()
@@ -599,7 +606,7 @@ let fadeStart = function (duration, data) {
           updateBarGraphDims(mapModeHeight),
 
           updateXScale(),
-          updateYScale(-15, 50),
+          updateYScale(yStart, yEnd),
           updateBarGraphSVG(1000),
 
           updateBarGraphText(null, 1000),
@@ -609,7 +616,7 @@ let fadeStart = function (duration, data) {
           updateBarGraphParam('yParam', 'rate'),
           updatePercentLine('35', 1000),
 
-          updateBarGraphParam('tickValues', [0,35]),
+          updateBarGraphParam('tickValues', tickValues),
           updateYAxis(1000),
           updateXAxis(1000),
           updateBars(0, 1000, 1000)
