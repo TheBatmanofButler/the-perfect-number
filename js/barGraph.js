@@ -361,8 +361,6 @@ let updateQuoteText = function (duration, lineBreak) {
 
 let resizeBarGraph = function () {
 
-  if (currentSlide == 1) return;
-
   updateBarGraphDims();
 
   updateXScale();

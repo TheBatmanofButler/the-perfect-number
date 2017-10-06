@@ -13,6 +13,7 @@ $('.about-button').click( function (e) {
 
 $('.slide-explore').click( function (e) {
   $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
+  $('.typeahead').typeahead('val', '');
   openMapView(allCompanyData);
 });
 
@@ -69,13 +70,13 @@ let removeBarGraphClicks = function () {
 
 addBarGraphClicks();
 
-let resizeTimer;
+// let resizeTimer;
 window.addEventListener('resize', function () {
   $('.proportion-graph-wrapper').css('opacity', '0');
-  clearTimeout(resizeTimer);
-  resizeTimer = setTimeout(function() {
+  // clearTimeout(resizeTimer);
+  // resizeTimer = setTimeout(function() {
     $('.proportion-graph-wrapper').css('opacity', '1');
     resizeBarGraph();
-    updatePropGraph();
-  }, 250);
+    updatePropGraph(false);
+  // }, 250);
 })

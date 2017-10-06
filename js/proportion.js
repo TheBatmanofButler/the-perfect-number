@@ -66,32 +66,42 @@ let getGridSquares = function (numSquares, squareOuterLength, columnLength) {
   });
 }
 
-let updatePropGraph = function () {
+let updatePropGraph = function (sparkle = true) {
 
   updatePropGraphParams();
   setAllRegionSquares();
   getHoverMap();
   createCanvases();
-  drawAllCanvases();
+  drawAllCanvases(sparkle);
 
 }
 
-let drawAllCanvases = function () {
+let drawAllCanvases = function (sparkle) {
   let regions = propGraphParams['regions'];
+  let chain = Promise.resolve();
 
   for (let regionId in regions) {
     addCanvas(regionId);
 
-    if (regionId == 0)
-      showCanvas(regionId, 1000);
-    else
-      showCanvas(regionId);
-
-    if (regionId == 1)
-      drawRegionByColumn(regionId);
-    else
-      drawRegion(regionId);
+    if (regionId == 0) {
+      chain = chain.then( function () {
+        return Promise.all([
+          showCanvas(regionId, 1000),
+          drawRegion(regionId)
+        ])
+      });
+    }
+    else {
+      chain = chain.then( function () {
+                return showCanvas(regionId, 1000);
+              })
+              .then( function () {
+                return drawRegion(regionId, sparkle)
+              });
+    }
   }
+
+  console.log(chain);
 }
 
 let shuffleArray = function(a) {
@@ -108,7 +118,10 @@ let createCanvases = function () {
       propHeight = propGraphParams['propHeight'],
       canvases = propGraphParams['canvases'] = [];
 
-  d3.selectAll('canvas').remove();
+  d3.selectAll('canvas')
+    // .transition()
+    // .duration(300)
+    .remove();
 
   let canvasObj;
   for (let ii in regions) {
@@ -244,13 +257,16 @@ let addCanvas = function (canvasId) {
 }
 
 let showCanvas = function (canvasId, duration = 100) {
-  let canvases = propGraphParams['canvases'],
-      canvas = canvases[canvasId];
+  return new Promise( function (resolve, reject) {
+    let canvases = propGraphParams['canvases'],
+        canvas = canvases[canvasId];
 
-  d3.select(canvas)
-    .transition()
-    .duration(duration)
-    .style('opacity', '1');
+    d3.select(canvas)
+      .transition()
+      .duration(duration)
+      .style('opacity', '1')
+      .end(resolve);
+  });
 }
 
 let hideCanvas = function (canvasId) {
@@ -278,37 +294,59 @@ let changeOpacity = function (color, opacity) {
 }
 
 let drawRegion = function (regionId, sparkle = false) {
-  let canvas = propGraphParams['canvases'][regionId],
-      region = propGraphParams['regions'][regionId],
-      squareOuterLength = propGraphParams['squareOuterLength'],
-      squares = region['squares'],
-      numSquares = region['numSquares'],
-      ctx = canvas.getContext('2d'),
-      squareSpacing = Math.floor(squareOuterLength / 3),
-      squareInnerLength = squareOuterLength - squareSpacing;
+  return new Promise( function (resolve, reject) {
+    console.log(regionId);
+    let canvas = propGraphParams['canvases'][regionId],
+        region = propGraphParams['regions'][regionId],
+        squareOuterLength = propGraphParams['squareOuterLength'],
+        squares = region['squares'],
+        numSquares = region['numSquares'],
+        ctx = canvas.getContext('2d'),
+        sparkleTime,
+        squareInnerLength,
+        squareSpacing;
+        console.log(squareOuterLength);
+        if (squareOuterLength < 2)
+          squareSpacing = 0.5;
+        else
+          squareSpacing = Math.floor(squareOuterLength / 9);
 
-  if (sparkle)
-    squares = shuffleArray(squares);
-
-  ctx.fillStyle = region['color'];
-  for (let i = 0; i < numSquares; ++i) {
-    const point = squares[i];
+        squareInnerLength = squareOuterLength - squareSpacing;
 
     if (sparkle) {
-      setTimeout(function() {
+      squares = shuffleArray(squares);
+      sparkleTime = 800 / squares.length;
+    }
+
+    ctx.fillStyle = region['color'];
+    for (let i = 0; i < numSquares; ++i) {
+      const point = squares[i];
+
+      if (sparkle) {
+        setTimeout(function() {
+          ctx.fillRect(point.x,
+                       point.y,
+                       squareInnerLength,
+                       squareInnerLength);
+        }, sparkleTime * i);
+      }
+      else {
         ctx.fillRect(point.x,
                      point.y,
                      squareInnerLength,
                      squareInnerLength);
-      }, 0.01 * i);
+      }
     }
-    else {
-      ctx.fillRect(point.x,
-                   point.y,
-                   squareInnerLength,
-                   squareInnerLength);
+
+    if (sparkle) {
+      setTimeout(function() {
+        resolve();
+      }, sparkleTime * (numSquares - 1));
     }
-  }
+    else
+      resolve();
+
+  });
 }
 
 let drawRegionByColumn = function (regionId) {
@@ -318,9 +356,17 @@ let drawRegionByColumn = function (regionId) {
       squares = region['squares'],
       numSquares = region['numSquares'],
       ctx = canvas.getContext('2d'),
-      squareSpacing = Math.floor(squareOuterLength / 3),
-      squareInnerLength = squareOuterLength - squareSpacing,
+      squareSpacing,
+      // = Math.floor(squareOuterLength / 3),
+      squareInnerLength,
+      // = squareOuterLength - squareSpacing,
       columnLength = propGraphParams['columnLength'];
+      if (squareOuterLength < 2)
+        squareSpacing = 0.5;
+      else
+        squareSpacing = Math.floor(squareOuterLength / 9);
+
+      squareInnerLength = squareOuterLength - squareSpacing;
 
   ctx.fillStyle = region['color'];
 
