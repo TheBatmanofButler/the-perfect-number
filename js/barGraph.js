@@ -173,6 +173,11 @@ let initBarGraph = function () {
     .attr('class', 'y-axis axis')
     .style('opacity', 0);
 
+  d3.select('.bar-graph-elements')
+    .append('line')
+    .attr('class', 'percent-line')
+    .style('opacity', 0);
+
   let y = barGraphParams['y'],
       x = barGraphParams['x'];
 
@@ -436,45 +441,9 @@ let closeMapView = function () {
   addBarGraphClicks();
 }
 
-
-let addPercentLine = function (y, percent, duration, barGraphWidth) {
-  d3.select('.bar-graph-elements')
-    .append('line')
-    .attr('class', function () {
-      return 'percent-line percent' + percent;
-    })
-}
-
-let slidePercentLine = function (percent, duration) {
-  return new Promise( function (resolve, reject) {
-    let percentClass = '.percent' + percent;
-    let y = barGraphParams['y'];
-    let barGraphWidth = barGraphParams['barGraphWidth'];
-    if (d3.select(percentClass).empty()) {
-      addPercentLine(y, percent, duration, barGraphWidth);
-
-      d3.select('.percent' + percent)
-        .attr('x1', 0)
-        .attr('x2', 0)
-        .attr('y1', y(percent))
-        .attr('y2', y(percent))
-        .transition()
-        .duration(duration)
-        .attr('x2', barGraphWidth)
-        .end(resolve);
-    }
-    else {
-      resolve();
-    }
-
-  });
-}
-
 let fadeOutPercentLine = function (percent, duration) {
   return new Promise( function (resolve, reject) {
-    let percentClass = '.percent' + percent;
-
-    d3.select(percentClass)
+    d3.select('.percent-line')
       .transition()
       .duration(duration)
       .style('opacity', 0)
@@ -614,13 +583,15 @@ let fadeStart = function (duration, data, yStart = -15, yEnd = 50, tickValues = 
 
           updateBarGraphParam('data', data),
           updateBarGraphParam('yParam', 'rate'),
-          updatePercentLine('35', 1000),
 
           updateBarGraphParam('tickValues', tickValues),
           updateYAxis(1000),
           updateXAxis(1000),
           updateBars(0, 1000, 1000)
         ]);
+      })
+      .then( function () {
+        return updatePercentLine(1000);
       })
       .then( function () {
         if (shouldFade) {

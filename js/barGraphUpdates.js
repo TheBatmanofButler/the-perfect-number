@@ -29,20 +29,35 @@ let updateYScale = function (domainStart, domainEnd) {
                           .range([barGraphHeight, 0]);
 }
 
-let updatePercentLine = function (percent, duration) {
+let updatePercentLine = function (duration) {
   return new Promise( function (resolve, reject) {
     let barGraphWidth = barGraphParams['barGraphWidth'],
-        y = barGraphParams['y'];
+        y = barGraphParams['y'],
+        percentLine = d3.select('.percent-line');
 
-    d3.selectAll('.percent-line')
-        .transition()
-        .duration(duration)
-        .ease(d3.easeLinear)
+    if (percentLine.style('opacity') == 0) {
+      percentLine
+        .style('opacity', 1)
         .attr('x1', 0)
-        .attr('x2', barGraphWidth)
+        .attr('x2', 0)
         .attr('y1', y(35))
         .attr('y2', y(35))
+        .transition()
+        .duration(duration)
+        .attr('x2', barGraphWidth)
         .end(resolve);
+    }
+    else {
+      percentLine
+          .transition()
+          .duration(duration)
+          .ease(d3.easeLinear)
+          .attr('x1', 0)
+          .attr('x2', barGraphWidth)
+          .attr('y1', y(35))
+          .attr('y2', y(35))
+          .end(resolve);
+    }
   });
 }
 

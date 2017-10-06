@@ -13,10 +13,7 @@ let slide2 = function (data) {
   // let barGraph = d3.select('.bar-graph-elements');
   slideInProgress = true;
 
-  slidePercentLine('35', 1000)
-  .then( function () {
-    return fadeStart(1000, data);
-  })
+  fadeStart(1000, data)
   .then( function () {
     return highlightBarsSplit('rate', 35, 'red', 'green', 1000);
   })
