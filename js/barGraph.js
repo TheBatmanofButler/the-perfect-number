@@ -219,9 +219,15 @@ let createOpeningSlide = function () {
 
   let quote1 = 'America is one of the highest-taxed nations in the world.';
   let quote2 = 'America is one of the highest-taxed nations in the world.|';
-
+  let width = 1415,
+      height = 407;
+  
   let quoteChars = quote1.split('').concat(quote2.split('')),
-      openingScreen = d3.select('.opening-screen');
+      openingScreen = d3.select('.opening-screen')
+                      .attr("min-width",width)
+                      .attr("min-height",height)
+                      .attr("preserveAspectRatio", "xMidYMid meet")
+                      .attr("viewBox", "0 0 140 300");
 
 
   let chars = openingScreen
@@ -241,7 +247,8 @@ let createOpeningSlide = function () {
 
   setTimeout(function () {
     let i = 0;
-    let totalWidth = 450;
+    let totalWidth1 = 20;
+    let totalWidth2 = 20;
     let barGraphWidth = barGraphParams['barGraphWidth'];
 
     d3.selectAll('.quote-text')
@@ -263,12 +270,28 @@ let createOpeningSlide = function () {
         else
           charWidth = this.getComputedTextLength();
 
-        let currentPosition = totalWidth;
-        totalWidth += charWidth;
+        // let currentPosition = totalWidth;
+        // totalWidth += charWidth;
+
+        let currentPosition;
+        if (i < 7) {
+          currentPosition = totalWidth1;
+          totalWidth1 += charWidth;
+        }
+        else {
+          currentPosition = totalWidth2;
+          totalWidth2 += charWidth;
+        }
 
         return currentPosition;
       })
-      .attr('y', 150);
+      .attr('y', function (d,i) {
+        console.log(i);
+        if (i < 7)
+          return 100;
+        else
+          return 150;
+      });
     // while(i < 10) {
     //   d3.select('#cursor')
     //     .transition()
@@ -289,7 +312,8 @@ let createOpeningSlide = function () {
         .append('text')
         .text('by Pedal')
         .attr('class', 'pedal')
-        .attr('x', barGraphWidth * 0.5)
+        // .attr('x', barGraphWidth * 0.5)
+        .attr('x', 20)
         .attr('y', 190)
         .style('opacity', 0)
         .transition()

@@ -3,6 +3,7 @@ html, body {
   margin: 0;
   font-family: 'Asap Condensed', sans-serif;
   color: #fff;
+  /*background-color: #000E28;*/
 }
 
 canvas {
@@ -234,6 +235,13 @@ canvas {
 
       .bar-graph {
         position: absolute;
+      }
+
+      .opening-screen {
+        max-width: 100%;
+        min-width: 1000px;
+        max-height: 100%;
+        min-height: 700px;
       }
 
       .intro-text {
