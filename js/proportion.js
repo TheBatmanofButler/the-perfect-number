@@ -16,6 +16,40 @@ let propGraphParams = {
   canvases: []
 }
 
+let createKeyBar = function () {
+  let textBox = d3.select('.dynamic-text');
+  d3.selectAll('.key').remove(); 
+  let keys = textBox
+                .selectAll('.key')
+                .data(propGraphParams['regions'], function(d) {
+                  console.log(d);
+                  return d;
+                })
+                .enter()
+                .append('g')
+                .attr('class', 'key');
+
+  keys
+    .append('svg')
+    .attr('class', 'key-rect')
+    .attr('width', 10)
+    .attr('height', 10)
+    .append('rect')
+    .attr('width', 10)
+    .attr('height', 10)
+    .attr('fill', function (d) {
+      return d['color'];
+    });
+
+  keys
+    .append('text')
+    .attr('class', 'key-text')
+    .text( function (d) {
+      return d['text'];
+    });
+
+
+}
 
 let getSquareOuterLengthHelper = function (p1, p2, numSquares) {
   let pxy = Math.ceil(Math.sqrt(numSquares * p2 / p1));

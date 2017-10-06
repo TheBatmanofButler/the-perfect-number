@@ -146,6 +146,22 @@ canvas {
       margin-right: 10px; 
     }
 
+    .key {
+      padding: 1%;
+      margin: 1%;
+      /*height: 5%;*/
+    }
+
+    .key-rect {
+      padding-left: 10px;
+      padding-right: 5px;
+    }
+
+    .key-text {
+      font-size: 1vw;
+    }
+
+
   .graph-viewers {
     display: flex;
     flex-direction: column;
