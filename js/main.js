@@ -17,7 +17,6 @@ $('.slide-explore').click( function (e) {
 
   // fadeOpeningScreen(1000);
   openMapView(allCompanyData);
-  createKeyBar();
 });
 
 $('.typeahead').bind('typeahead:select', function(ev, suggestion) {
@@ -28,7 +27,6 @@ $('.typeahead').bind('typeahead:select', function(ev, suggestion) {
     $('.company-bar-name').text('All companies');
     initPropGraph('All Companies');
     updatePropGraph();
-    createKeyBar();
   }
 
   else {
@@ -39,8 +37,7 @@ $('.typeahead').bind('typeahead:select', function(ev, suggestion) {
 
     loadInfo(companyInfo);
     initPropGraph(suggestion);
-    updatePropGraph(); 
-    createKeyBar();   
+    updatePropGraph();  
   }
 });
 

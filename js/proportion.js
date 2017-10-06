@@ -16,41 +16,6 @@ let propGraphParams = {
   canvases: []
 }
 
-let createKeyBar = function () {
-  let textBox = d3.select('.dynamic-text');
-  d3.selectAll('.key').remove(); 
-  let keys = textBox
-                .selectAll('.key')
-                .data(propGraphParams['regions'], function(d) {
-                  console.log(d);
-                  return d;
-                })
-                .enter()
-                .append('g')
-                .attr('class', 'key');
-
-  keys
-    .append('svg')
-    .attr('class', 'key-rect')
-    .attr('width', 10)
-    .attr('height', 10)
-    .append('rect')
-    .attr('width', 10)
-    .attr('height', 10)
-    .attr('fill', function (d) {
-      return d['color'];
-    });
-
-  keys
-    .append('text')
-    .attr('class', 'key-text')
-    .text( function (d) {
-      return d['text'];
-    });
-
-
-}
-
 let getSquareOuterLengthHelper = function (p1, p2, numSquares) {
   let pxy = Math.ceil(Math.sqrt(numSquares * p2 / p1));
 
@@ -180,11 +145,14 @@ let addMouseEvent = function (canvasObj) {
           squareId = column * columnLength + row;
       if (squareId < numSquares)
         showProperRegion(squareId);
-      else
+      else {
         showAllRegions();
+        changeDynamicText(0,'');
+      }
     })
     .on('mouseout', function () {
       showAllRegions();
+      changeDynamicText(0,'');
     });
 }
 
@@ -206,9 +174,17 @@ let getHoverMap = function () {
   }
 }
 
+let showHoverText = function (regionId) {
+  let region = propGraphParams['regions'][regionId];
+  let text = '<b>' + region['text'] + '</b>' + ', ' + region['money'];
+  changeDynamicText(0,text);
+}
+
 let showProperRegion = function (squareId) {
   let hoverMap = propGraphParams['hoverMap'],
       regionId = hoverMap[squareId];
+
+  showHoverText(regionId);
 
   if (regionId == 0)
     showOuterMainRegion();

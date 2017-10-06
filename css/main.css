@@ -184,7 +184,8 @@ canvas {
 
       .info {
         background: #4C2A85;
-        border-left: 5px solid white;
+        /*border-left: 5px solid white;*/
+        margin-right: 10px;
         padding: 10px 30px 10px 30px;
         width: 300px;
         overflow-y: scroll; 
