@@ -10,7 +10,7 @@ let loadInfo = function (infoBoxData) {
   $('.company-name').text(infoBoxData['companyName']);
   $('.industry').text(infoBoxData['industry']);
   $('.rate').text('Tax Rate: ' + infoBoxData['rate'] + '%');
-  $('.tax-break').text('Tax Break: $' + infoBoxData['taxBreak'].toFixed(2) + ' million');
+  $('.tax-break').text('Tax Break: $' + infoBoxData['taxBreak']);
   if(infoBoxData['yearsNoTax'] > 0) {
     $('.years-no-tax').show()
     if(infoBoxData['yearsNoTax'] == 1) {

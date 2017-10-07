@@ -116,7 +116,10 @@ let createCanvases = function () {
   let regions = propGraphParams['regions'],
       propWidth = propGraphParams['propWidth'],
       propHeight = propGraphParams['propHeight'],
-      canvases = propGraphParams['canvases'] = [];
+      canvases = propGraphParams['canvases'] = [],
+      unit = propGraphParams['regions'][0]['unit'];
+      
+  changeDynamicText(0, 'Each square is the equivalent of $' + unit);
 
   d3.selectAll('canvas')
     // .transition()
@@ -160,12 +163,12 @@ let addMouseEvent = function (canvasObj) {
         showProperRegion(squareId);
       else {
         showAllRegions();
-        changeDynamicText(0,'');
+        // changeDynamicText(0,'');
       }
     })
     .on('mouseout', function () {
       showAllRegions();
-      changeDynamicText(0,'');
+      // changeDynamicText(0,'');
     });
 }
 
@@ -210,7 +213,9 @@ let showProperRegion = function (squareId) {
 }
 
 let showAllRegions = function () {
-  let canvases = propGraphParams['canvases'];
+  let canvases = propGraphParams['canvases'],
+      unit = propGraphParams['regions'][0]['unit'];
+  changeDynamicText(0, 'Each square is the equivalent of $' + unit);
 
   for (let ii = 0; ii < canvases.length; ii++)
     showCanvas(ii);
@@ -302,16 +307,9 @@ let drawRegion = function (regionId, sparkle = false) {
         squares = region['squares'],
         numSquares = region['numSquares'],
         ctx = canvas.getContext('2d'),
-        sparkleTime,
-        squareInnerLength,
-        squareSpacing;
-        console.log(squareOuterLength);
-        if (squareOuterLength < 2)
-          squareSpacing = 0.5;
-        else
-          squareSpacing = Math.floor(squareOuterLength / 9);
-
-        squareInnerLength = squareOuterLength - squareSpacing;
+        squareSpacing = Math.floor(squareOuterLength / 9),
+        squareInnerLength = squareOuterLength - squareSpacing,
+        sparkleTime;
 
     if (sparkle) {
       squares = shuffleArray(squares);
@@ -356,17 +354,9 @@ let drawRegionByColumn = function (regionId) {
       squares = region['squares'],
       numSquares = region['numSquares'],
       ctx = canvas.getContext('2d'),
-      squareSpacing,
-      // = Math.floor(squareOuterLength / 3),
-      squareInnerLength,
-      // = squareOuterLength - squareSpacing,
+      squareSpacing = Math.floor(squareOuterLength / 3),
+      squareInnerLength = squareOuterLength - squareSpacing,
       columnLength = propGraphParams['columnLength'];
-      if (squareOuterLength < 2)
-        squareSpacing = 0.5;
-      else
-        squareSpacing = Math.floor(squareOuterLength / 9);
-
-      squareInnerLength = squareOuterLength - squareSpacing;
 
   ctx.fillStyle = region['color'];
 

@@ -286,7 +286,7 @@ let createOpeningSlide = function () {
         return currentPosition;
       })
       .attr('y', function (d,i) {
-        console.log(i);
+
         if (i < 7)
           return 100;
         else

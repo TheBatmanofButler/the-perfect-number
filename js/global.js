@@ -35,24 +35,27 @@ let createProportionAreas = function (comparisons, actualProfit, actualTaxBreak,
       unit;
 
   if (convertConst == 1e3)
-    unit = ' billion';
+    unit = '1 billion';
+  else if (convertConst == 1e2)
+    unit = '100 million';
   else if (convertConst == 10)
-    unit = ' ten-million';
+    unit = '10 million';
   else
-    unit = ' million';
+    unit = '1 million';
 
   let proportionAreas = [
     {
       'text': 'Company Tax if rate is 35%',
       'numSquares': num35PercentSquares,
       'color': 'rgba(128, 0, 0, 0.8)',
-      'money': getMoneyString(money35, unit)
+      'money': getMoneyString(money35, convertConst),
+      'unit': unit
     },
     {
       'text': 'Company Tax Paid',
       'numSquares': numTaxPaidSquares,
       'color': 'rgba(255, 0, 0, 0.8)',
-      'money': getMoneyString(taxPaid, unit)
+      'money': getMoneyString(taxPaid, convertConst)
     }
   ]
 
@@ -61,7 +64,7 @@ let createProportionAreas = function (comparisons, actualProfit, actualTaxBreak,
       'text': 'Tax Break',
       'numSquares': numTaxBreakSquares,
       'color': 'rgba(48, 0, 0, 1)',
-      'money': getMoneyString(taxBreak, unit)
+      'money': getMoneyString(taxBreak, convertConst)
     });
   }
 
@@ -78,7 +81,7 @@ let createProportionAreas = function (comparisons, actualProfit, actualTaxBreak,
         'text': comparison['text'],
         'numSquares': numComparisonSquares,
         'color': comparison['color'],
-        'money': getMoneyString(comparisonMoney, unit)
+        'money': getMoneyString(comparisonMoney, convertConst)
       });
 
       filled += numComparisonSquares;
@@ -88,7 +91,19 @@ let createProportionAreas = function (comparisons, actualProfit, actualTaxBreak,
   return proportionAreas;
 }
 
-let getMoneyString = function (money, unit) {
+let getMoneyString = function (money, convertConst) {
+  let unit,
+      ordMag;
+  money *= convertConst;
+  ordMag = Math.floor( Math.log10(money) );
+
+  if (ordMag > 2) {
+    unit = ' billion';
+    money /= 1e3
+  }
+  else
+    unit = ' million';
+
   return String(money.toFixed(2)) + unit;
 }
 
@@ -162,7 +177,7 @@ d3.queue()
       'industry':           d['industry'],
       'yearsNoTax':         d['years_no_tax'],
       'note':               d['note'],
-      'taxBreak':           d['tax_break'],
+      'taxBreak':           getMoneyString(d['tax_break'], 1),
       'stockOptions':       d['stock_options'],
       'researchExperiment': d['research_experiment'],
       'dpad':               d['dpad'],
@@ -223,9 +238,10 @@ d3.queue()
       companiesCompetitors[competitor].push(d);
     }
 
-    let convertConst = 1;
-    // if (d['tax_break'] > 5000)
-      // convertConst = 10;
+    let convertConst = Math.pow( 10, ( Math.floor( Math.log10(d['profit']) ) - 3 ) );
+
+    if (convertConst < 1)
+      convertConst = 1;
     comparisonData[d['company_name']] = createProportionAreas(comparisons,
                                                                   d['profit'],
                                                                   d['tax_break'],
@@ -243,7 +259,6 @@ d3.queue()
   // let totalRate = (totalProfits - totalTaxBreaks) / totalProfits;
 
   comparisonData['All Companies'] = createProportionAreas(comparisons, totalProfits, totalTaxBreaks, 1e3);
-
   // infoBoxData[slugify('All Companies')] = {
   //   'companyName':        'All Companies',
   //   'profit':             totalProfits,
