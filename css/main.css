@@ -184,6 +184,7 @@ canvas {
       }
 
       .info {
+        opacity: 0;
         background: #4C2A85;
         /*border-left: 5px solid white;*/
         margin-right: 10px;

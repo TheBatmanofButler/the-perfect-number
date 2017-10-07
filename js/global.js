@@ -254,25 +254,23 @@ d3.queue()
     }
   });
 
-  // console.log(totalTaxBreaks);
-  // console.log(totalProfits);
-  // let totalRate = (totalProfits - totalTaxBreaks) / totalProfits;
+  let totalRate = ((totalProfits * 0.35 - totalTaxBreaks) / totalProfits * 100).toFixed(2);
 
   comparisonData['All Companies'] = createProportionAreas(comparisons, totalProfits, totalTaxBreaks, 1e3);
-  // infoBoxData[slugify('All Companies')] = {
-  //   'companyName':        'All Companies',
-  //   'profit':             totalProfits,
-  //   'rate':               totalRate,
-  //   'industry':           '',
-  //   'yearsNoTax':         '',
-  //   'note':               '',
-  //   'taxBreak':           totalTaxBreaks,
-  //   'stockOptions':       false,
-  //   'researchExperiment': false,
-  //   'dpad':               false,
-  //   'accDepreciation':    false,
-  //   'deferredTaxes':      false
-  // };
+  infoBoxData[slugify('All Companies')] = {
+    'companyName':        'All Companies',
+    'profit':             totalProfits,
+    'rate':               totalRate,
+    'industry':           '',
+    'yearsNoTax':         '',
+    'note':               '',
+    'taxBreak':           getMoneyString(totalTaxBreaks, 1),
+    'stockOptions':       "True",
+    'researchExperiment': "True",
+    'dpad':               "True",
+    'accDepreciation':    "True",
+    'deferredTaxes':      "True"
+  };
 
   populateDropdown(companyNames);
   createSlides(companies,

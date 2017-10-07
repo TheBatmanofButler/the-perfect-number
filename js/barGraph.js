@@ -405,31 +405,51 @@ let resizeBarGraph = function () {
 
 let openMapView = function (data, company='All Companies') {
 
-  $('.proportion-graph-viewer').css('display', 'flex');
-  $('.proportion-graph-viewer').animate({'height': '45vh'}, 1000, 'linear', function () {
-
-    if (company != 'All Companies') {
-      let slugifiedCompanyName = slugify(company),
-          companyInfo = infoBoxData[slugifiedCompanyName];
-      loadInfo(companyInfo);
-    }
-
-    initPropGraph(company);
-    updatePropGraph();
-  });
-  
   let mapModeHeight = $('.visualization').outerHeight() 
                                        - $('.top').outerHeight() 
                                        - $('.dynamic-text').outerHeight()
                                        - $(window).outerHeight() * 0.45;
 
+  let companyData;
+  for (let ii in allCompanyData) {
+    companyData = allCompanyData[ii];
+    if (companyData['company_name'] == company) break;
+    else companyData = null;
+  }
+
   removeBarGraphClicks();
-  return new Promise( function (resolve, reject) {
-    highlightAllBars('#000', 0)
+
+  let chain = Promise.resolve();
+
+  if (currentSlide == 1) {
+    chain = chain.then( function () {
+      return fadeStart(500, allCompanyData);
+    });
+  }
+
+  return chain.then( function () {
+      $('.proportion-graph-viewer').css('display', 'flex');
+      $('.proportion-graph-viewer').animate({'height': '45vh'}, 1000, 'linear', function () {
+
+        let slugifiedCompanyName = slugify(company),
+            companyInfo = infoBoxData[slugifiedCompanyName];
+        loadInfo(companyInfo);
+
+        initPropGraph(company);
+        return updatePropGraph();
+      });  
+    })
+    .then( function () {
+      return highlightAllBars('#000', 0);
+    })
+    .then( function () {
+      if (companyData)
+        return highlightSomeBars([companyData], 'red', 500);
+    })
     .then( function () {
       slideInProgress = false;
 
-      Promise.all([
+      return Promise.all([
         $('.bar-graph-elements').animate({'opacity': 1}),
         $('.opening-screen').animate({'opacity': 0}),
         updateBarGraphParam('marginBottom', 40),
@@ -444,16 +464,14 @@ let openMapView = function (data, company='All Companies') {
 
         updateBarGraphParam('data', data),
         updateBarGraphParam('yParam', 'rate'),
-        updatePercentLine('35', 1000),
+        updatePercentLine(1000),
 
-        updateBarGraphParam('tickValues', [-15, 35, 50]),
+        updateBarGraphParam('tickValues', [0, 35]),
         updateYAxis(1000),
         updateXAxis(1000),
-        updateBars(0, 0, 1000)
+        updateBars(0, 1000, 1000)
       ])
-    })
-    .then(resolve);
-  });
+    });
 
 }
 
@@ -591,7 +609,9 @@ let fadeStart = function (duration, data, yStart = -15, yEnd = 50, tickValues = 
       })
       .then( function () {
         let mapModeHeight = $('.graph-viewers').height();
+        // console.log(changeDynamicText(1000,''));
         return Promise.all([
+          changeDynamicText(1000,''),
           closeMapView(),
           updateBarGraphParam('marginBottom', 100),
           updateBarGraphDims(mapModeHeight),
@@ -609,11 +629,9 @@ let fadeStart = function (duration, data, yStart = -15, yEnd = 50, tickValues = 
           updateBarGraphParam('tickValues', tickValues),
           updateYAxis(1000),
           updateXAxis(1000),
+          updatePercentLine(1000),
           updateBars(0, 1000, 1000)
         ]);
-      })
-      .then( function () {
-        return updatePercentLine(1000);
       })
       .then( function () {
         if (shouldFade) {

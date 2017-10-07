@@ -7,6 +7,7 @@
  */
 
 let loadInfo = function (infoBoxData) {
+  $('.info').animate({'opacity': 1}, 1000);
   $('.company-name').text(infoBoxData['companyName']);
   $('.industry').text(infoBoxData['industry']);
   $('.rate').text('Tax Rate: ' + infoBoxData['rate'] + '%');
@@ -26,10 +27,10 @@ let loadInfo = function (infoBoxData) {
   let taxRebates = ['deferredTaxes','accDepreciation','dpad','researchExperiment','stockOptions'];
   for (let i in taxRebates) {
     if (infoBoxData[taxRebates[i]] == 'True') {
-      $('.'+taxRebates[i]).show()
+      $('.' + taxRebates[i]).show()
     }
     else {
-      $('.'+taxRebates[i]).hide()
+      $('.' + taxRebates[i]).hide()
     }
   };
   $('.note').text(infoBoxData['note']);
@@ -37,11 +38,27 @@ let loadInfo = function (infoBoxData) {
 
 let changeDynamicText = function (duration, newText, imgSrc) {
 	return new Promise( function (resolve, reject) {
-		$('.dynamic-text').fadeOut(duration, function(){
-    		$(this).html(newText).fadeIn(duration);
-    		if (imgSrc)
-    			$(this).prepend('<img src=' + imgSrc + ' class="dynamic-text-img"/>').fadeIn(duration);
-		}).end(resolve)
+  		$('.dynamic-text').animate({'opacity': 0}, duration)
+        .promise()
+        .then( function () {
+          let p1,
+              p2;
+
+          p1 = $(this)
+                .html(newText)
+                .animate({'opacity': 1}, duration)
+                .promise();
+      		if (imgSrc)
+      			p2 = $(this)
+                    .prepend('<img src=' + imgSrc + ' class="dynamic-text-img"/>')
+                    .animate({'opacity': 1}, duration)
+                    .promise();
+          else
+            p2 = $.when();
+
+          return $.when(p1, p2)
+    		})
+        .then(resolve)
   	});
 };
 

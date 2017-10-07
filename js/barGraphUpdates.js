@@ -165,12 +165,7 @@ let updateBars = function (exitTime, enterTime, updateTime) {
                         .on('click', function (d) {
                           if (inMapMode) {
                             let companyName = d['company_name'];
-                            let slugifyCompanyName = slugify(companyName);
-                            let companyInfo = infoBoxData[slugifyCompanyName];
-
-                            loadInfo(companyInfo);
-                            initPropGraph(companyName);
-                            updatePropGraph();
+                            openMapView(allCompanyData, companyName);
                           }
                         })
                         .call(updateBarSize)

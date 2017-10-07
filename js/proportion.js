@@ -68,11 +68,13 @@ let getGridSquares = function (numSquares, squareOuterLength, columnLength) {
 
 let updatePropGraph = function (sparkle = true) {
 
-  updatePropGraphParams();
-  setAllRegionSquares();
-  getHoverMap();
-  createCanvases();
-  drawAllCanvases(sparkle);
+  return Promise.all([
+    updatePropGraphParams(),
+    setAllRegionSquares(),
+    getHoverMap(),
+    createCanvases(),
+    drawAllCanvases(sparkle)
+  ]);
 
 }
 
@@ -87,13 +89,17 @@ let drawAllCanvases = function (sparkle) {
       chain = chain.then( function () {
         return Promise.all([
           showCanvas(regionId, 1000),
-          drawRegion(regionId)
+          drawRegion(regionId),
+          showHoverText(regionId)
         ])
       });
     }
     else {
       chain = chain.then( function () {
-                return showCanvas(regionId, 1000);
+                return Promise.all([
+                  showCanvas(regionId, 1000),
+                  showHoverText(regionId)
+                ]);
               })
               .then( function () {
                 return drawRegion(regionId, sparkle)
@@ -101,7 +107,7 @@ let drawAllCanvases = function (sparkle) {
     }
   }
 
-  console.log(chain);
+  return chain;
 }
 
 let shuffleArray = function(a) {
@@ -118,7 +124,7 @@ let createCanvases = function () {
       propHeight = propGraphParams['propHeight'],
       canvases = propGraphParams['canvases'] = [],
       unit = propGraphParams['regions'][0]['unit'];
-      
+
   changeDynamicText(0, 'Each square is the equivalent of $' + unit);
 
   d3.selectAll('canvas')
@@ -193,7 +199,11 @@ let getHoverMap = function () {
 let showHoverText = function (regionId) {
   let region = propGraphParams['regions'][regionId];
   let text = '<b>' + region['text'] + '</b>' + ', ' + region['money'];
-  changeDynamicText(0,text);
+
+  if ($('.dynamic-text').html() != text)
+    return changeDynamicText(0, text);
+  else
+    return Promise.resolve();
 }
 
 let showProperRegion = function (squareId) {

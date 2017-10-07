@@ -66,6 +66,7 @@ let slide5 = function (data, companiesRebates) {
 
     for (let rebate in companiesRebates) {
       chain = chain.then( function () {
+                console.log(companiesRebates[rebate]);
                 return highlightSomeBars(companiesRebates[rebate], 'red', 1000);
               })
 
