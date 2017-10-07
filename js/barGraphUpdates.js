@@ -2,18 +2,19 @@ let updateBarGraphText = function (text, duration) {
   let barGraphWidth = barGraphParams['barGraphWidth'],
       barGraphText = d3.select('.bar-graph-text');
 
-  barGraphText
-    .transition()
-    .duration(duration)
-    .ease(d3.easeLinear)
-    .attr('dx', function () {
-      return barGraphWidth - this.getComputedTextLength();
-    });
-
-  if (text) {
+  return new Promise( function (resolve, reject) {
     barGraphText
-      .text(text);    
-  }
+      .transition()
+      .duration(duration)
+      .ease(d3.easeLinear)
+      .attr('x', barGraphWidth / 2)
+      .text( function () {
+        if (text) return text;
+      })
+      .style('opacity', 1)
+      .end(resolve);
+
+  });
 }
 
 let updateXScale = function () {

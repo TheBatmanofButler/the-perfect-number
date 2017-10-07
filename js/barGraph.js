@@ -184,7 +184,7 @@ let initBarGraph = function () {
   barGraph
     .append('text')
     .attr('class', 'company-label')
-    .attr('dx', 5)
+    .attr('x', 5)
     .attr('y', y(-7))
     .style('font-size', '50px');
 
@@ -194,8 +194,9 @@ let initBarGraph = function () {
   barGraph
     .append('text')
     .attr('class', 'bar-graph-text')
+    .attr('x', barGraphWidth / 2)
     .attr('y', y(barGraphTextY))
-    .style('font-size', '50px');
+    .style('font-size', '30px');
 
   barGraph
     .append('g')
@@ -417,15 +418,15 @@ let openMapView = function (data, company='All Companies') {
     else companyData = null;
   }
 
-  removeBarGraphClicks();
-
   let chain = Promise.resolve();
 
-  if (currentSlide == 1) {
+  if (currentSlide == 1 && !inMapMode) {
     chain = chain.then( function () {
       return fadeStart(500, allCompanyData);
     });
   }
+
+  removeBarGraphClicks();
 
   return chain.then( function () {
       $('.proportion-graph-viewer').css('display', 'flex');
@@ -541,6 +542,7 @@ let highlightBars = function (bars, color, duration) {
     bars
       .transition()
       .duration(duration)
+      .ease(d3.easeLinear)
       .style('fill', color)
       .end(resolve);
   });

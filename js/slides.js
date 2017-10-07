@@ -30,8 +30,18 @@ let slide3 = function (data, companiesYearsNoTax) {
   .then(function () {
     let chain = Promise.resolve();
     for (let ii = Object.keys(companiesYearsNoTax).length; ii > 0; ii--) {
+
+      let barGraphText;
+      if (ii > 1)
+        barGraphText = 'At least ' + ii + ' years of no federal tax';
+      else
+        barGraphText = 'At least ' + ii + ' year of no federal tax';
+
       chain = chain.then(function () {
-                return highlightSomeBars(companiesYearsNoTax[ii], 'red', 1000);
+                return Promise.all([
+                  updateBarGraphText(barGraphText, 1500),
+                  highlightSomeBars(companiesYearsNoTax[ii], 'red', 500)
+                ]);
               });
     }
     return chain;

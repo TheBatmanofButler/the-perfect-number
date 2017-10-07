@@ -107,6 +107,11 @@ let drawAllCanvases = function (sparkle) {
     }
   }
 
+  chain = chain.then( function () {
+    let unit = propGraphParams['regions'][0]['unit'];
+    return changeDynamicText(0, 'Each square is the equivalent of $' + unit);
+  })
+
   return chain;
 }
 
@@ -156,7 +161,6 @@ let addMouseEvent = function (canvasObj) {
   let hoverMap = propGraphParams['hoverMap'],
       regions = propGraphParams['regions'],
       numSquares = propGraphParams['numSquares'];
-  console.log(regions);
 
   canvasObj
     .on('mousemove', function() {
@@ -169,12 +173,10 @@ let addMouseEvent = function (canvasObj) {
         showProperRegion(squareId);
       else {
         showAllRegions();
-        // changeDynamicText(0,'');
       }
     })
     .on('mouseout', function () {
       showAllRegions();
-      // changeDynamicText(0,'');
     });
 }
 
@@ -310,7 +312,6 @@ let changeOpacity = function (color, opacity) {
 
 let drawRegion = function (regionId, sparkle = false) {
   return new Promise( function (resolve, reject) {
-    console.log(regionId);
     let canvas = propGraphParams['canvases'][regionId],
         region = propGraphParams['regions'][regionId],
         squareOuterLength = propGraphParams['squareOuterLength'],
