@@ -104,7 +104,7 @@ let slide6 = function (data, companiesIPS, companiesTop3EmpChanges, companiesLos
   fadeStart(500, data)
   .then( function () {
     return Promise.all([
-      fadeOutPercentLine('35', 1000),
+      fadeOutPercentLine(1000),
       updateBars(0, 1000, 1000)
     ]);
   })
@@ -200,7 +200,7 @@ let slide8 = function (data, companiesForeignDiff) {
   fadeStart(500, data)
   .then( function () {
     return Promise.all([
-      fadeOutPercentLine('35', 1000),
+      fadeOutPercentLine(1000),
       highlightSomeBars(companiesForeignDiff, 'red', 1000),
       updateBarGraphParam('data', companiesForeignDiff),
       updateBarGraphParam('yParam', 'us_foreign_diff'),

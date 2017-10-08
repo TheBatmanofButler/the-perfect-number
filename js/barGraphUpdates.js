@@ -36,7 +36,7 @@ let updatePercentLine = function (duration) {
         y = barGraphParams['y'],
         percentLine = d3.select('.percent-line');
 
-    if (percentLine.style('opacity') == 0) {
+    if (percentLine.style('opacity') == 0 && !inMapMode) {
       percentLine
         .style('opacity', 1)
         .attr('x1', 0)
@@ -62,7 +62,7 @@ let updatePercentLine = function (duration) {
   });
 }
 
-let updateXAxis = function (duration) {
+let updateXAxis = function (duration, hide) {
   return new Promise( function (resolve, reject) {
     let data = barGraphParams['data'],
         x = barGraphParams['x'],
@@ -84,13 +84,15 @@ let updateXAxis = function (duration) {
       .duration(duration)
       .ease(d3.easeLinear)
       .attr('transform', 'translate(0,' + y(0) + ')')
-      .style('opacity', 1)
+      .style('opacity', function () {
+        return hide ? 0 : 1;
+      })
       .call(xAxis)
       .end(resolve);
     });
 }
 
-let updateYAxis = function (duration) {
+let updateYAxis = function (duration, hide) {
   return new Promise( function (resolve, reject) {
     let y = barGraphParams['y'],
         tickValues = barGraphParams['tickValues'];
@@ -108,7 +110,9 @@ let updateYAxis = function (duration) {
       .duration(duration)
       .ease(d3.easeLinear)
       .call(yAxis)
-      .style('opacity', 1)
+      .style('opacity', function () {
+        return hide ? 0 : 1;
+      })
       .end(resolve);
   });
 }

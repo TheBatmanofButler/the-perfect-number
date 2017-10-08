@@ -450,20 +450,15 @@ let openMapView = function (data, company) {
       });  
     })
     .then( function () {
-      return highlightAllBars('#000', 0);
+      if (!inMapMode)
+        return highlightAllBars('#000', 0);
     })
     .then( function () {
       slideInProgress = false;
-
-      let chain = Promise.resolve();
-
-      if (companyData) {
-        chain.then( function () {
+      if (companyData)
           return highlightSomeBars([companyData], 'red', 0);
-        });
-      }
-
-      chain.then( function () {
+    })
+    .then( function () {
         return Promise.all([
                 highlightSomeBars([companyData], 'red', 0),
                 $('.bar-graph-elements').animate({'opacity': 1}),
@@ -483,12 +478,22 @@ let openMapView = function (data, company) {
                 updatePercentLine(1000),
 
                 updateBarGraphParam('tickValues', [0, 35]),
-                updateYAxis(1000),
-                updateXAxis(1000),
+                updateYAxis(1000, true),
+                updateXAxis(1000, true),
                 updateBars(0, 1000, 1000)
               ]);
-      });
-    });
+      })
+    .then( function () {
+      if (!inMapMode) {
+        return Promise.all([
+          fadeOutPercentLine(1000),
+          highlightBarsSplit('rate', 35, 'red', 'green', 1000)        
+        ]);
+      }
+    })
+    .then( function () {
+      inMapMode = true;
+    })
 
 }
 
@@ -500,13 +505,12 @@ let closeMapView = function () {
 
 }
 
-let fadeOutPercentLine = function (percent, duration) {
+let fadeOutPercentLine = function (duration) {
   return new Promise( function (resolve, reject) {
     d3.select('.percent-line')
       .transition()
       .duration(duration)
       .style('opacity', 0)
-      .remove()
       .end(resolve);
   });
 }
@@ -535,6 +539,7 @@ let highlightBarsSplit = function (yParam, limit, colorLow, colorHigh, duration)
     d3.selectAll('.bar')
       .transition()
       .duration(duration)
+      .ease(d3.easeLinear)
       .style('fill', function (d) {
         if (d[yParam] > limit) {
           return colorHigh;

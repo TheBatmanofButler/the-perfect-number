@@ -2,6 +2,7 @@ html, body {
   padding: 0;
   margin: 0;
   color: #fff;
+  font-family: sans-serif;
   /*background-color: #000E28;*/
 }
 
@@ -223,7 +224,7 @@ canvas {
                     user-select: none; /* Non-prefixed version, currently
                                           supported by Chrome and Opera */
         }
-          .tax-rebate {
+          .toggle-label {
             cursor: pointer;
           }
             .description {
@@ -233,12 +234,17 @@ canvas {
           .tax-rebates > * {
             padding-bottom: 2px;
           }
+
           .how {
             font-size: 17px;
           }
+
         .note {
-          font-size: 15px;
+          font-size: 17px;
         }
+          .note>.description {
+            font-size: 15px;
+          }
 
     .bar-graph-viewer {
       display: flex;
