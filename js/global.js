@@ -22,7 +22,7 @@ var type = function (d) {
   return d;
 }
 
-let createProportionAreas = function (comparisons, actualProfit, actualTaxBreak, convertConst) {
+let createProportionAreas = function (comparisons, actualProfit, actualTaxBreak, convertConst, name) {
 
   let money35 = actualProfit * 0.35 / convertConst,
       num35PercentSquares = Math.floor(money35),
@@ -33,6 +33,9 @@ let createProportionAreas = function (comparisons, actualProfit, actualTaxBreak,
       taxPaid = money35 - taxBreak,
       numTaxPaidSquares = Math.floor(taxPaid),
       unit;
+
+  if (taxBreak <= 0)
+    console.log(taxBreak, taxPaid, name);
 
   if (convertConst == 1e3)
     unit = '1 billion';
@@ -50,21 +53,24 @@ let createProportionAreas = function (comparisons, actualProfit, actualTaxBreak,
       'color': 'rgba(128, 0, 0, 0.8)',
       'money': getMoneyString(money35, convertConst),
       'unit': unit
-    },
-    {
-      'text': 'Company Tax Paid',
-      'numSquares': numTaxPaidSquares,
-      'color': 'rgba(255, 0, 0, 0.8)',
-      'money': getMoneyString(taxPaid, convertConst)
     }
   ]
 
   if (taxPaid < 0) {
     proportionAreas.push({
-      'text': 'Tax Break',
+      'text': 'Company Tax Break',
       'numSquares': numTaxBreakSquares,
       'color': 'rgba(48, 0, 0, 1)',
-      'money': getMoneyString(taxBreak, convertConst)
+      'money': getMoneyString(taxBreak, convertConst),
+      'unit': unit
+    });
+  }
+  else {
+    proportionAreas.push({
+      'text': 'Company Tax Paid',
+      'numSquares': numTaxPaidSquares,
+      'color': 'rgba(255, 0, 0, 0.8)',
+      'money': getMoneyString(taxPaid, convertConst)
     });
   }
 
@@ -246,7 +252,7 @@ d3.queue()
     comparisonData[d['company_name']] = createProportionAreas(comparisons,
                                                                   d['profit'],
                                                                   d['tax_break'],
-                                                                  convertConst);
+                                                                  convertConst, d['company_name']);
 
     let taxBreak = d['tax_break'];
     if(taxBreak > 0) {

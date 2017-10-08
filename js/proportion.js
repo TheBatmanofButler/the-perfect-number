@@ -33,7 +33,7 @@ let getSquareOuterLength = function (width, height, numSquares) {
 }
 
 let initPropGraph = function (companyName) {
-
+    allRegionsDrawn = false;
     propGraphParams['regions'] = comparisonData[companyName].sort(function (a, b) {
       return b['numSquares'] - a['numSquares'];
     });
@@ -47,8 +47,6 @@ let updatePropGraphParams = function () {
       squareOuterLength = getSquareOuterLength(propWidth, propHeight, numSquares),
       columnLength = Math.floor(propHeight / squareOuterLength),
       squares = getGridSquares(numSquares, squareOuterLength, columnLength);
-
-  allRegionsDrawn = false;
 
   propGraphParams['propWidth'] = propWidth;
   propGraphParams['propHeight'] = propHeight;
@@ -68,44 +66,52 @@ let getGridSquares = function (numSquares, squareOuterLength, columnLength) {
   });
 }
 
-let updatePropGraph = function (sparkle = true) {
+let updatePropGraph = function (firstDraw = true) {
 
   return Promise.all([
     updatePropGraphParams(),
     setAllRegionSquares(),
     getHoverMap(),
     createCanvases(),
-    drawAllCanvases(sparkle)
+    drawAllCanvases(firstDraw)
   ]);
 
 }
 
-let drawAllCanvases = function (sparkle) {
+let drawAllCanvases = function (firstDraw) {
   let regions = propGraphParams['regions'];
   let chain = Promise.resolve();
 
   for (let regionId in regions) {
     addCanvas(regionId);
 
-    if (regionId == 0) {
-      chain = chain.then( function () {
-        return Promise.all([
-          showCanvas(regionId, 1000),
-          drawRegion(regionId),
-          showHoverText(regionId)
-        ])
-      });
+    if (firstDraw) {
+      if (regionId == 0) {
+        chain = chain.then( function () {
+          return Promise.all([
+            showCanvas(regionId, 1000),
+            drawRegion(regionId),
+            showHoverText(regionId)
+          ])
+        });
+      }
+      else {
+        chain = chain.then( function () {
+                  return Promise.all([
+                    showCanvas(regionId, 1000),
+                    showHoverText(regionId)
+                  ]);
+                })
+                .then( function () {
+                  console.log(regionId);
+                  return drawRegion(regionId, firstDraw)
+                });
+      }
     }
+
     else {
-      chain = chain.then( function () {
-                return Promise.all([
-                  showCanvas(regionId, 1000),
-                  showHoverText(regionId)
-                ]);
-              })
-              .then( function () {
-                return drawRegion(regionId, sparkle)
-              });
+      showCanvas(regionId, 0);
+      drawRegion(regionId);
     }
   }
 
@@ -208,6 +214,7 @@ let getHoverMap = function () {
 
 let showHoverText = function (regionId) {
   let region = propGraphParams['regions'][regionId];
+  console.log(propGraphParams['regions']);
   let text = '<b>' + region['text'] + '</b>' + ', ' + region['money'];
 
   if ($('.dynamic-text').html() != text)
@@ -318,8 +325,9 @@ let changeOpacity = function (color, opacity) {
   return color.replace(/[\d\.]+\)$/g, opacity+')');
 }
 
-let drawRegion = function (regionId, sparkle = false) {
+let drawRegion = function (regionId, firstDraw = false) {
   return new Promise( function (resolve, reject) {
+    console.log(propGraphParams['regions'], regionId)
     let canvas = propGraphParams['canvases'][regionId],
         region = propGraphParams['regions'][regionId],
         squareOuterLength = propGraphParams['squareOuterLength'],
@@ -330,7 +338,7 @@ let drawRegion = function (regionId, sparkle = false) {
         squareInnerLength = squareOuterLength - squareSpacing,
         sparkleTime;
 
-    if (sparkle) {
+    if (firstDraw) {
       squares = shuffleArray(squares);
       sparkleTime = 800 / squares.length;
     }
@@ -339,7 +347,7 @@ let drawRegion = function (regionId, sparkle = false) {
     for (let i = 0; i < numSquares; ++i) {
       const point = squares[i];
 
-      if (sparkle) {
+      if (firstDraw) {
         setTimeout(function() {
           ctx.fillRect(point.x,
                        point.y,
@@ -355,7 +363,7 @@ let drawRegion = function (regionId, sparkle = false) {
       }
     }
 
-    if (sparkle) {
+    if (firstDraw) {
       setTimeout(function() {
         resolve();
       }, sparkleTime * (numSquares - 1));
