@@ -225,8 +225,8 @@ let getWordX = function (arr, pos) {
 
 let createOpeningSlide = function () {
 
-  let quote1 = 'America is one of the highest-taxed nations in the world.';
-  let quote2 = 'America is one of the highest-taxed nations in the world.|';
+  let quote1 = 'We will reduce the corporate tax rate to no higher than 20 percent...';
+  let quote2 = '...This is a revolutionary change, and the biggest winners will be the everyday American workers|';
   let width = 1415,
       height = 407;
   
@@ -346,12 +346,12 @@ let updateQuoteText = function (duration, lineBreak) {
       text = d3.selectAll('.quote-text');
 
   text
-    .style('font-size', 0.04 * barGraphWidth)
+    .style('font-size', 30)
     .style('opacity', 0)
     .text( function (d, i) {
       if (d == '|')
         d3.select(this).attr('id','cursor');
-      if (i > -1 && i < 7 || i > 20 && i < 35)
+      if (i > -1 && i < 7 || i > 21 && i < 35)
         d3.select(this).attr('class','highlight');
       return d;
     })
@@ -365,10 +365,11 @@ let updateQuoteText = function (duration, lineBreak) {
       
       let charWidth;
       if (d == ' ')
-        charWidth = 0.01 * barGraphWidth;
+        charWidth = 0.02 * barGraphWidth;
       else
-        charWidth = this.getBBox().width;
-        // charWidth = this.getComputedTextLength();
+        charWidth = this.getComputedTextLength();
+
+      console.log(charWidth);
 
       let currentPosition;
       if (i < lineBreak) {
