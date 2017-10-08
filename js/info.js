@@ -39,7 +39,14 @@ let loadInfo = function (infoBoxData) {
       $('.' + taxRebates[rebate]).hide()
     }
   };
-  $('.note').text(infoBoxData['note']);
+  
+  $('.note>.description').text(infoBoxData['note']);
+  if (infoBoxData['note']) {
+    $('.note').show()
+  }
+  else {
+    $('.note').hide()
+  }
 }
 
 let changeDynamicText = function (duration, newText, imgSrc) {
