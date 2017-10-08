@@ -226,11 +226,16 @@ let getWordX = function (arr, pos) {
 let createOpeningSlide = function () {
 
   let quote1 = 'We will reduce the corporate tax rate to no higher than 20 percent...';
-  let quote2 = '...This is a revolutionary change, and the biggest winners will be the everyday American workers|';
+  let quote2 = '...This is a revolutionary change, and the biggest winners will be'; 
+  let quote3 = 'the everyday American workers|';
   let width = 1415,
       height = 407;
+
+  console.log(quote1.length);
+  console.log(quote2.length);
+  console.log(quote3.length);
   
-  let quoteChars = quote1.split('').concat(quote2.split('')),
+  let quoteChars = quote1.split('').concat(quote2.split('')).concat(quote3.split('')),
       openingScreen = d3.select('.opening-screen')
                       .attr("min-width",width)
                       .attr("min-height",height)
@@ -251,13 +256,18 @@ let createOpeningSlide = function () {
               .attr('class', 'quote-text');
 
 
-  updateQuoteText(50, quote1.length);
+  updateQuoteText(50, quote1.length, quote1.length + quote2.length);
 
   setTimeout(function () {
     let i = 0;
-    let totalWidth1 = 20;
-    let totalWidth2 = 20;
     let barGraphWidth = barGraphParams['barGraphWidth'];
+    // let totalWidth1 = 20;
+    let totalWidth1 = barGraphWidth/2 - 20;
+    let totalWidth2 = barGraphWidth/2 - 35;
+    let totalWidth3 = barGraphWidth/2 - 20;
+    // let totalWidth2 = 8;
+    // let totalWidth3 = 20;
+    
 
     d3.selectAll('.quote-text')
       .transition()
@@ -282,23 +292,29 @@ let createOpeningSlide = function () {
         // totalWidth += charWidth;
 
         let currentPosition;
-        if (i < 7) {
+        if (i < 8) {
           currentPosition = totalWidth1;
           totalWidth1 += charWidth;
         }
-        else {
+        else if (i < 18) {
           currentPosition = totalWidth2;
           totalWidth2 += charWidth;
+        }
+        else {
+          currentPosition = totalWidth3;
+          totalWidth3 += charWidth;
         }
 
         return currentPosition;
       })
       .attr('y', function (d,i) {
 
-        if (i < 7)
-          return 100;
+        if (i < 8)
+          return 80;
+        else if (i < 18)
+          return 120;
         else
-          return 150;
+          return 160;
       });
     // while(i < 10) {
     //   d3.select('#cursor')
@@ -321,7 +337,7 @@ let createOpeningSlide = function () {
         .text('by Pedal')
         .attr('class', 'pedal')
         // .attr('x', barGraphWidth * 0.5)
-        .attr('x', 20)
+        .attr('x', barGraphWidth/2)
         .attr('y', 190)
         .style('opacity', 0)
         .transition()
@@ -339,11 +355,13 @@ let sumTillPosition = function (arr, pos) {
   return sum;
 }
 
-let updateQuoteText = function (duration, lineBreak) {
+let updateQuoteText = function (duration, lineBreak1, lineBreak2) {
   let barGraphWidth = barGraphParams['barGraphWidth'],
       totalWidth1 = 20,
       totalWidth2 = 100,
+      totalWidth3 = 180,
       text = d3.selectAll('.quote-text');
+      console.log(lineBreak2);
 
   text
     .style('font-size', 30)
@@ -351,15 +369,17 @@ let updateQuoteText = function (duration, lineBreak) {
     .text( function (d, i) {
       if (d == '|')
         d3.select(this).attr('id','cursor');
-      if (i > -1 && i < 7 || i > 21 && i < 35)
+      if (i > 138 && i < 164)
         d3.select(this).attr('class','highlight');
       return d;
     })
     .attr('y', function (d, i) {
-      if (i < lineBreak) 
+      if (i < lineBreak1) 
         return 40;
+      else if (i < lineBreak2)
+        return 80;
       else
-        return 100;
+        return 120;
     })
     .attr('x', function (d, i) {
       
@@ -369,16 +389,18 @@ let updateQuoteText = function (duration, lineBreak) {
       else
         charWidth = this.getComputedTextLength();
 
-      console.log(charWidth);
-
       let currentPosition;
-      if (i < lineBreak) {
+      if (i < lineBreak1) {
         currentPosition = totalWidth1;
         totalWidth1 += charWidth;
       }
-      else {
+      else if(i < lineBreak2) {
         currentPosition = totalWidth2;
         totalWidth2 += charWidth;
+      }
+      else {
+        currentPosition = totalWidth3;
+        totalWidth3 += charWidth;
       }
       
       return currentPosition;
