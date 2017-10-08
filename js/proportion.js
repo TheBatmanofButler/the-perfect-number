@@ -103,7 +103,7 @@ let drawAllCanvases = function (firstDraw) {
                   ]);
                 })
                 .then( function () {
-                  console.log(regionId);
+                  // console.log(regionId);
                   return drawRegion(regionId, firstDraw)
                 });
       }
@@ -214,7 +214,6 @@ let getHoverMap = function () {
 
 let showHoverText = function (regionId) {
   let region = propGraphParams['regions'][regionId];
-  console.log(propGraphParams['regions']);
   let text = '<b>' + region['text'] + '</b>' + ', ' + region['money'];
 
   if ($('.dynamic-text').html() != text)
@@ -327,10 +326,13 @@ let changeOpacity = function (color, opacity) {
 
 let drawRegion = function (regionId, firstDraw = false) {
   return new Promise( function (resolve, reject) {
-    console.log(propGraphParams['regions'], regionId)
     let canvas = propGraphParams['canvases'][regionId],
         region = propGraphParams['regions'][regionId],
-        squareOuterLength = propGraphParams['squareOuterLength'],
+        squareOuterLength = propGraphParams['squareOuterLength'];
+
+    if (!region)
+      console.log(propGraphParams['regions'], regionId)
+    let
         squares = region['squares'],
         numSquares = region['numSquares'],
         ctx = canvas.getContext('2d'),

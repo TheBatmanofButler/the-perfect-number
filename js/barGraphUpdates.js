@@ -164,7 +164,7 @@ let updateBars = function (exitTime, enterTime, updateTime) {
                             .text('');
                         })
                         .on('click', function (d) {
-                          if (inMapMode) {
+                          if (inMapMode && allRegionsDrawn) {
                             let companyName = d['company_name'];
                             openMapView(allCompanyData, companyName);
                           }

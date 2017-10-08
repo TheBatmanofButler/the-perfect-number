@@ -34,8 +34,8 @@ let createProportionAreas = function (comparisons, actualProfit, actualTaxBreak,
       numTaxPaidSquares = Math.floor(taxPaid),
       unit;
 
-  if (taxBreak <= 0)
-    console.log(taxBreak, taxPaid, name);
+  // if (taxBreak <= 0)
+    // console.log(taxBreak, taxPaid, name);
 
   if (convertConst == 1e3)
     unit = '1 billion';
