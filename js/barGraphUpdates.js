@@ -152,16 +152,24 @@ let updateBars = function (exitTime, enterTime, updateTime) {
                           return 'bar ' + slugify(d['company_name']);
                         })
                         .on('mouseover', function (d) {
-                          d3.select('.company-label')
-                            .transition()
-                            .ease(d3.easeLinear)
-                            .text(d['company_name']);
+                          if (inMapMode && allRegionsDrawn) {
+                            d3.select('.company-label')
+                              .transition()
+                              .ease(d3.easeLinear)
+                              .text(d['company_name']);
+
+                            d3.select(this).style('fill', 'red');
+                          }
                         })
                         .on('mouseout', function (d) {
-                          d3.select('.company-label')
-                            .transition()
-                            .ease(d3.easeLinear)
-                            .text('');
+                          if (inMapMode && allRegionsDrawn) {
+                            d3.select('.company-label')
+                              .transition()
+                              .ease(d3.easeLinear)
+                              .text('');
+
+                            d3.select(this).style('fill', 'black');
+                          }
                         })
                         .on('click', function (d) {
                           if (inMapMode && allRegionsDrawn) {

@@ -38,6 +38,7 @@ let loadInfo = function (infoBoxData) {
 
 let changeDynamicText = function (duration, newText, imgSrc) {
 	return new Promise( function (resolve, reject) {
+      console.log(newText)
   		$('.dynamic-text').animate({'opacity': 0}, duration)
         .promise()
         .then( function () {

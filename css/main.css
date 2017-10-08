@@ -214,6 +214,9 @@ canvas {
           padding-bottom: 10px;
           font-size: 15px;
         }
+          .description {
+            display: none;
+          }
           .tax-rebates > * {
             padding-bottom: 2px;
           }

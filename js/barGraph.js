@@ -30,7 +30,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
   initBarGraph();
 
   $('#slide1').click( function (e) {
-    if (slideInProgress) return;
+    if (slideInProgress || !allRegionsDrawn) return;
     slide1(barGraphWidth, barGraphHeight);
     currentSlide = 1;
     $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
@@ -38,7 +38,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
   });
 
   $('#slide2').click( function (e) {
-    if (slideInProgress) return;
+    if (slideInProgress || !allRegionsDrawn) return;
     slide2(data);
     currentSlide = 2;
     $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
@@ -46,7 +46,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
   });
 
   $('#slide3').click( function (e) {
-    if (slideInProgress) return;
+    if (slideInProgress || !allRegionsDrawn) return;
     slide3(data, companiesYearsNoTax);
     currentSlide = 3;
     $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
@@ -54,7 +54,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
   });
 
   $('#slide4').click( function (e) {
-    if (slideInProgress) return;
+    if (slideInProgress || !allRegionsDrawn) return;
     slide4(data, companiesTop25);
     currentSlide = 4;
     $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
@@ -62,7 +62,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
   });
 
   $('#slide5').click( function (e) {
-    if (slideInProgress) return;
+    if (slideInProgress || !allRegionsDrawn) return;
     slide5(data, companiesRebates);
     currentSlide = 5;
     $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
@@ -70,7 +70,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
   });
 
   $('#slide6').click( function (e) {
-    if (slideInProgress) return;
+    if (slideInProgress || !allRegionsDrawn) return;
     slide6(data, companiesIPS, companiesTop3EmpChanges, companiesLostEmployees);
     currentSlide = 6;
     $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
@@ -78,7 +78,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
   });
 
   $('#slide7').click( function (e) {
-    if (slideInProgress) return;
+    if (slideInProgress || !allRegionsDrawn) return;
     slide7(companiesLostEmployees);
     currentSlide = 7;
     $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
@@ -86,7 +86,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
   });
 
   $('#slide8').click( function (e) {
-    if (slideInProgress) return;
+    if (slideInProgress || !allRegionsDrawn) return;
     slide8(data, companiesForeignDiff);
     currentSlide = 8;
     $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
@@ -94,7 +94,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
   });
 
   $('#slide9').click( function (e) {
-    if (slideInProgress) return;
+    if (slideInProgress || !allRegionsDrawn) return;
     slide9(data, companiesCompetitors);
     currentSlide = 9;
     $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
@@ -102,7 +102,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
   });
 
   $('.slide-explore').click( function (e) {
-    if (slideInProgress) return;
+    if (slideInProgress || !allRegionsDrawn) return;
     $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
     $('.typeahead').typeahead('val', '');
     openMapView(allCompanyData, 'All Companies');
@@ -397,16 +397,16 @@ let resizeBarGraph = function () {
 
   updateXScale();
   updateYScale(-15, 50);
-  updateBarGraphSVG(1000);
+  updateBarGraphSVG(0);
 
-  updateBarGraphText(null, 1000);
-  updateCompanyLabel(1000);
+  updateBarGraphText(null, 0);
+  updateCompanyLabel(0);
   updateQuoteText();
 
-  updatePercentLine('35', 1000);
-  updateYAxis([-15, 35, 50], 1000);
-  updateXAxis(1000);
-  updateBars(0, 1000, 1000);
+  updatePercentLine('35', 0);
+  updateYAxis(0);
+  updateXAxis(0);
+  updateBars(0, 0, 0);
 
   if (slideInProgress) restartSlide(1000);
 }
@@ -465,7 +465,7 @@ let openMapView = function (data, company) {
         return Promise.all([
                 highlightSomeBars([companyData], 'red', 0),
                 $('.bar-graph-elements').animate({'opacity': 1}),
-                $('.opening-screen').animate({'opacity': 0}),
+                $('.opening-screen').hide(),
                 updateBarGraphParam('marginBottom', 40),
                 updateBarGraphDims(mapModeHeight),
 
@@ -493,7 +493,9 @@ let openMapView = function (data, company) {
 let closeMapView = function () {
   $('.proportion-graph-viewer').animate({'height': '0'}, 1000, 'linear');
   $('.proportion-graph-viewer').hide(500);
+  changeDynamicText(1000, '');
   addBarGraphClicks();
+
 }
 
 let fadeOutPercentLine = function (percent, duration) {
@@ -588,10 +590,12 @@ let showAll = function (duration) {
 let fadeOpeningScreen = function(duration) {
   return new Promise( function (resolve, reject) {
     showAll(1000);
+
     d3.select('.opening-screen')
       .transition()
       .duration(duration)
       .style('opacity', 0)
+      .style('display', 'none')
       .end(resolve);
   });
 }
@@ -600,11 +604,12 @@ let showOpeningScreen = function(duration) {
   slideInProgress = false;
   return new Promise( function (resolve, reject) {
     fadeAll(500);
-    console.log('here');
+
     d3.select('.opening-screen')
       .transition()
       .duration(1000)
       .style('opacity', 1)
+      .style('display', 'block')
       .end(resolve);
   });
 }
@@ -627,7 +632,6 @@ let fadeStart = function (duration, data, yStart = -15, yEnd = 50, tickValues = 
         let mapModeHeight = $('.graph-viewers').height();
         // console.log(changeDynamicText(1000,''));
         return Promise.all([
-          changeDynamicText(1000,''),
           closeMapView(),
           updateBarGraphParam('marginBottom', 100),
           updateBarGraphDims(mapModeHeight),
