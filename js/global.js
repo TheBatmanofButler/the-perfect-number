@@ -118,6 +118,7 @@ var isValidComparison = function (comparison, numTaxBreakSquares, numComparisonS
 let inMapMode = false;
 let proportionInTransition = false;
 let allCompanyData;
+let allRegionsDrawn = false;
 var infoBoxData = {};
 var comparisonData = {};
 var totalProfits = 0;

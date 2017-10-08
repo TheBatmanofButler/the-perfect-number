@@ -100,6 +100,13 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
     $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
     $('#slide9 div:first').addClass('active-slide-no-square');
   });
+
+  $('.slide-explore').click( function (e) {
+    if (slideInProgress) return;
+    $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
+    $('.typeahead').typeahead('val', '');
+    openMapView(allCompanyData, 'All Companies');
+  });
 }
 
 let initBarGraph = function () {
@@ -404,7 +411,7 @@ let resizeBarGraph = function () {
   if (slideInProgress) restartSlide(1000);
 }
 
-let openMapView = function (data, company='All Companies') {
+let openMapView = function (data, company) {
 
   let mapModeHeight = $('.visualization').outerHeight() 
                                        - $('.top').outerHeight() 
@@ -426,9 +433,9 @@ let openMapView = function (data, company='All Companies') {
     });
   }
 
-  removeBarGraphClicks();
-
   return chain.then( function () {
+      removeBarGraphClicks();
+
       $('.proportion-graph-viewer').css('display', 'flex');
       $('.proportion-graph-viewer').animate({'height': '45vh'}, 1000, 'linear', function () {
 
@@ -437,41 +444,48 @@ let openMapView = function (data, company='All Companies') {
         loadInfo(companyInfo);
 
         initPropGraph(company);
-        return updatePropGraph();
+        updatePropGraph();
       });  
     })
     .then( function () {
       return highlightAllBars('#000', 0);
     })
     .then( function () {
-      if (companyData)
-        return highlightSomeBars([companyData], 'red', 500);
-    })
-    .then( function () {
       slideInProgress = false;
 
-      return Promise.all([
-        $('.bar-graph-elements').animate({'opacity': 1}),
-        $('.opening-screen').animate({'opacity': 0}),
-        updateBarGraphParam('marginBottom', 40),
-        updateBarGraphDims(mapModeHeight),
+      let chain = Promise.resolve();
 
-        updateXScale(),
-        updateYScale(-15, 50),
-        updateBarGraphSVG(1000),
+      if (companyData) {
+        chain.then( function () {
+          return highlightSomeBars([companyData], 'red', 0);
+        });
+      }
 
-        updateBarGraphText(null, 1000),
-        updateCompanyLabel(1000),
+      chain.then( function () {
+        return Promise.all([
+                highlightSomeBars([companyData], 'red', 0),
+                $('.bar-graph-elements').animate({'opacity': 1}),
+                $('.opening-screen').animate({'opacity': 0}),
+                updateBarGraphParam('marginBottom', 40),
+                updateBarGraphDims(mapModeHeight),
 
-        updateBarGraphParam('data', data),
-        updateBarGraphParam('yParam', 'rate'),
-        updatePercentLine(1000),
+                updateXScale(),
+                updateYScale(-15, 50),
+                updateBarGraphSVG(1000),
 
-        updateBarGraphParam('tickValues', [0, 35]),
-        updateYAxis(1000),
-        updateXAxis(1000),
-        updateBars(0, 1000, 1000)
-      ])
+                updateBarGraphText(null, 1000),
+                updateCompanyLabel(1000),
+
+                updateBarGraphParam('data', data),
+                updateBarGraphParam('yParam', 'rate'),
+                updatePercentLine(1000),
+
+                updateBarGraphParam('tickValues', [0, 35]),
+                updateYAxis(1000),
+                updateXAxis(1000),
+                updateBars(0, 1000, 1000)
+              ]);
+      });
     });
 
 }

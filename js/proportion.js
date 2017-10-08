@@ -48,12 +48,14 @@ let updatePropGraphParams = function () {
       columnLength = Math.floor(propHeight / squareOuterLength),
       squares = getGridSquares(numSquares, squareOuterLength, columnLength);
 
-      propGraphParams['propWidth'] = propWidth;
-      propGraphParams['propHeight'] = propHeight;
-      propGraphParams['numSquares'] = numSquares;
-      propGraphParams['squareOuterLength'] = squareOuterLength;
-      propGraphParams['columnLength'] = columnLength;
-      propGraphParams['squares'] = squares;
+  allRegionsDrawn = false;
+
+  propGraphParams['propWidth'] = propWidth;
+  propGraphParams['propHeight'] = propHeight;
+  propGraphParams['numSquares'] = numSquares;
+  propGraphParams['squareOuterLength'] = squareOuterLength;
+  propGraphParams['columnLength'] = columnLength;
+  propGraphParams['squares'] = squares;
 }
 
 let getGridSquares = function (numSquares, squareOuterLength, columnLength) {
@@ -111,6 +113,9 @@ let drawAllCanvases = function (sparkle) {
     let unit = propGraphParams['regions'][0]['unit'];
     return changeDynamicText(0, 'Each square is the equivalent of $' + unit);
   })
+  .then( function () {
+    allRegionsDrawn = true;
+  })
 
   return chain;
 }
@@ -164,19 +169,22 @@ let addMouseEvent = function (canvasObj) {
 
   canvasObj
     .on('mousemove', function() {
-      let mouseX = d3.event.offsetX,
-          mouseY = d3.event.offsetY,
-          column = Math.floor(mouseX / squareOuterLength),
-          row = Math.floor(mouseY / squareOuterLength),
-          squareId = column * columnLength + row;
-      if (squareId < numSquares)
-        showProperRegion(squareId);
-      else {
-        showAllRegions();
+      if (allRegionsDrawn) {
+        let mouseX = d3.event.offsetX,
+            mouseY = d3.event.offsetY,
+            column = Math.floor(mouseX / squareOuterLength),
+            row = Math.floor(mouseY / squareOuterLength),
+            squareId = column * columnLength + row;
+        if (squareId < numSquares)
+          showProperRegion(squareId);
+        else {
+          showAllRegions();
+        }
       }
     })
     .on('mouseout', function () {
-      showAllRegions();
+      if (allRegionsDrawn)
+        showAllRegions();
     });
 }
 

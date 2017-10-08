@@ -11,25 +11,15 @@ $('.about-button').click( function (e) {
   getAboutDiv();
 });
 
-$('.slide-explore').click( function (e) {
-  $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
-  $('.typeahead').typeahead('val', '');
-  openMapView(allCompanyData);
-});
-
 $('.typeahead').bind('typeahead:select', function(ev, suggestion) {
   if (proportionInTransition)
     $('.typeahead').typeahead('val', '');
 
-  else if (suggestion == 'All companies') {
-    $('.company-bar-name').text('All companies');
+  else if (suggestion == 'All companies')
     openMapView(allCompanyData, 'All Companies');
-  }
 
-  else {
-    $('.company-bar-name').text(suggestion);
+  else
     openMapView(allCompanyData, suggestion);
-  }
 });
 
 let addBarGraphClicks = function () {
