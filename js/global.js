@@ -272,11 +272,11 @@ d3.queue()
     'yearsNoTax':         '',
     'note':               '',
     'taxBreak':           getMoneyString(totalTaxBreaks, 1),
-    'stockOptions':       "True",
-    'researchExperiment': "True",
-    'dpad':               "True",
-    'accDepreciation':    "True",
-    'deferredTaxes':      "True"
+    'stockOptions':       'True',
+    'researchExperiment': 'True',
+    'dpad':               'True',
+    'accDepreciation':    'True',
+    'deferredTaxes':      'True'
   };
 
   populateDropdown(companyNames);

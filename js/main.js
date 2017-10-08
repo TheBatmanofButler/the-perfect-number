@@ -81,13 +81,7 @@ let removeBarGraphClicks = function () {
 
 addBarGraphClicks();
 
-// let resizeTimer;
 window.addEventListener('resize', function () {
-  $('.proportion-graph-wrapper').css('opacity', '0');
-  // clearTimeout(resizeTimer);
-  // resizeTimer = setTimeout(function() {
-    $('.proportion-graph-wrapper').css('opacity', '1');
-    resizeBarGraph();
-    updatePropGraph(false);
-  // }, 250);
+  resizeBarGraph();
+  updatePropGraph(false);
 })

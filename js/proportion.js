@@ -48,6 +48,8 @@ let updatePropGraphParams = function () {
       columnLength = Math.floor(propHeight / squareOuterLength),
       squares = getGridSquares(numSquares, squareOuterLength, columnLength);
 
+  console.log(propWidth);
+
   propGraphParams['propWidth'] = propWidth;
   propGraphParams['propHeight'] = propHeight;
   propGraphParams['numSquares'] = numSquares;
@@ -68,8 +70,8 @@ let getGridSquares = function (numSquares, squareOuterLength, columnLength) {
 
 let updatePropGraph = function (firstDraw = true) {
 
+  updatePropGraphParams();
   return Promise.all([
-    updatePropGraphParams(),
     setAllRegionSquares(),
     getHoverMap(),
     createCanvases(),

@@ -393,22 +393,24 @@ let updateQuoteText = function (duration, lineBreak) {
 
 let resizeBarGraph = function () {
 
-  updateBarGraphDims();
+  if (currentSlide > 1) {
+    updateBarGraphDims();
 
-  updateXScale();
-  updateYScale(-15, 50);
-  updateBarGraphSVG(0);
+    updateXScale();
+    updateYScale(-15, 50);
+    updateBarGraphSVG(0);
 
-  updateBarGraphText(null, 0);
-  updateCompanyLabel(0);
-  updateQuoteText();
+    updateBarGraphText(null, 0);
+    updateCompanyLabel(0);
+    updateQuoteText();
 
-  updatePercentLine('35', 0);
-  updateYAxis(0);
-  updateXAxis(0);
-  updateBars(0, 0, 0);
+    updatePercentLine(0);
+    updateYAxis(0);
+    updateXAxis(0);
+    updateBars(0, 0, 0);
 
-  if (slideInProgress) restartSlide(1000);
+    if (slideInProgress) restartSlide(1000);
+  }
 }
 
 let openMapView = function (data, company) {
@@ -435,7 +437,6 @@ let openMapView = function (data, company) {
 
   return chain.then( function () {
       removeBarGraphClicks();
-
       $('.proportion-graph-viewer').css('display', 'flex');
       $('.proportion-graph-viewer').animate({'height': '45vh'}, 1000, 'linear', function () {
 

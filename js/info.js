@@ -24,13 +24,19 @@ let loadInfo = function (infoBoxData) {
   else {
     $('.years-no-tax').hide();
   }
-  let taxRebates = ['deferredTaxes','accDepreciation','dpad','researchExperiment','stockOptions'];
-  for (let i in taxRebates) {
-    if (infoBoxData[taxRebates[i]] == 'True') {
-      $('.' + taxRebates[i]).show()
+
+  let taxRebates = {'deferredTaxes': 'deferred-taxes',
+                    'accDepreciation': 'acc-depreciation',
+                    'dpad': 'dpad',
+                    'researchExperiment': 'research-experiment',
+                    'stockOptions': 'stock-options'};
+  
+  for (let rebate in taxRebates) {
+    if (infoBoxData[rebate] == 'True') {
+      $('.' + taxRebates[rebate]).show()
     }
     else {
-      $('.' + taxRebates[i]).hide()
+      $('.' + taxRebates[rebate]).hide()
     }
   };
   $('.note').text(infoBoxData['note']);

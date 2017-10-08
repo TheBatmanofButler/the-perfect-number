@@ -158,7 +158,9 @@ let updateBars = function (exitTime, enterTime, updateTime) {
                               .ease(d3.easeLinear)
                               .text(d['company_name']);
 
-                            d3.select(this).style('fill', 'red');
+                            d3.select(this)
+                              .style('fill', 'red')
+                              .style('stroke', 'red');
                           }
                         })
                         .on('mouseout', function (d) {
@@ -168,7 +170,9 @@ let updateBars = function (exitTime, enterTime, updateTime) {
                               .ease(d3.easeLinear)
                               .text('');
 
-                            d3.select(this).style('fill', 'black');
+                            d3.select(this)
+                              .style('fill', 'black')
+                              .style('stroke', 'black');
                           }
                         })
                         .on('click', function (d) {
@@ -229,6 +233,7 @@ let updateBarSize = function (bars) {
         return y(0);
       }
     })
+    .style('stroke', 'black')
     .attr('width', width / (data.length + 100))
     .attr('height', function(d) {
       return Math.abs(y(d[yParam]) - y(0));
@@ -273,6 +278,8 @@ let updateBarGraphDims = function (mapModeHeight) {
       marginLeft = barGraphParams['marginLeft'],
       marginBottom = barGraphParams['marginBottom'],
       barGraphWidth = $('.bar-graph-viewer').width() - marginLeft - marginRight;
+
+  console.log(barGraphWidth);
 
   if (!mapModeHeight)
     mapModeHeight = $('.bar-graph-viewer').height();
