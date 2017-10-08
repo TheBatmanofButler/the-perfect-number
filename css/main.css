@@ -1,7 +1,6 @@
 html, body {
   padding: 0;
   margin: 0;
-  font-family: 'Asap Condensed', sans-serif;
   color: #fff;
   /*background-color: #000E28;*/
 }
@@ -114,6 +113,8 @@ canvas {
 
         height: 34px;
         width: 105px;
+
+        font-size: 0.6rem;
       }
       .slide-explore:hover {
         color: white;
@@ -258,6 +259,8 @@ canvas {
         min-width: 1000px;
         max-height: 100%;
         min-height: 700px;
+       
+        font-family: 'Roboto Mono', monospace;
       }
 
       .intro-text {
