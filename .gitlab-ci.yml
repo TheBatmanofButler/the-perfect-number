@@ -7,6 +7,5 @@ pages:
   artifacts:
     paths:
     - public
-    - csv/dv_data
   only:
   - master
