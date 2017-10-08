@@ -168,8 +168,8 @@ var companyNames = ['All companies'],
                           };
 
 d3.queue()
-.defer(d3.csv, '../csv/dv_data/interactive_data.csv', type)
-.defer(d3.csv, '../csv/dv_data/comparison_data.csv', type)
+.defer(d3.csv, 'csv/dv_data/interactive_data.csv', type)
+.defer(d3.csv, 'csv/dv_data/comparison_data.csv', type)
 .await( function (error, companies, comparisons) {
 
   allCompanyData = companies;
