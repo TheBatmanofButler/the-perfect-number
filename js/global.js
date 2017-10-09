@@ -70,7 +70,8 @@ let createProportionAreas = function (comparisons, actualProfit, actualTaxBreak,
       'text': 'Company Tax Paid',
       'numSquares': numTaxPaidSquares,
       'color': 'rgba(255, 0, 0, 0.8)',
-      'money': getMoneyString(taxPaid, convertConst)
+      'money': getMoneyString(taxPaid, convertConst),
+      'unit': unit
     });
   }
 
@@ -121,9 +122,12 @@ var isValidComparison = function (comparison, numTaxBreakSquares, numComparisonS
     return (enough && notTooMany);
 }
 
+let counter = 0;
+
 let inMapMode = false;
 let proportionInTransition = false;
 let allCompanyData;
+let currentCompany;
 let allRegionsDrawn = true;
 var infoBoxData = {};
 var comparisonData = {};
@@ -253,6 +257,9 @@ d3.queue()
                                                                   d['profit'],
                                                                   d['tax_break'],
                                                                   convertConst, d['company_name']);
+
+    counter += 1;
+    console.log(d['profit']);
 
     let taxBreak = d['tax_break'];
     if(taxBreak > 0) {
