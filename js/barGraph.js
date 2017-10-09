@@ -457,6 +457,7 @@ let openMapView = function (data, company) {
 
   if (currentSlide == 1 && !inMapMode) {
     chain = chain.then( function () {
+      console.log(111111);
       return fadeStart(500, allCompanyData);
     });
   }
@@ -471,15 +472,17 @@ let openMapView = function (data, company) {
         loadInfo(companyInfo);
 
         initPropGraph(company);
-        updatePropGraph();
+        return updatePropGraph();
       });  
     })
     .then( function () {
+      console.log(333333);
       slideInProgress = false;
       if (!inMapMode)
         return highlightAllBars('#000', 0);
     })
     .then( function () {
+        console.log(444444);
         return Promise.all([
                 $('.bar-graph-elements').animate({'opacity': 1}),
                 updateBarGraphParam('marginBottom', 60),
