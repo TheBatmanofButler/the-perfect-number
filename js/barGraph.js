@@ -227,7 +227,8 @@ let createOpeningSlide = function () {
 
   let quote1 = '"We will reduce the corporate tax rate to no higher than 20 percent...';
   let quote2 = '...This is a revolutionary change, and the biggest winners will be'; 
-  let quote3 = 'the everyday American workers" - Donald Trump|';
+  let quote3 = 'the everyday American workers"';
+  let quote4 = '- Donald Trump|';
   let width = 1415,
       height = 407;
 
@@ -235,7 +236,9 @@ let createOpeningSlide = function () {
   console.log(quote2.length);
   console.log(quote3.length);
   
-  let quoteChars = quote1.split('').concat(quote2.split('')).concat(quote3.split('')),
+  let quoteChars = quote1.split('').concat(quote2.split(''))
+                                    .concat(quote3.split(''))
+                                    .concat(quote4.split('')),
       openingScreen = d3.select('.opening-screen')
                       .attr("min-width",width)
                       .attr("min-height",height)
@@ -256,15 +259,15 @@ let createOpeningSlide = function () {
               .attr('class', 'quote-text');
 
 
-  updateQuoteText(50, quote1.length, quote1.length + quote2.length);
+  updateQuoteText(50, quote1.length, quote1.length + quote2.length, quote1.length + quote2.length + quote3.length);
 
   setTimeout(function () {
     let i = 0;
     let barGraphWidth = barGraphParams['barGraphWidth'];
     // let totalWidth1 = 20;
-    let totalWidth1 = barGraphWidth/2 - 20;
-    let totalWidth2 = barGraphWidth/2 - 35;
-    let totalWidth3 = barGraphWidth/2 - 20;
+    let totalWidth1 = barGraphWidth/2 - 65;
+    let totalWidth2 = barGraphWidth/2 - 70;
+    let totalWidth3 = barGraphWidth/2 - 65;
     // let totalWidth2 = 8;
     // let totalWidth3 = 20;
     
@@ -292,7 +295,7 @@ let createOpeningSlide = function () {
         // totalWidth += charWidth;
 
         let currentPosition;
-        if (i < 8) {
+        if (i < 9) {
           currentPosition = totalWidth1;
           totalWidth1 += charWidth;
         }
@@ -309,7 +312,7 @@ let createOpeningSlide = function () {
       })
       .attr('y', function (d,i) {
 
-        if (i < 8)
+        if (i < 9)
           return 80;
         else if (i < 18)
           return 120;
@@ -337,7 +340,7 @@ let createOpeningSlide = function () {
         .text('by Pedal')
         .attr('class', 'pedal')
         // .attr('x', barGraphWidth * 0.5)
-        .attr('x', barGraphWidth/2)
+        .attr('x', barGraphWidth/2 - 20)
         .attr('y', 190)
         .style('opacity', 0)
         .transition()
@@ -360,6 +363,7 @@ let updateQuoteText = function (duration, lineBreak1, lineBreak2, lineBreak3) {
       totalWidth1 = 20,
       totalWidth2 = 20,
       totalWidth3 = 20,
+      totalWidth4 = 130,
       text = d3.selectAll('.quote-text');
       console.log(lineBreak2);
 
@@ -369,7 +373,7 @@ let updateQuoteText = function (duration, lineBreak1, lineBreak2, lineBreak3) {
     .text( function (d, i) {
       if (d == '|')
         d3.select(this).attr('id','cursor');
-      if (i > 138 && i < 164)
+      if (i > 138 && i < 165)
         d3.select(this).attr('class','highlight');
       return d;
     })
@@ -378,8 +382,10 @@ let updateQuoteText = function (duration, lineBreak1, lineBreak2, lineBreak3) {
         return 40;
       else if (i < lineBreak2)
         return 80;
-      else
+      else if (i < lineBreak3)
         return 120;
+      else
+        return 160;
     })
     .attr('x', function (d, i) {
       
@@ -397,6 +403,10 @@ let updateQuoteText = function (duration, lineBreak1, lineBreak2, lineBreak3) {
       else if(i < lineBreak2) {
         currentPosition = totalWidth2;
         totalWidth2 += charWidth;
+      }
+      else if(i < lineBreak3) {
+        currentPosition = totalWidth3;
+        totalWidth3 += charWidth;
       }
       else {
         currentPosition = totalWidth3;
