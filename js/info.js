@@ -10,15 +10,15 @@ let loadInfo = function (infoBoxData) {
   $('.info').animate({'opacity': 1}, 1000);
   $('.company-name').text(infoBoxData['companyName']);
   $('.industry').text(infoBoxData['industry']);
-  $('.rate').text('Tax Rate: ' + infoBoxData['rate'] + '%');
+  $('.rate').html('<b>Tax Rate</b>: <font size="3px">' + infoBoxData['rate'] + '%</font>');
   let taxBreak = infoBoxData['taxBreak'];
   console.log(taxBreak);
   if (taxBreak[0] == '-') {
     taxBreak = taxBreak.slice(1);
-    $('.tax-break').text('Tax Break: Paid $' + taxBreak + 'beyond the standard 35% rate');
+    $('.tax-break').html('<b>Tax Break</b>: <font size="3px">Paid $' + taxBreak + ' beyond the standard 35% rate</font>');
   }
   else
-    $('.tax-break').text('Tax Break: $' + infoBoxData['taxBreak']);
+    $('.tax-break').html('<b>Tax Break</b>: <font size="3px">$' + infoBoxData['taxBreak'] + '</font>');
 
   if(infoBoxData['yearsNoTax'] > 0) {
     $('.years-no-tax').show()

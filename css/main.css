@@ -113,9 +113,9 @@ canvas {
         margin-left: 5px;
 
         height: 34px;
-        width: 105px;
+        width: 110px;
 
-        font-size: 0.6rem;
+        font-size: 0.9rem;
       }
       .slide-explore:hover {
         color: white;
@@ -190,7 +190,7 @@ canvas {
         background: #4C2A85;
         margin-right: 10px;
         padding: 10px 20px 10px 20px;
-        width: 250px;
+        width: 290px;
         overflow-y: scroll; 
         z-index: 2;
       }
@@ -201,15 +201,18 @@ canvas {
           /*padding-bottom: 2px;*/
         }
         .industry {
-          font-size: 20px;
+          font-size: 19px;
           padding-bottom: 15px;
           font-style: italic;
           text-align: center;
         }
         .main-info {
           padding-bottom: 10px;
-          font-size: 19px;
+          font-size: 17px;
         }
+          .years-no-tax {
+            font-size: 15px;
+          }
           .rate, .tax-break, .years-no-tax {
             padding-bottom: 5px;
           }
@@ -231,6 +234,7 @@ canvas {
             .description {
               display: none;
               padding-left: 12px;
+              font-size: 12px;
             }
 
           .tax-rebates > * {
@@ -238,15 +242,15 @@ canvas {
           }
 
           .how {
-            font-size: 19px;
+            font-size: 17px;
           }
 
         .note {
-          font-size: 19px;
+          font-size: 17px;
         }
-          .note>.description {
-            font-size: 15px;
-          }
+          /*.note>.description {
+            font-size: 12px;
+          }*/
 
     .bar-graph-viewer {
       display: flex;
