@@ -70,7 +70,8 @@ let createProportionAreas = function (comparisons, actualProfit, actualTaxBreak,
       'text': 'Company Tax Paid',
       'numSquares': numTaxPaidSquares,
       'color': 'rgba(255, 0, 0, 0.8)',
-      'money': getMoneyString(taxPaid, convertConst)
+      'money': getMoneyString(taxPaid, convertConst),
+      'unit': unit
     });
   }
 
@@ -121,17 +122,18 @@ var isValidComparison = function (comparison, numTaxBreakSquares, numComparisonS
     return (enough && notTooMany);
 }
 
-let inMapMode = false;
-let proportionInTransition = false;
-let allCompanyData;
-let allRegionsDrawn = true;
-var infoBoxData = {};
-var comparisonData = {};
-var totalProfits = 0;
-var totalTaxBreaks = 0;
-let currentSlide = 1;
-let shouldFade = false;
-var companyNames = ['All companies'],
+let inMapMode = false,
+    proportionInTransition = false,
+    allCompanyData,
+    currentCompany,
+    allRegionsDrawn = true,
+    infoBoxData = {},
+    comparisonData = {},
+    totalProfits = 0,
+    totalTaxBreaks = 0,
+    currentSlide = 1,
+    shouldFade = false,
+    companyNames = ['All companies'],
     companiesIPS = [],
     companiesYearsNoTax = {
                         '8': [],
@@ -254,11 +256,8 @@ d3.queue()
                                                                   d['tax_break'],
                                                                   convertConst, d['company_name']);
 
-    let taxBreak = d['tax_break'];
-    if(taxBreak > 0) {
-      totalProfits += d['profit'];
-      totalTaxBreaks += taxBreak;
-    }
+    totalProfits += d['profit'];
+    totalTaxBreaks += d['tax_break'];
   });
 
   let totalRate = ((totalProfits * 0.35 - totalTaxBreaks) / totalProfits * 100).toFixed(2);

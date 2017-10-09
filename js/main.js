@@ -22,7 +22,7 @@ $('.typeahead').bind('typeahead:select', function(ev, suggestion) {
     openMapView(allCompanyData, suggestion);
 });
 
-$('.tax-rebate').click( function () {
+$('.toggle-label').click( function () {
 
   if ($(this).find('.arrow-right').length == 1) {
     $(this).find('.arrow-right').replaceWith(
@@ -75,7 +75,6 @@ let addBarGraphClicks = function () {
 }
 
 let removeBarGraphClicks = function () {
-  inMapMode = true;
   $('.bar-graph-viewer').off('click');
 }
 

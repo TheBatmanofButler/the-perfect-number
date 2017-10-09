@@ -11,7 +11,15 @@ let loadInfo = function (infoBoxData) {
   $('.company-name').text(infoBoxData['companyName']);
   $('.industry').text(infoBoxData['industry']);
   $('.rate').text('Tax Rate: ' + infoBoxData['rate'] + '%');
-  $('.tax-break').text('Tax Break: $' + infoBoxData['taxBreak']);
+  let taxBreak = infoBoxData['taxBreak'];
+  console.log(taxBreak);
+  if (taxBreak[0] == '-') {
+    taxBreak = taxBreak.slice(1);
+    $('.tax-break').text('Tax Break: Paid $' + taxBreak + 'beyond the standard 35% rate');
+  }
+  else
+    $('.tax-break').text('Tax Break: $' + infoBoxData['taxBreak']);
+
   if(infoBoxData['yearsNoTax'] > 0) {
     $('.years-no-tax').show()
     if(infoBoxData['yearsNoTax'] == 1) {
@@ -51,7 +59,7 @@ let loadInfo = function (infoBoxData) {
 
 let changeDynamicText = function (duration, newText, imgSrc) {
 	return new Promise( function (resolve, reject) {
-      console.log(newText)
+
   		$('.dynamic-text').animate({'opacity': 0}, duration)
         .promise()
         .then( function () {

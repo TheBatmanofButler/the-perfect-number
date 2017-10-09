@@ -36,7 +36,7 @@ let updatePercentLine = function (duration) {
         y = barGraphParams['y'],
         percentLine = d3.select('.percent-line');
 
-    if (percentLine.style('opacity') == 0) {
+    if (percentLine.style('opacity') == 0 && !inMapMode) {
       percentLine
         .style('opacity', 1)
         .attr('x1', 0)
@@ -62,7 +62,7 @@ let updatePercentLine = function (duration) {
   });
 }
 
-let updateXAxis = function (duration) {
+let updateXAxis = function (duration, hide) {
   return new Promise( function (resolve, reject) {
     let data = barGraphParams['data'],
         x = barGraphParams['x'],
@@ -84,13 +84,15 @@ let updateXAxis = function (duration) {
       .duration(duration)
       .ease(d3.easeLinear)
       .attr('transform', 'translate(0,' + y(0) + ')')
-      .style('opacity', 1)
+      .style('opacity', function () {
+        return hide ? 0 : 1;
+      })
       .call(xAxis)
       .end(resolve);
     });
 }
 
-let updateYAxis = function (duration) {
+let updateYAxis = function (duration, hide) {
   return new Promise( function (resolve, reject) {
     let y = barGraphParams['y'],
         tickValues = barGraphParams['tickValues'];
@@ -108,7 +110,9 @@ let updateYAxis = function (duration) {
       .duration(duration)
       .ease(d3.easeLinear)
       .call(yAxis)
-      .style('opacity', 1)
+      .style('opacity', function () {
+        return hide ? 0 : 1;
+      })
       .end(resolve);
   });
 }
@@ -152,31 +156,53 @@ let updateBars = function (exitTime, enterTime, updateTime) {
                           return 'bar ' + slugify(d['company_name']);
                         })
                         .on('mouseover', function (d) {
-                          if (inMapMode && allRegionsDrawn) {
+                          if (inMapMode && allRegionsDrawn && d != currentCompany) {
                             d3.select('.company-label')
                               .transition()
                               .ease(d3.easeLinear)
                               .text(d['company_name']);
 
                             d3.select(this)
-                              .style('fill', 'red')
-                              .style('stroke', 'red');
+                              .style('fill', 'yellow')
+                              .style('stroke', 'yellow');
                           }
                         })
                         .on('mouseout', function (d) {
-                          if (inMapMode && allRegionsDrawn) {
+                          if (inMapMode && allRegionsDrawn && d != currentCompany) {
                             d3.select('.company-label')
                               .transition()
                               .ease(d3.easeLinear)
                               .text('');
 
+                            let color;
+                            if (d['rate'] > 35) {
+                              color = 'green';
+                            }
+                            else {
+                              color = 'red'; 
+                            }
+
                             d3.select(this)
-                              .style('fill', 'black')
+                              .style('fill', color)
                               .style('stroke', 'black');
                           }
                         })
                         .on('click', function (d) {
                           if (inMapMode && allRegionsDrawn) {
+                            currentCompany = d;
+
+                            d3.selectAll('.bar')
+                              .style('fill', function (d2) {
+                                if (d2['rate'] > 35)
+                                  return 'green';
+                                else
+                                  return 'red';
+                              })
+
+                            d3.select(this)
+                              .style('fill', 'yellow')
+                              .style('stroke', 'black');
+
                             let companyName = d['company_name'];
                             openMapView(allCompanyData, companyName);
                           }
@@ -269,7 +295,7 @@ let updateCompanyLabel = function (duration) {
     .ease(d3.easeLinear)
     .attr('dx', 5)
     .attr('y', y(-7))
-    .style('font-size', 50);
+    .style('font-size', 30);
 }
 
 let updateBarGraphDims = function (mapModeHeight) {

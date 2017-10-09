@@ -7,7 +7,7 @@ let barGraphParams = {
   data: null,
   marginTop: 50,
   marginRight: 80,
-  marginBottom: 100,
+  marginBottom: 200,
   marginLeft: 80
 }
 
@@ -192,8 +192,8 @@ let initBarGraph = function () {
     .append('text')
     .attr('class', 'company-label')
     .attr('x', 5)
-    .attr('y', y(-7))
-    .style('font-size', '50px');
+    .attr('y', y(-20))
+    .style('font-size', 30);
 
   let yDomain = barGraphParams['y'].domain(),
       barGraphTextY = yDomain[yDomain.length - 1];
@@ -225,9 +225,9 @@ let getWordX = function (arr, pos) {
 
 let createOpeningSlide = function () {
 
-  let quote1 = 'We will reduce the corporate tax rate to no higher than 20 percent...';
+  let quote1 = '"We will reduce the corporate tax rate to no higher than 20 percent...';
   let quote2 = '...This is a revolutionary change, and the biggest winners will be'; 
-  let quote3 = 'the everyday American workers|';
+  let quote3 = 'the everyday American workers" - Donald Trump|';
   let width = 1415,
       height = 407;
 
@@ -355,11 +355,11 @@ let sumTillPosition = function (arr, pos) {
   return sum;
 }
 
-let updateQuoteText = function (duration, lineBreak1, lineBreak2) {
+let updateQuoteText = function (duration, lineBreak1, lineBreak2, lineBreak3) {
   let barGraphWidth = barGraphParams['barGraphWidth'],
       totalWidth1 = 20,
-      totalWidth2 = 100,
-      totalWidth3 = 180,
+      totalWidth2 = 20,
+      totalWidth3 = 20,
       text = d3.selectAll('.quote-text');
       console.log(lineBreak2);
 
@@ -385,7 +385,7 @@ let updateQuoteText = function (duration, lineBreak1, lineBreak2) {
       
       let charWidth;
       if (d == ' ')
-        charWidth = 0.02 * barGraphWidth;
+        charWidth = 0.01 * barGraphWidth;
       else
         charWidth = this.getComputedTextLength();
 
@@ -443,13 +443,6 @@ let openMapView = function (data, company) {
                                        - $('.dynamic-text').outerHeight()
                                        - $(window).outerHeight() * 0.45;
 
-  let companyData;
-  for (let ii in allCompanyData) {
-    companyData = allCompanyData[ii];
-    if (companyData['company_name'] == company) break;
-    else companyData = null;
-  }
-
   let chain = Promise.resolve();
 
   if (currentSlide == 1 && !inMapMode) {
@@ -472,25 +465,14 @@ let openMapView = function (data, company) {
       });  
     })
     .then( function () {
-      return highlightAllBars('#000', 0);
+      slideInProgress = false;
+      if (!inMapMode)
+        return highlightAllBars('#000', 0);
     })
     .then( function () {
-      slideInProgress = false;
-
-      let chain = Promise.resolve();
-
-      if (companyData) {
-        chain.then( function () {
-          return highlightSomeBars([companyData], 'red', 0);
-        });
-      }
-
-      chain.then( function () {
         return Promise.all([
-                highlightSomeBars([companyData], 'red', 0),
                 $('.bar-graph-elements').animate({'opacity': 1}),
-                $('.opening-screen').hide(),
-                updateBarGraphParam('marginBottom', 40),
+                updateBarGraphParam('marginBottom', 60),
                 updateBarGraphDims(mapModeHeight),
 
                 updateXScale(),
@@ -505,12 +487,22 @@ let openMapView = function (data, company) {
                 updatePercentLine(1000),
 
                 updateBarGraphParam('tickValues', [0, 35]),
-                updateYAxis(1000),
-                updateXAxis(1000),
+                updateYAxis(1000, true),
+                updateXAxis(1000, true),
                 updateBars(0, 1000, 1000)
               ]);
-      });
-    });
+      })
+    .then( function () {
+      if (!inMapMode) {
+        return Promise.all([
+          fadeOutPercentLine(1000),
+          highlightBarsSplit('rate', 35, 'red', 'green', 1000)        
+        ]);
+      }
+    })
+    .then( function () {
+      inMapMode = true;
+    })
 
 }
 
@@ -522,13 +514,12 @@ let closeMapView = function () {
 
 }
 
-let fadeOutPercentLine = function (percent, duration) {
+let fadeOutPercentLine = function (duration) {
   return new Promise( function (resolve, reject) {
     d3.select('.percent-line')
       .transition()
       .duration(duration)
       .style('opacity', 0)
-      .remove()
       .end(resolve);
   });
 }
@@ -557,6 +548,7 @@ let highlightBarsSplit = function (yParam, limit, colorLow, colorHigh, duration)
     d3.selectAll('.bar')
       .transition()
       .duration(duration)
+      .ease(d3.easeLinear)
       .style('fill', function (d) {
         if (d[yParam] > limit) {
           return colorHigh;
@@ -657,7 +649,7 @@ let fadeStart = function (duration, data, yStart = -15, yEnd = 50, tickValues = 
         // console.log(changeDynamicText(1000,''));
         return Promise.all([
           closeMapView(),
-          updateBarGraphParam('marginBottom', 100),
+          updateBarGraphParam('marginBottom', 200),
           updateBarGraphDims(mapModeHeight),
 
           updateXScale(),
