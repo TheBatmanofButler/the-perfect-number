@@ -124,6 +124,7 @@ var isValidComparison = function (comparison, numTaxBreakSquares, numComparisonS
 
 let inMapMode = false,
     proportionInTransition = false,
+    dynamicTextInProgress = false,
     allCompanyData,
     currentCompany,
     allRegionsDrawn = true,

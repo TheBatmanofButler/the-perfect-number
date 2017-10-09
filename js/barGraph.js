@@ -462,49 +462,47 @@ let openMapView = function (data, company) {
     });
   }
 
-  return chain.then( function () {
-      removeBarGraphClicks();
-      $('.proportion-graph-viewer').css('display', 'flex');
-      $('.proportion-graph-viewer').animate({'height': '45vh'}, 1000, 'linear', function () {
-
-        let slugifiedCompanyName = slugify(company),
-            companyInfo = infoBoxData[slugifiedCompanyName];
-        loadInfo(companyInfo);
-
-        initPropGraph(company);
-        return updatePropGraph();
-      });  
-    })
+  return chain
     .then( function () {
-      console.log(333333);
       slideInProgress = false;
       if (!inMapMode)
         return highlightAllBars('#000', 0);
     })
     .then( function () {
-        console.log(444444);
-        return Promise.all([
-                $('.bar-graph-elements').animate({'opacity': 1}),
-                updateBarGraphParam('marginBottom', 60),
-                updateBarGraphDims(mapModeHeight),
 
-                updateXScale(),
-                updateYScale(-15, 50),
-                updateBarGraphSVG(1000),
+      removeBarGraphClicks();
+      $('.proportion-graph-viewer').css('display', 'flex');
+      $('.proportion-graph-viewer').animate({'height': '45vh'}, 1000, 'linear', function () {
+        let slugifiedCompanyName = slugify(company),
+            companyInfo = infoBoxData[slugifiedCompanyName];
+        loadInfo(companyInfo);
 
-                updateBarGraphText(null, 1000),
-                updateCompanyLabel(1000),
+        initPropGraph(company);
+        updatePropGraph();
+      }); 
 
-                updateBarGraphParam('data', data),
-                updateBarGraphParam('yParam', 'rate'),
-                updatePercentLine(1000),
+      return Promise.all([
+              $('.bar-graph-elements').animate({'opacity': 1}),
+              updateBarGraphParam('marginBottom', 60),
+              updateBarGraphDims(mapModeHeight),
 
-                updateBarGraphParam('tickValues', [0, 35]),
-                updateYAxis(1000, true),
-                updateXAxis(1000, true),
-                updateBars(0, 1000, 1000)
-              ]);
-      })
+              updateXScale(),
+              updateYScale(-15, 50),
+              updateBarGraphSVG(1000),
+
+              updateBarGraphText(null, 1000),
+              updateCompanyLabel(1000),
+
+              updateBarGraphParam('data', data),
+              updateBarGraphParam('yParam', 'rate'),
+              updatePercentLine(1000),
+
+              updateBarGraphParam('tickValues', [0, 35]),
+              updateYAxis(1000, true),
+              updateXAxis(1000, true),
+              updateBars(0, 1000, 1000)
+            ]);
+    })
     .then( function () {
       if (!inMapMode) {
         return Promise.all([
@@ -659,7 +657,7 @@ let fadeStart = function (duration, data, yStart = -15, yEnd = 50, tickValues = 
       })
       .then( function () {
         let mapModeHeight = $('.graph-viewers').height();
-        // console.log(changeDynamicText(1000,''));
+
         return Promise.all([
           closeMapView(),
           updateBarGraphParam('marginBottom', 200),
