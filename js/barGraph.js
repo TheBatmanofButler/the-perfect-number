@@ -240,10 +240,10 @@ let createOpeningSlide = function () {
                                     .concat(quote3.split(''))
                                     .concat(quote4.split('')),
       openingScreen = d3.select('.opening-screen')
-                      .attr("min-width",width)
-                      .attr("min-height",height)
-                      .attr("preserveAspectRatio", "xMidYMid meet")
+                      // .attr("min-width",width)
+                      // .attr("min-height",height)
                       .attr("viewBox", "0 0 140 300");
+                      .attr("preserveAspectRatio", "xMidYMid meet")
 
 
   let chars = openingScreen

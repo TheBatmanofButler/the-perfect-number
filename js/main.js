@@ -31,7 +31,7 @@ $('.toggle-label').click( function () {
         </svg>'
       )
 
-    $(this).find('.description').show();
+    $(this).find('.description').slideDown();
   }
   else {
     $(this).find('.arrow-down').replaceWith(
@@ -39,7 +39,7 @@ $('.toggle-label').click( function () {
           <path d="M0 0v8l4-4-4-4z" transform="translate(2)" /> \
         </svg>'
       )
-    $(this).find('.description').hide();
+    $(this).find('.description').slideUp();
   }
 })
 

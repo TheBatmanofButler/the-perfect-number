@@ -290,10 +290,10 @@ canvas {
 
 .about {
   position: absolute;
-  height: 100vh;
+  height: calc(100vh - 34px - 5px - 5px - 5px);
   width: 0vw;
   background: green;
   z-index: 4;
-  top: 5vh; right: 0vw;
+  top: calc(5px + 34px); right: 0vw;
   margin: 5px;
 }

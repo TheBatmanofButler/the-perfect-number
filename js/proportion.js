@@ -74,9 +74,11 @@ let updatePropGraph = function (firstDraw = true) {
   return Promise.all([
     setAllRegionSquares(),
     getHoverMap(),
-    createCanvases(),
-    drawAllCanvases(firstDraw)
-  ]);
+    createCanvases()
+  ])
+  .then( function () {
+    return drawAllCanvases(firstDraw);
+  })
 
 }
 
@@ -136,37 +138,42 @@ let shuffleArray = function(a) {
 }
 
 let createCanvases = function () {
-  let regions = propGraphParams['regions'],
-      propWidth = propGraphParams['propWidth'],
-      propHeight = propGraphParams['propHeight'],
-      canvases = propGraphParams['canvases'] = [],
-      unit = propGraphParams['regions'][0]['unit'];
+  return new Promise( function (resolve, reject) {
+    let regions = propGraphParams['regions'],
+        propWidth = propGraphParams['propWidth'],
+        propHeight = propGraphParams['propHeight'],
+        canvases = propGraphParams['canvases'] = [],
+        unit = propGraphParams['regions'][0]['unit'];
 
-  changeDynamicText(500, 'Each square is the equivalent of $' + unit);
+    changeDynamicText(500, 'Each square is the equivalent of $' + unit);
 
-  d3.selectAll('canvas')
-    // .transition()
-    // .duration(300)
-    .remove();
+    let canvasObj;
+    for (let ii in regions) {
+      let canvas = document.createElement('canvas');
+      canvases.push(canvas);
+      
+      canvasObj = d3.select(canvas)
+                    .attr('class', function (d) {
+                      if (ii == 1)
+                        return 'animated';
+                      else
+                        return 'non-animated';
+                    })
+                    .attr('width', propWidth)
+                    .attr('height', propHeight);
+    }
 
-  let canvasObj;
-  for (let ii in regions) {
-    let canvas = document.createElement('canvas');
-    canvases.push(canvas);
-    
-    canvasObj = d3.select(canvas)
-                  .attr('class', function (d) {
-                    if (ii == 1)
-                      return 'animated';
-                    else
-                      return 'non-animated';
-                  })
-                  .attr('width', propWidth)
-                  .attr('height', propHeight);
-  }
+    canvasObj
+      .call(addMouseEvent);
 
-  canvasObj
-    .call(addMouseEvent);
+
+    d3.selectAll('canvas')
+      .transition()
+      .duration(500)
+      .style('opacity', 0)
+      .remove()
+      .end(resolve);
+  });
 }
 
 let addMouseEvent = function (canvasObj) {
