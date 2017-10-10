@@ -266,12 +266,14 @@ canvas {
         position: absolute;
       }
 
-      .opening-screen {
+      .opening-screen-svg {
         max-width: 100%;
         min-width: 1000px;
         max-height: 100%;
         min-height: 700px;
-       
+      }
+
+      .opening-screen {       
         font-family: 'Roboto Mono', monospace;
       }
 
@@ -290,10 +292,10 @@ canvas {
 
 .about {
   position: absolute;
-  height: calc(100vh - 34px - 5px - 5px - 5px);
+  height: calc(100vh - 49px);
   width: 0vw;
   background: green;
   z-index: 4;
-  top: calc(5px + 34px); right: 0vw;
+  top: 39px; right: 0;
   margin: 5px;
 }

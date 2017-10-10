@@ -7,7 +7,7 @@
  */
 
 let propGraphParams = {
-  regions: {},
+  regions: [],
   propWidth: null,
   propHeight: null,
   squareOuterLength: null,
@@ -69,6 +69,8 @@ let getGridSquares = function (numSquares, squareOuterLength, columnLength) {
 }
 
 let updatePropGraph = function (firstDraw = true) {
+
+  if (propGraphParams['regions'].length == 0) return;
 
   updatePropGraphParams();
   return Promise.all([

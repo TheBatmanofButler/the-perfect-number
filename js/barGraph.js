@@ -135,10 +135,11 @@ let initBarGraph = function () {
 
   let barGraphSVG = d3.select('.bar-graph')
 
-  let openingScreen = barGraphSVG
-                          .append('g')
-                          .attr('class', 'opening-screen')
-                          .style('opacity', 1);
+  // let openingScreen = barGraphSVG
+  //                         .append('svg')
+  //                         .style('opacity', 1)
+  //                         .append('g')
+  //                         .attr('class', 'opening-screen');
 
   createOpeningSlide();
 
@@ -239,11 +240,11 @@ let createOpeningSlide = function () {
   let quoteChars = quote1.split('').concat(quote2.split(''))
                                     .concat(quote3.split(''))
                                     .concat(quote4.split('')),
-      openingScreen = d3.select('.opening-screen')
-                      // .attr("min-width",width)
-                      // .attr("min-height",height)
-                      .attr("viewBox", "0 0 140 300");
-                      .attr("preserveAspectRatio", "xMidYMid meet")
+      openingScreen = d3.select('.bar-graph')
+                        .attr('width', null)
+                        .attr('height', null)
+                        .attr("viewBox", "0 0 1400 300")
+                        .attr("preserveAspectRatio", "xMidYMid meet");
 
 
   let chars = openingScreen
@@ -261,7 +262,7 @@ let createOpeningSlide = function () {
 
   updateQuoteText(50, quote1.length, quote1.length + quote2.length, quote1.length + quote2.length + quote3.length);
 
-  setTimeout(function () {
+  let timeout = setTimeout(function () {
     let i = 0;
     let barGraphWidth = barGraphParams['barGraphWidth'];
     // let totalWidth1 = 20;
@@ -348,6 +349,8 @@ let createOpeningSlide = function () {
         .duration(3000)
         .style('opacity', 1);
   }, 50 * quoteChars.length);
+
+  openingScreenTimeouts.push(timeout);
 }
 
 let sumTillPosition = function (arr, pos) {
@@ -417,10 +420,11 @@ let updateQuoteText = function (duration, lineBreak1, lineBreak2, lineBreak3) {
     })
     .each( function (d,i) {
       let element = this;
-      setTimeout( function () {
+      let timeout = setTimeout( function () {
         d3.select(element)
           .style('opacity', 1);
       }, i * duration);
+      openingScreenTimeouts.push(timeout);
     })
 }
 
@@ -616,14 +620,37 @@ let showAll = function (duration) {
 
 let fadeOpeningScreen = function(duration) {
   return new Promise( function (resolve, reject) {
-    showAll(1000);
+    // showAll(1000);
 
-    d3.select('.opening-screen')
+    for (let ii in openingScreenTimeouts) {
+      let timeout = openingScreenTimeouts[ii];
+      clearTimeout(timeout);
+      timeout = 0;
+    }
+    openingScreenTimeouts = [];
+
+    d3.selectAll('.quote-text, .highlight, .cursor')
       .transition()
       .duration(duration)
       .style('opacity', 0)
-      .style('display', 'none')
-      .end(resolve);
+      .end(function () {
+        let barGraphWidth = barGraphParams['barGraphWidth'],
+            barGraphHeight = barGraphParams['barGraphHeight'],
+            marginTop = barGraphParams['marginTop'],
+            marginRight = barGraphParams['marginRight'],
+            marginBottom = barGraphParams['marginBottom'],
+            marginLeft = barGraphParams['marginLeft'],
+            totalWidth = barGraphWidth + marginLeft + marginRight,
+            totalHeight = barGraphHeight + marginTop + marginBottom;
+
+        d3.select('.bar-graph')
+          .attr('height', totalHeight)
+          .attr('width', totalWidth)
+          .attr("viewBox", null)
+          .attr("preserveAspectRatio", null)
+
+        resolve();
+      });
   });
 }
 
