@@ -232,9 +232,9 @@ let createOpeningSlide = function () {
   let width = 1415,
       height = 407;
 
-  console.log(quote1.length);
-  console.log(quote2.length);
-  console.log(quote3.length);
+  // console.log(quote1.length);
+  // console.log(quote2.length);
+  // console.log(quote3.length);
   
   let quoteChars = quote1.split('').concat(quote2.split(''))
                                     .concat(quote3.split(''))
@@ -365,7 +365,7 @@ let updateQuoteText = function (duration, lineBreak1, lineBreak2, lineBreak3) {
       totalWidth3 = 20,
       totalWidth4 = 130,
       text = d3.selectAll('.quote-text');
-      console.log(lineBreak2);
+      // console.log(lineBreak2);
 
   text
     .style('font-size', 30)
@@ -457,7 +457,7 @@ let openMapView = function (data, company) {
 
   if (currentSlide == 1 && !inMapMode) {
     chain = chain.then( function () {
-      console.log(111111);
+      // console.log(111111);
       return fadeStart(500, allCompanyData);
     });
   }
@@ -476,13 +476,13 @@ let openMapView = function (data, company) {
       });  
     })
     .then( function () {
-      console.log(333333);
+      // console.log(333333);
       slideInProgress = false;
       if (!inMapMode)
         return highlightAllBars('#000', 0);
     })
     .then( function () {
-        console.log(444444);
+        // console.log(444444);
         return Promise.all([
                 $('.bar-graph-elements').animate({'opacity': 1}),
                 updateBarGraphParam('marginBottom', 60),

@@ -48,7 +48,7 @@ let updatePropGraphParams = function () {
       columnLength = Math.floor(propHeight / squareOuterLength),
       squares = getGridSquares(numSquares, squareOuterLength, columnLength);
 
-  console.log(propWidth);
+  // console.log(propWidth);
 
   propGraphParams['propWidth'] = propWidth;
   propGraphParams['propHeight'] = propHeight;

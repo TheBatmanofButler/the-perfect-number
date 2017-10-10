@@ -305,7 +305,7 @@ let updateBarGraphDims = function (mapModeHeight) {
       marginBottom = barGraphParams['marginBottom'],
       barGraphWidth = $('.bar-graph-viewer').width() - marginLeft - marginRight;
 
-  console.log(barGraphWidth);
+  // console.log(barGraphWidth);
 
   if (!mapModeHeight)
     mapModeHeight = $('.bar-graph-viewer').height();

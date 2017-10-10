@@ -77,10 +77,10 @@ let createProportionAreas = function (comparisons, actualProfit, actualTaxBreak,
 
   let filled = 0;
   for (let ii in comparisons) {
-
     let comparison = comparisons[ii],
         comparisonMoney = comparison['money'] / convertConst,
-        numComparisonSquares = Math.floor(comparisonMoney);
+        numComparisonSquares = Math.floor(comparisonMoney),
+        lastComparison = 0;
 
     if (isValidComparison(comparison, numTaxBreakSquares, numComparisonSquares, filled)) {
 
@@ -92,9 +92,35 @@ let createProportionAreas = function (comparisons, actualProfit, actualTaxBreak,
       });
 
       filled += numComparisonSquares;
+      lastComparison = ii;
     }
-  }
 
+
+    else if (lastComparison < ii) {
+      let i = 0;
+      numComparisonSquares = Math.floor(comparisonMoney * i);
+      console.log(numComparisonSquares);
+      while ((numComparisonSquares < 6) || ((numComparisonSquares < 50) && isValidComparison(comparison, numTaxBreakSquares, numComparisonSquares, filled))) {
+        i+=100;
+        numComparisonSquares = Math.floor(comparisonMoney * i);
+      }
+
+      // numComparisonSquares = Math.floor(comparisonMoney * i;
+      if (isValidComparison(comparison, numTaxBreakSquares, numComparisonSquares, filled)) {
+        console.log(numComparisonSquares);
+        proportionAreas.push({
+          'text': i + ' x ' + comparison['text'],
+          'numSquares': numComparisonSquares,
+          'color': comparison['color'],
+          'money': getMoneyString(comparisonMoney * i, convertConst)
+        });
+
+        filled += numComparisonSquares;
+      }
+    }
+
+  }
+  console.log(proportionAreas);
   return proportionAreas;
 }
 
@@ -115,9 +141,9 @@ let getMoneyString = function (money, convertConst) {
 }
 
 var isValidComparison = function (comparison, numTaxBreakSquares, numComparisonSquares, filled) {
-    enough = numComparisonSquares > 6,
-    remaining = numTaxBreakSquares - filled,
-    notTooMany = numComparisonSquares <= remaining;
+  let enough = numComparisonSquares > 6,
+      remaining = numTaxBreakSquares - filled,
+      notTooMany = numComparisonSquares <= remaining;
 
     return (enough && notTooMany);
 }

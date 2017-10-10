@@ -12,7 +12,7 @@ let loadInfo = function (infoBoxData) {
   $('.industry').text(infoBoxData['industry']);
   $('.rate').html('<b>Tax Rate</b>: <font size="3px">' + infoBoxData['rate'] + '%</font>');
   let taxBreak = infoBoxData['taxBreak'];
-  console.log(taxBreak);
+  // console.log(taxBreak);
   if (taxBreak[0] == '-') {
     taxBreak = taxBreak.slice(1);
     $('.tax-break').html('<b>Tax Break</b>: <font size="3px">Paid $' + taxBreak + ' beyond the standard 35% rate</font>');
