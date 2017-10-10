@@ -439,7 +439,6 @@ let resizeBarGraph = function () {
 
     updateBarGraphText(null, 0);
     updateCompanyLabel(0);
-    updateQuoteText();
 
     updatePercentLine(0);
     updateYAxis(0);
@@ -629,7 +628,7 @@ let fadeOpeningScreen = function(duration) {
     }
     openingScreenTimeouts = [];
 
-    d3.selectAll('.quote-text, .highlight, .cursor')
+    d3.selectAll('.quote-text, .highlight, .cursor, .pedal')
       .transition()
       .duration(duration)
       .style('opacity', 0)
@@ -657,14 +656,70 @@ let fadeOpeningScreen = function(duration) {
 let showOpeningScreen = function(duration) {
   slideInProgress = false;
   return new Promise( function (resolve, reject) {
-    fadeAll(500);
+    fadeAll(500)
+    .then( function () {
 
-    d3.select('.opening-screen')
-      .transition()
-      .duration(1000)
-      .style('opacity', 1)
-      .style('display', 'block')
-      .end(resolve);
+      let barGraphWidth = barGraphParams['barGraphWidth'],
+          totalWidth1 = 20,
+          totalWidth2 = 20,
+          totalWidth3 = 20;
+
+
+      d3.select('.bar-graph')
+        .attr('width', null)
+        .attr('height', null)
+        .attr("viewBox", "0 0 1400 300")
+        .attr("preserveAspectRatio", "xMidYMid meet");
+
+      d3.selectAll('.highlight')
+        .attr('x', function (d, i) {
+          let charWidth;
+          if (d == ' ')
+            charWidth = 0.01 * barGraphWidth;
+          else
+            charWidth = this.getComputedTextLength();
+
+          // let currentPosition = totalWidth;
+          // totalWidth += charWidth;
+
+          let currentPosition;
+          if (i < 9) {
+            currentPosition = totalWidth1;
+            totalWidth1 += charWidth;
+          }
+          else if (i < 18) {
+            currentPosition = totalWidth2;
+            totalWidth2 += charWidth;
+          }
+          else {
+            currentPosition = totalWidth3;
+            totalWidth3 += charWidth;
+          }
+
+          return currentPosition;
+        })
+        .attr('y', function (d,i) {
+
+          if (i < 9)
+            return 80;
+          else if (i < 18)
+            return 120;
+          else
+            return 160;
+        })
+        .transition()
+        .duration(1000)
+        .style('fill', 'red')
+        .style('opacity', 1)
+
+    d3.select('.pedal')
+        .attr('x', barGraphWidth/2 - 20)
+        .attr('y', 190)
+        .transition()
+        .duration(1000)
+        .style('opacity', 1);
+
+    });
   });
 }
 
