@@ -99,7 +99,6 @@ let createProportionAreas = function (comparisons, actualProfit, actualTaxBreak,
     else if (lastComparison < ii) {
       let i = 0;
       numComparisonSquares = Math.floor(comparisonMoney * i);
-      console.log(numComparisonSquares);
       while ((numComparisonSquares < 6) || ((numComparisonSquares < 50) && isValidComparison(comparison, numTaxBreakSquares, numComparisonSquares, filled))) {
         i+=100;
         numComparisonSquares = Math.floor(comparisonMoney * i);
@@ -107,7 +106,6 @@ let createProportionAreas = function (comparisons, actualProfit, actualTaxBreak,
 
       // numComparisonSquares = Math.floor(comparisonMoney * i;
       if (isValidComparison(comparison, numTaxBreakSquares, numComparisonSquares, filled)) {
-        console.log(numComparisonSquares);
         proportionAreas.push({
           'text': i + ' x ' + comparison['text'],
           'numSquares': numComparisonSquares,
@@ -120,7 +118,6 @@ let createProportionAreas = function (comparisons, actualProfit, actualTaxBreak,
     }
 
   }
-  console.log(proportionAreas);
   return proportionAreas;
 }
 
@@ -150,8 +147,10 @@ var isValidComparison = function (comparison, numTaxBreakSquares, numComparisonS
 
 let inMapMode = false,
     proportionInTransition = false,
+    dynamicTextInProgress = false,
     allCompanyData,
     currentCompany,
+    openingScreenTimeouts = [],
     allRegionsDrawn = true,
     infoBoxData = {},
     comparisonData = {},

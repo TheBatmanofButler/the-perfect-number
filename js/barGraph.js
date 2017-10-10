@@ -135,10 +135,11 @@ let initBarGraph = function () {
 
   let barGraphSVG = d3.select('.bar-graph')
 
-  let openingScreen = barGraphSVG
-                          .append('g')
-                          .attr('class', 'opening-screen')
-                          .style('opacity', 1);
+  // let openingScreen = barGraphSVG
+  //                         .append('svg')
+  //                         .style('opacity', 1)
+  //                         .append('g')
+  //                         .attr('class', 'opening-screen');
 
   createOpeningSlide();
 
@@ -231,19 +232,15 @@ let createOpeningSlide = function () {
   let quote4 = '- Donald Trump|';
   let width = 1415,
       height = 407;
-
-  // console.log(quote1.length);
-  // console.log(quote2.length);
-  // console.log(quote3.length);
   
   let quoteChars = quote1.split('').concat(quote2.split(''))
                                     .concat(quote3.split(''))
                                     .concat(quote4.split('')),
-      openingScreen = d3.select('.opening-screen')
-                      .attr("min-width",width)
-                      .attr("min-height",height)
-                      .attr("preserveAspectRatio", "xMidYMid meet")
-                      .attr("viewBox", "0 0 140 300");
+      openingScreen = d3.select('.bar-graph')
+                        .attr('width', null)
+                        .attr('height', null)
+                        .attr("viewBox", "0 0 1400 300")
+                        .attr("preserveAspectRatio", "xMidYMid meet");
 
 
   let chars = openingScreen
@@ -261,15 +258,21 @@ let createOpeningSlide = function () {
 
   updateQuoteText(50, quote1.length, quote1.length + quote2.length, quote1.length + quote2.length + quote3.length);
 
-  setTimeout(function () {
+  let barGraphWidth = barGraphParams['barGraphWidth'];
+  openingScreen
+        .append('g')
+        .append('text')
+        .text('by Pedal')
+        .attr('class', 'pedal')
+        .attr('x', barGraphWidth/2 - 20)
+        .attr('y', 190)
+        .style('opacity', 0);
+
+  let timeout = setTimeout(function () {
     let i = 0;
-    let barGraphWidth = barGraphParams['barGraphWidth'];
-    // let totalWidth1 = 20;
     let totalWidth1 = barGraphWidth/2 - 65;
     let totalWidth2 = barGraphWidth/2 - 70;
     let totalWidth3 = barGraphWidth/2 - 65;
-    // let totalWidth2 = 8;
-    // let totalWidth3 = 20;
     
 
     d3.selectAll('.quote-text')
@@ -290,9 +293,6 @@ let createOpeningSlide = function () {
           charWidth = 0.01 * barGraphWidth;
         else
           charWidth = this.getComputedTextLength();
-
-        // let currentPosition = totalWidth;
-        // totalWidth += charWidth;
 
         let currentPosition;
         if (i < 9) {
@@ -334,20 +334,14 @@ let createOpeningSlide = function () {
     //       // })
     //     })
     // }
-    openingScreen
-        .append('g')
-        .append('text')
-        .text('by Pedal')
-        .attr('class', 'pedal')
-        // .attr('x', barGraphWidth * 0.5)
-        .attr('x', barGraphWidth/2 - 20)
-        .attr('y', 190)
-        .style('opacity', 0)
-        .transition()
-        .delay(3000)
-        .duration(3000)
-        .style('opacity', 1);
+    d3.select('.pedal')
+      .transition()
+      .delay(3000)
+      .duration(3000)
+      .style('opacity', 1);
   }, 50 * quoteChars.length);
+
+  openingScreenTimeouts.push(timeout);
 }
 
 let sumTillPosition = function (arr, pos) {
@@ -365,7 +359,6 @@ let updateQuoteText = function (duration, lineBreak1, lineBreak2, lineBreak3) {
       totalWidth3 = 20,
       totalWidth4 = 130,
       text = d3.selectAll('.quote-text');
-      // console.log(lineBreak2);
 
   text
     .style('font-size', 30)
@@ -417,10 +410,11 @@ let updateQuoteText = function (duration, lineBreak1, lineBreak2, lineBreak3) {
     })
     .each( function (d,i) {
       let element = this;
-      setTimeout( function () {
+      let timeout = setTimeout( function () {
         d3.select(element)
           .style('opacity', 1);
       }, i * duration);
+      openingScreenTimeouts.push(timeout);
     })
 }
 
@@ -435,7 +429,6 @@ let resizeBarGraph = function () {
 
     updateBarGraphText(null, 0);
     updateCompanyLabel(0);
-    updateQuoteText();
 
     updatePercentLine(0);
     updateYAxis(0);
@@ -457,54 +450,51 @@ let openMapView = function (data, company) {
 
   if (currentSlide == 1 && !inMapMode) {
     chain = chain.then( function () {
-      // console.log(111111);
       return fadeStart(500, allCompanyData);
     });
   }
 
-  return chain.then( function () {
-      removeBarGraphClicks();
-      $('.proportion-graph-viewer').css('display', 'flex');
-      $('.proportion-graph-viewer').animate({'height': '45vh'}, 1000, 'linear', function () {
-
-        let slugifiedCompanyName = slugify(company),
-            companyInfo = infoBoxData[slugifiedCompanyName];
-        loadInfo(companyInfo);
-
-        initPropGraph(company);
-        return updatePropGraph();
-      });  
-    })
+  return chain
     .then( function () {
-      // console.log(333333);
       slideInProgress = false;
       if (!inMapMode)
         return highlightAllBars('#000', 0);
     })
     .then( function () {
-        // console.log(444444);
-        return Promise.all([
-                $('.bar-graph-elements').animate({'opacity': 1}),
-                updateBarGraphParam('marginBottom', 60),
-                updateBarGraphDims(mapModeHeight),
 
-                updateXScale(),
-                updateYScale(-15, 50),
-                updateBarGraphSVG(1000),
+      removeBarGraphClicks();
+      $('.proportion-graph-viewer').css('display', 'flex');
+      $('.proportion-graph-viewer').animate({'height': '45vh'}, 1000, 'linear', function () {
+        let slugifiedCompanyName = slugify(company),
+            companyInfo = infoBoxData[slugifiedCompanyName];
+        loadInfo(companyInfo);
 
-                updateBarGraphText(null, 1000),
-                updateCompanyLabel(1000),
+        initPropGraph(company);
+        updatePropGraph();
+      }); 
 
-                updateBarGraphParam('data', data),
-                updateBarGraphParam('yParam', 'rate'),
-                updatePercentLine(1000),
+      return Promise.all([
+              $('.bar-graph-elements').animate({'opacity': 1}),
+              updateBarGraphParam('marginBottom', 60),
+              updateBarGraphDims(mapModeHeight),
 
-                updateBarGraphParam('tickValues', [0, 35]),
-                updateYAxis(1000, true),
-                updateXAxis(1000, true),
-                updateBars(0, 1000, 1000)
-              ]);
-      })
+              updateXScale(),
+              updateYScale(-15, 50),
+              updateBarGraphSVG(1000),
+
+              updateBarGraphText(null, 1000),
+              updateCompanyLabel(1000),
+
+              updateBarGraphParam('data', data),
+              updateBarGraphParam('yParam', 'rate'),
+              updatePercentLine(1000),
+
+              updateBarGraphParam('tickValues', [0, 35]),
+              updateYAxis(1000, true),
+              updateXAxis(1000, true),
+              updateBars(0, 1000, 1000)
+            ]);
+    })
     .then( function () {
       if (!inMapMode) {
         return Promise.all([
@@ -618,28 +608,114 @@ let showAll = function (duration) {
 
 let fadeOpeningScreen = function(duration) {
   return new Promise( function (resolve, reject) {
+    // showAll(1000);
+
+    for (let ii in openingScreenTimeouts) {
+      let timeout = openingScreenTimeouts[ii];
+      clearTimeout(timeout);
+      timeout = 0;
+    }
+    openingScreenTimeouts = [];
+
     showAll(1000);
 
-    d3.select('.opening-screen')
+    d3.selectAll('.quote-text, .highlight, .cursor, .pedal')
       .transition()
       .duration(duration)
       .style('opacity', 0)
-      .style('display', 'none')
-      .end(resolve);
+      .end(function () {
+        let barGraphWidth = barGraphParams['barGraphWidth'],
+            barGraphHeight = barGraphParams['barGraphHeight'],
+            marginTop = barGraphParams['marginTop'],
+            marginRight = barGraphParams['marginRight'],
+            marginBottom = barGraphParams['marginBottom'],
+            marginLeft = barGraphParams['marginLeft'],
+            totalWidth = barGraphWidth + marginLeft + marginRight,
+            totalHeight = barGraphHeight + marginTop + marginBottom;
+
+        d3.select('.bar-graph')
+          .attr('height', totalHeight)
+          .attr('width', totalWidth)
+          .attr("viewBox", null)
+          .attr("preserveAspectRatio", null)
+
+        resolve();
+      });
   });
 }
 
 let showOpeningScreen = function(duration) {
   slideInProgress = false;
+  let barGraphWidth = barGraphParams['barGraphWidth'],
+            barGraphHeight = barGraphParams['barGraphHeight'],
+            marginTop = barGraphParams['marginTop'],
+            marginRight = barGraphParams['marginRight'],
+            marginBottom = barGraphParams['marginBottom'],
+            marginLeft = barGraphParams['marginLeft'],
+            totalWidth = barGraphWidth + marginLeft + marginRight,
+            totalHeight = barGraphHeight + marginTop + marginBottom;
   return new Promise( function (resolve, reject) {
-    fadeAll(500);
+    fadeAll(500)
+    .then( function () {
 
-    d3.select('.opening-screen')
-      .transition()
-      .duration(1000)
-      .style('opacity', 1)
-      .style('display', 'block')
-      .end(resolve);
+      let barGraphWidth = barGraphParams['barGraphWidth'],
+          totalWidth1 = barGraphWidth/2 - 65;
+          totalWidth2 = barGraphWidth/2 - 70;
+          totalWidth3 = barGraphWidth/2 - 65;
+
+
+      d3.select('.bar-graph')
+        .attr('width', null)
+        .attr('height', null)
+        .attr("viewBox", "0 0 " + totalWidth + " " + totalHeight)
+        .attr("preserveAspectRatio", "xMidYMid meet");
+
+      d3.selectAll('.highlight')
+        .attr('x', function (d, i) {
+          let charWidth;
+          if (d == ' ')
+            charWidth = 0.01 * barGraphWidth;
+          else
+            charWidth = this.getComputedTextLength();
+
+          let currentPosition;
+          if (i < 9) {
+            currentPosition = totalWidth1;
+            totalWidth1 += charWidth;
+          }
+          else if (i < 18) {
+            currentPosition = totalWidth2;
+            totalWidth2 += charWidth;
+          }
+          else {
+            currentPosition = totalWidth3;
+            totalWidth3 += charWidth;
+          }
+
+          return currentPosition;
+        })
+        .attr('y', function (d,i) {
+
+          if (i < 9)
+            return 80;
+          else if (i < 18)
+            return 120;
+          else
+            return 160;
+        })
+        .transition()
+        .duration(1000)
+        .style('fill', 'red')
+        .style('opacity', 1)
+
+    d3.select('.pedal')
+        .attr('x', barGraphWidth/2 - 20)
+        .attr('y', 190)
+        .transition()
+        .duration(1000)
+        .style('opacity', 1);
+
+    });
   });
 }
 
@@ -659,7 +735,7 @@ let fadeStart = function (duration, data, yStart = -15, yEnd = 50, tickValues = 
       })
       .then( function () {
         let mapModeHeight = $('.graph-viewers').height();
-        // console.log(changeDynamicText(1000,''));
+
         return Promise.all([
           closeMapView(),
           updateBarGraphParam('marginBottom', 200),
