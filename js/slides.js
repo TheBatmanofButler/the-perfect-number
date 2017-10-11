@@ -2,10 +2,6 @@
 let slide1 = function (data) {
   slideInProgress = true;
   closeMapView();
-  let mapModeHeight = $('.graph-viewers').height();
-  updateBarGraphParam('marginBottom', 100);
-  updateBarGraphDims(mapModeHeight);
-  updateBarGraphSVG(1000);
   showOpeningScreen();
 }
 

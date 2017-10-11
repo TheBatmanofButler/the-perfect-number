@@ -133,48 +133,7 @@ let initBarGraph = function () {
         .attr('class', 'bar-graph-elements')
         .attr('transform', 'translate(' + marginLeft + ',' + marginTop + ')');
 
-  let barGraphSVG = d3.select('.bar-graph')
-
-  // let openingScreen = barGraphSVG
-  //                         .append('svg')
-  //                         .style('opacity', 1)
-  //                         .append('g')
-  //                         .attr('class', 'opening-screen');
-
   createOpeningSlide();
-
-
-    // openingScreen
-    //   .append('text')
-    //   .attr('class', 'intro-text')
-    //   .attr('x', 20)
-    //   .attr('y', barGraphHeight * 0.7)
-    //   .style('font-size', '10px')
-    //   .text('by')
-
-    // openingScreen
-    //   .append('text')
-    //   .attr('class', 'pedal')
-    //   .attr('x', 35)
-    //   .attr('y', barGraphHeight * 0.7)
-    //   .style('font-size', '20px')
-    //   .text('Pedal');
-
-    // openingScreen
-    //   .append('text')
-    //   .attr('class', 'intro-text')
-    //   .attr('x', 20)
-    //   .attr('y', barGraphHeight * 0.5)
-    //   .style('font-size', '40px')
-    //   .text('Corporate Tax Reality');
-
-    // openingScreen
-    //   .append('text')
-    //   .attr('class', 'intro-text')
-    //   .attr('x', 20)
-    //   .attr('y', barGraphHeight * 0.5 + 40)
-    //   .style('font-size', '25px')
-    //   .text('Visualizing the Federal Tax Rates for 258 Fortune 500 Companies');
 
   barGraph
     .append('g')
@@ -232,14 +191,23 @@ let createOpeningSlide = function () {
   let quote4 = '- Donald Trump|';
   let width = 1415,
       height = 407;
-  
+
+  let barGraphWidth = barGraphParams['barGraphWidth'],
+      barGraphHeight = barGraphParams['barGraphHeight'],
+      marginTop = barGraphParams['marginTop'],
+      marginRight = barGraphParams['marginRight'],
+      marginBottom = barGraphParams['marginBottom'],
+      marginLeft = barGraphParams['marginLeft'],
+      totalWidth = barGraphWidth + marginLeft + marginRight,
+      totalHeight = barGraphHeight + marginTop + marginBottom;
+
   let quoteChars = quote1.split('').concat(quote2.split(''))
                                     .concat(quote3.split(''))
                                     .concat(quote4.split('')),
       openingScreen = d3.select('.bar-graph')
                         .attr('width', null)
                         .attr('height', null)
-                        .attr("viewBox", "0 0 1400 300")
+                        .attr("viewBox", "0 0 " + totalWidth + " " + totalHeight)
                         .attr("preserveAspectRatio", "xMidYMid meet");
 
 
@@ -258,7 +226,6 @@ let createOpeningSlide = function () {
 
   updateQuoteText(50, quote1.length, quote1.length + quote2.length, quote1.length + quote2.length + quote3.length);
 
-  let barGraphWidth = barGraphParams['barGraphWidth'];
   openingScreen
         .append('g')
         .append('text')
@@ -421,6 +388,7 @@ let updateQuoteText = function (duration, lineBreak1, lineBreak2, lineBreak3) {
 let resizeBarGraph = function () {
 
   if (currentSlide > 1) {
+    updateBarGraphParam('tickValues', []);
     updateBarGraphDims();
 
     updateXScale();
@@ -449,6 +417,7 @@ let openMapView = function (data, company) {
   let chain = Promise.resolve();
 
   if (currentSlide == 1 && !inMapMode) {
+    currentSlide = null;
     chain = chain.then( function () {
       return fadeStart(500, allCompanyData);
     });
@@ -634,8 +603,8 @@ let fadeOpeningScreen = function(duration) {
             totalHeight = barGraphHeight + marginTop + marginBottom;
 
         d3.select('.bar-graph')
-          .attr('height', totalHeight)
           .attr('width', totalWidth)
+          .attr('height', totalHeight)
           .attr("viewBox", null)
           .attr("preserveAspectRatio", null)
 
