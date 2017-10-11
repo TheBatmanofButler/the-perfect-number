@@ -185,10 +185,14 @@ let getWordX = function (arr, pos) {
 
 let createOpeningSlide = function () {
 
-  let quote1 = '"We will reduce the corporate tax rate to no higher than 20 percent...';
-  let quote2 = '...This is a revolutionary change, and the biggest winners will be'; 
-  let quote3 = 'the everyday American workers"';
-  let quote4 = '- Donald Trump|';
+  let quote1 = '"That\'s the number I wanted to get to. I wanted to start at 15 to get there.';
+  let quote2 = 'We really had to start there because of the complexity of the numbers,'; 
+  let quote3 = 'but 20 is a perfect number."';
+  let quote4 = '- Donald Trump on US Corporate Tax|';
+  console.log(quote1.length)
+  console.log(quote2.length)
+  console.log(quote3.length)
+  console.log(quote4.length)
   let width = 1415,
       height = 407;
 
@@ -237,9 +241,9 @@ let createOpeningSlide = function () {
 
   let timeout = setTimeout(function () {
     let i = 0;
-    let totalWidth1 = barGraphWidth/2 - 65;
-    let totalWidth2 = barGraphWidth/2 - 70;
-    let totalWidth3 = barGraphWidth/2 - 65;
+    let totalWidth1 = barGraphWidth/2 - 20;
+    let totalWidth2 = barGraphWidth/2 - 30;
+    let totalWidth3 = barGraphWidth/2 - 20;
     
 
     d3.selectAll('.quote-text')
@@ -262,11 +266,11 @@ let createOpeningSlide = function () {
           charWidth = this.getComputedTextLength();
 
         let currentPosition;
-        if (i < 9) {
+        if (i < 1) {
           currentPosition = totalWidth1;
           totalWidth1 += charWidth;
         }
-        else if (i < 18) {
+        else if (i < 10) {
           currentPosition = totalWidth2;
           totalWidth2 += charWidth;
         }
@@ -279,9 +283,9 @@ let createOpeningSlide = function () {
       })
       .attr('y', function (d,i) {
 
-        if (i < 9)
+        if (i < 1)
           return 80;
-        else if (i < 18)
+        else if (i < 10)
           return 120;
         else
           return 160;
@@ -333,7 +337,7 @@ let updateQuoteText = function (duration, lineBreak1, lineBreak2, lineBreak3) {
     .text( function (d, i) {
       if (d == '|')
         d3.select(this).attr('id','cursor');
-      if (i > 138 && i < 165)
+      if (i > 155 && i < 172)
         d3.select(this).attr('class','highlight');
       return d;
     })
@@ -628,9 +632,9 @@ let showOpeningScreen = function(duration) {
     .then( function () {
 
       let barGraphWidth = barGraphParams['barGraphWidth'],
-          totalWidth1 = barGraphWidth/2 - 65;
-          totalWidth2 = barGraphWidth/2 - 70;
-          totalWidth3 = barGraphWidth/2 - 65;
+          totalWidth1 = barGraphWidth/2 - 15;
+          totalWidth2 = barGraphWidth/2 - 25;
+          totalWidth3 = barGraphWidth/2 - 5;
 
 
       d3.select('.bar-graph')
