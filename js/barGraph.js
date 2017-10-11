@@ -243,7 +243,7 @@ let createOpeningSlide = function () {
     let i = 0;
     let totalWidth1 = barGraphWidth/2 - 20;
     let totalWidth2 = barGraphWidth/2 - 30;
-    let totalWidth3 = barGraphWidth/2 - 20;
+    let totalWidth3 = barGraphWidth/2 - 30;
     
 
     d3.selectAll('.quote-text')
@@ -266,7 +266,7 @@ let createOpeningSlide = function () {
           charWidth = this.getComputedTextLength();
 
         let currentPosition;
-        if (i < 1) {
+        if (i < 3) {
           currentPosition = totalWidth1;
           totalWidth1 += charWidth;
         }
@@ -283,7 +283,7 @@ let createOpeningSlide = function () {
       })
       .attr('y', function (d,i) {
 
-        if (i < 1)
+        if (i < 3)
           return 80;
         else if (i < 10)
           return 120;
@@ -337,7 +337,7 @@ let updateQuoteText = function (duration, lineBreak1, lineBreak2, lineBreak3) {
     .text( function (d, i) {
       if (d == '|')
         d3.select(this).attr('id','cursor');
-      if (i > 155 && i < 172)
+      if ((i > 7 && i < 11 )|| (i > 157 && i < 172))
         d3.select(this).attr('class','highlight');
       return d;
     })
@@ -632,9 +632,9 @@ let showOpeningScreen = function(duration) {
     .then( function () {
 
       let barGraphWidth = barGraphParams['barGraphWidth'],
-          totalWidth1 = barGraphWidth/2 - 15;
-          totalWidth2 = barGraphWidth/2 - 25;
-          totalWidth3 = barGraphWidth/2 - 5;
+          totalWidth1 = barGraphWidth/2 - 20;
+          totalWidth2 = barGraphWidth/2 - 30;
+          totalWidth3 = barGraphWidth/2 - 30;
 
 
       d3.select('.bar-graph')
@@ -652,11 +652,11 @@ let showOpeningScreen = function(duration) {
             charWidth = this.getComputedTextLength();
 
           let currentPosition;
-          if (i < 9) {
+          if (i < 3) {
             currentPosition = totalWidth1;
             totalWidth1 += charWidth;
           }
-          else if (i < 18) {
+          else if (i < 10) {
             currentPosition = totalWidth2;
             totalWidth2 += charWidth;
           }
@@ -669,9 +669,9 @@ let showOpeningScreen = function(duration) {
         })
         .attr('y', function (d,i) {
 
-          if (i < 9)
+          if (i < 3)
             return 80;
-          else if (i < 18)
+          else if (i < 10)
             return 120;
           else
             return 160;
