@@ -273,7 +273,7 @@ canvas {
 
       .pedal {
         font-size: 2rem;
-        font-family: 'Oxygen', sans-serif;
+        font-family: 'Asap Condensed', sans-serif;
         color: #224461;
 
         padding: 1%;
@@ -283,7 +283,7 @@ canvas {
 .about {
   position: absolute;
 
-  height: calc(100vh - 49px);
+  height: calc(100vh - 65px);
   width: 0;
 
   background: green;
@@ -293,14 +293,16 @@ canvas {
   margin: 5px;
 
   overflow-y: scroll;
+  overflow-x: none; 
 }
 
   .about-text {
     text-overflow: clip;
+    text-align: justify;
 
     height: 100%;
-    width: 100%;
-    padding: 5px;
+    width: 90%;
+    padding: 20px;
   }
 
 .bold {

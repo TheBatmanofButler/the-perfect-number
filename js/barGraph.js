@@ -236,8 +236,17 @@ let createOpeningSlide = function () {
         .text('by Pedal')
         .attr('class', 'pedal')
         .attr('x', 20)
-        .attr('y', 200)
-        .style('opacity', 0);
+        .attr('y', 260)
+        .style('opacity', 0)
+
+  openingScreen
+        .append('g')
+        .append('svg:img')
+        .attr('class', 'pedal-link')
+        .attr('x',30)
+        .attr('y',260)
+        .attr('width', 15)
+        .attr('height', 15)
 
   let timeout = setTimeout(function () {
     let i = 0;
@@ -254,11 +263,11 @@ let createOpeningSlide = function () {
     d3.selectAll('.highlight')
       .transition()
       .duration(1000)
-      .style('font-size', '80px')
       .style('fill', 'red')
       .style('opacity', 1)
       .transition()
       .delay(1000)
+      .style('font-size', '80px')
       .attr('x', function (d, i) {
         let charWidth;
         if (d == ' ')
@@ -285,11 +294,11 @@ let createOpeningSlide = function () {
       .attr('y', function (d,i) {
 
         if (i < 3)
-          return 50;
+          return 60;
         else if (i < 10)
-          return 100;
+          return 130;
         else
-          return 150;
+          return 200;
       });
     // while(i < 10) {
     //   d3.select('#cursor')
@@ -672,11 +681,11 @@ let showOpeningScreen = function(duration) {
         .attr('y', function (d,i) {
 
           if (i < 3)
-            return 50;
+            return 60;
           else if (i < 10)
-            return 100;
+            return 130;
           else
-            return 150;
+            return 200;
         })
         .transition()
         .duration(1000)
@@ -685,7 +694,7 @@ let showOpeningScreen = function(duration) {
 
     d3.select('.pedal')
         .attr('x', 20)
-        .attr('y', 200)
+        .attr('y', 260)
         .transition()
         .duration(1000)
         .style('opacity', 1);
