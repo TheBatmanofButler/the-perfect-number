@@ -241,10 +241,11 @@ let createOpeningSlide = function () {
 
   openingScreen
         .append('g')
-        .append('svg:img')
+        .append('svg:image')
         .attr('class', 'pedal-link')
-        .attr('x',30)
-        .attr('y',260)
+        .attr('xlink:href', 'public/img/vendor/open-iconic/svg/external-link.svg')
+        .attr('x', 30)
+        .attr('y', 260)
         .attr('width', 15)
         .attr('height', 15)
 
