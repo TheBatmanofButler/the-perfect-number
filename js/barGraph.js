@@ -233,21 +233,45 @@ let createOpeningSlide = function () {
   openingScreen
         .append('g')
         .append('text')
-        .text('by Pedal')
+        .text('by')
         .attr('class', 'pedal')
         .attr('x', 20)
+        .attr('y', 260)
+        .style('opacity', 0)
+        
+  openingScreen
+        .append('g')
+        .append('text')
+        .text('Pedal')
+        .attr('class', 'pedal bolden')
+        .attr('x', 55)
         .attr('y', 260)
         .style('opacity', 0)
 
   openingScreen
         .append('g')
-        .append('svg:image')
-        .attr('class', 'pedal-link')
-        .attr('xlink:href', 'public/img/vendor/open-iconic/svg/external-link.svg')
-        .attr('x', 30)
-        .attr('y', 260)
+        .append('svg')
+        .attr('class', 'pedal-link bolden')
+        .attr('xmlns', 'http://www.w3.org/2000/svg')
+        .attr('x', 130)
+        .attr('y', 245)
+        .attr('viewBox', '0 0 8 8')
         .attr('width', 15)
         .attr('height', 15)
+        .style('opacity', 0)
+        .append('path')
+        .attr('d', 'M0 0v8h8v-2h-1v1h-6v-6h1v-1h-2zm4 0l1.5 1.5-2.5 2.5 1 1 2.5-2.5 1.5 1.5v-4h-4z')
+
+  d3.selectAll('.bolden')
+        .on("mouseover", function () {
+          d3.selectAll('.bolden')
+            .style('fill', 'red');
+        })
+        .on("mouseout", function () {
+          d3.selectAll('.bolden')
+            .style('fill', 'black');
+        })
+
 
   let timeout = setTimeout(function () {
     let i = 0;
@@ -316,7 +340,7 @@ let createOpeningSlide = function () {
     //       // })
     //     })
     // }
-    d3.select('.pedal')
+    d3.selectAll('.pedal, .pedal-link')
       .transition()
       .delay(3000)
       .duration(3000)
@@ -603,7 +627,7 @@ let fadeOpeningScreen = function(duration) {
 
     showAll(1000);
 
-    d3.selectAll('.quote-text, .highlight, .cursor, .pedal')
+    d3.selectAll('.quote-text, .highlight, .cursor, .pedal, .pedal-link')
       .transition()
       .duration(duration)
       .style('opacity', 0)
@@ -693,9 +717,7 @@ let showOpeningScreen = function(duration) {
         .style('fill', 'red')
         .style('opacity', 1)
 
-    d3.select('.pedal')
-        .attr('x', 20)
-        .attr('y', 260)
+    d3.selectAll('.pedal, .pedal-link')
         .transition()
         .duration(1000)
         .style('opacity', 1);

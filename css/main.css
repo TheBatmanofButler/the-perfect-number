@@ -279,6 +279,10 @@ canvas {
         padding: 1%;
       }
 
+      .bolden:hover {
+        cursor: pointer;
+      }
+
 
 .about {
   position: absolute;
