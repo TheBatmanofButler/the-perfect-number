@@ -235,15 +235,15 @@ let createOpeningSlide = function () {
         .append('text')
         .text('by Pedal')
         .attr('class', 'pedal')
-        .attr('x', barGraphWidth/2 - 20)
-        .attr('y', 190)
+        .attr('x', 20)
+        .attr('y', 200)
         .style('opacity', 0);
 
   let timeout = setTimeout(function () {
     let i = 0;
-    let totalWidth1 = barGraphWidth/2 - 20;
-    let totalWidth2 = barGraphWidth/2 - 30;
-    let totalWidth3 = barGraphWidth/2 - 30;
+    let totalWidth1 = 20;
+    let totalWidth2 = 20;
+    let totalWidth3 = 13;
     
 
     d3.selectAll('.quote-text')
@@ -254,6 +254,7 @@ let createOpeningSlide = function () {
     d3.selectAll('.highlight')
       .transition()
       .duration(1000)
+      .style('font-size', '80px')
       .style('fill', 'red')
       .style('opacity', 1)
       .transition()
@@ -263,7 +264,7 @@ let createOpeningSlide = function () {
         if (d == ' ')
           charWidth = 0.01 * barGraphWidth;
         else
-          charWidth = this.getComputedTextLength();
+          charWidth = this.getComputedTextLength() * 2.5;
 
         let currentPosition;
         if (i < 3) {
@@ -284,11 +285,11 @@ let createOpeningSlide = function () {
       .attr('y', function (d,i) {
 
         if (i < 3)
-          return 80;
+          return 50;
         else if (i < 10)
-          return 120;
+          return 100;
         else
-          return 160;
+          return 150;
       });
     // while(i < 10) {
     //   d3.select('#cursor')
@@ -632,9 +633,9 @@ let showOpeningScreen = function(duration) {
     .then( function () {
 
       let barGraphWidth = barGraphParams['barGraphWidth'],
-          totalWidth1 = barGraphWidth/2 - 20;
-          totalWidth2 = barGraphWidth/2 - 30;
-          totalWidth3 = barGraphWidth/2 - 30;
+          totalWidth1 = 20;
+          totalWidth2 = 20;
+          totalWidth3 = 13;
 
 
       d3.select('.bar-graph')
@@ -644,6 +645,7 @@ let showOpeningScreen = function(duration) {
         .attr("preserveAspectRatio", "xMidYMid meet");
 
       d3.selectAll('.highlight')
+        .style('font-size', '80px')
         .attr('x', function (d, i) {
           let charWidth;
           if (d == ' ')
@@ -670,11 +672,11 @@ let showOpeningScreen = function(duration) {
         .attr('y', function (d,i) {
 
           if (i < 3)
-            return 80;
+            return 50;
           else if (i < 10)
-            return 120;
+            return 100;
           else
-            return 160;
+            return 150;
         })
         .transition()
         .duration(1000)
@@ -682,8 +684,8 @@ let showOpeningScreen = function(duration) {
         .style('opacity', 1)
 
     d3.select('.pedal')
-        .attr('x', barGraphWidth/2 - 20)
-        .attr('y', 190)
+        .attr('x', 20)
+        .attr('y', 200)
         .transition()
         .duration(1000)
         .style('opacity', 1);
