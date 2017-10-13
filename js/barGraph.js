@@ -520,7 +520,7 @@ let openMapView = function (data, company) {
 let closeMapView = function () {
   $('.proportion-graph-viewer').animate({'height': '0'}, 1000, 'linear');
   $('.proportion-graph-viewer').hide(500);
-  changeDynamicText(1000, '');
+  callStoryText(1000, '');
   addBarGraphClicks();
 
 }
@@ -726,7 +726,7 @@ let showOpeningScreen = function(duration) {
   });
 }
 
-let fadeStart = function (duration, data, yStart = -15, yEnd = 50, tickValues = [0,35]) {
+let fadeStart = function (duration, data, preBarsText, yStart = -15, yEnd = 50, tickValues = [0,35]) {
 
   return new Promise( function (resolve, reject) {
     Promise.resolve()
@@ -739,6 +739,18 @@ let fadeStart = function (duration, data, yStart = -15, yEnd = 50, tickValues = 
       })
       .then( function () {
         return highlightAllBars('#000', 0);
+      })
+      .then( function () {
+          console.log(preBarsText)
+        if (preBarsText) {
+          return Promise.all([
+            updateBarGraphParam('tickValues', tickValues),
+            updateYAxis(1000),
+            updateXAxis(1000), 
+            updatePercentLine(1000),
+            callStoryText(1000, preBarsText)
+          ])
+        }
       })
       .then( function () {
         let mapModeHeight = $('.graph-viewers').height();

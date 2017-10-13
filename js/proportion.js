@@ -122,7 +122,7 @@ let drawAllCanvases = function (firstDraw) {
 
   chain = chain.then( function () {
     let unit = propGraphParams['regions'][0]['unit'];
-    return changeDynamicText(1000, 'Each square is the equivalent of $' + unit);
+    return callStoryText(1000, 'Each square is the equivalent of $' + unit);
   })
   .then( function () {
     allRegionsDrawn = true;
@@ -147,7 +147,7 @@ let createCanvases = function () {
         canvases = propGraphParams['canvases'] = [],
         unit = propGraphParams['regions'][0]['unit'];
 
-    changeDynamicText(500, 'Each square is the equivalent of $' + unit);
+    callStoryText(500, 'Each square is the equivalent of $' + unit);
 
     let canvasObj;
     for (let ii in regions) {
@@ -227,7 +227,7 @@ let showHoverText = function (regionId, duration) {
   let text = '<b>' + region['text'] + '</b>' + ', ' + region['money'];
 
   if ($('.dynamic-text').html() != text) {
-    return changeDynamicText(duration, text);
+    return callStoryText(duration, text);
   }
   else
     return Promise.resolve();
@@ -252,7 +252,7 @@ let showProperRegion = function (squareId) {
 let showAllRegions = function () {
   let canvases = propGraphParams['canvases'],
       unit = propGraphParams['regions'][0]['unit'];
-  changeDynamicText(500, 'Each square is the equivalent of $' + unit);
+  callStoryText(500, 'Each square is the equivalent of $' + unit);
 
   for (let ii = 0; ii < canvases.length; ii++)
     showCanvas(ii);

@@ -12,9 +12,15 @@ let slide2 = function (data) {
   // let barGraph = d3.select('.bar-graph-elements');
   slideInProgress = true;
 
-  fadeStart(1000, data)
+  fadeStart(1000, data, 'The federal corporate income tax rate is 35 percent...')
   .then( function () {
-    return highlightBarsSplit('rate', 35, 'red', 'green', 1000);
+    // return callStoryText(1000, 'The federal corporate income tax rate is 35 percent...');
+  })
+  .then( function () {
+    // return Promise.all([
+      // callStoryText(1000, 'but large corporations rarely pay that amount'),
+      // highlightBarsSplit('rate', 35, 'red', 'green', 1000)
+    // ]);
   })
   .then( function () {
     slideInProgress = false;
