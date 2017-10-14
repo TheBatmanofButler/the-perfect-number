@@ -31,11 +31,8 @@ let createProportionAreas = function (comparisons, actualProfit, actualTaxBreak,
       numTaxBreakSquares = Math.floor(taxBreak),
 
       taxPaid = money35 - taxBreak,
-      numTaxPaidSquares = Math.floor(taxPaid),
+      numTaxPaidSquares = num35PercentSquares - numTaxBreakSquares,
       unit;
-
-  // if (taxBreak <= 0)
-    // console.log(taxBreak, taxPaid, name);
 
   if (convertConst == 1e3)
     unit = '1 billion';
@@ -57,7 +54,7 @@ let createProportionAreas = function (comparisons, actualProfit, actualTaxBreak,
   ]
 
   if (taxPaid < 0) {
-    proportionAreas.push({
+    proportionAreas.unshift({
       'text': 'Company Tax Break',
       'numSquares': numTaxBreakSquares,
       'color': 'rgba(48, 0, 0, 1)',
@@ -66,13 +63,24 @@ let createProportionAreas = function (comparisons, actualProfit, actualTaxBreak,
     });
   }
   else {
-    proportionAreas.push({
-      'text': 'Company Tax Paid',
-      'numSquares': numTaxPaidSquares,
-      'color': 'rgba(255, 0, 0, 0.8)',
-      'money': getMoneyString(taxPaid, convertConst),
-      'unit': unit
-    });
+    if (numTaxPaidSquares > num35PercentSquares) {
+      proportionAreas.unshift({
+        'text': 'Company Tax Paid',
+        'numSquares': numTaxPaidSquares,
+        'color': 'rgba(255, 0, 0, 0.8)',
+        'money': getMoneyString(taxPaid, convertConst),
+        'unit': unit
+      });
+    }
+    else {
+      proportionAreas.push({
+        'text': 'Company Tax Paid',
+        'numSquares': numTaxPaidSquares,
+        'color': 'rgba(255, 0, 0, 0.8)',
+        'money': getMoneyString(taxPaid, convertConst),
+        'unit': unit
+      });
+    }
   }
 
   let filled = 0,
@@ -82,7 +90,7 @@ let createProportionAreas = function (comparisons, actualProfit, actualTaxBreak,
     let comparison = comparisons[ii],
         comparisonMoney = comparison['money'] / convertConst,
         numComparisonSquares = Math.floor(comparisonMoney);
-        
+
 
     if (isValidComparison(comparison, numTaxBreakSquares, numComparisonSquares, filled)) {
 
@@ -98,55 +106,50 @@ let createProportionAreas = function (comparisons, actualProfit, actualTaxBreak,
     }
 
 
-    else if (lastComparison < ii) {
-      let i = 1;
-      numComparisonSquares = Math.floor(comparisonMoney * i);
-      if ((numComparisonSquares < 20) || ((numComparisonSquares < 100) && isValidComparison(comparison, numTaxBreakSquares, numComparisonSquares, filled)))
-      while ((numComparisonSquares < 20) || ((numComparisonSquares < 100) && isValidComparison(comparison, numTaxBreakSquares, numComparisonSquares, filled))) {
-        i+=1;
-        numComparisonSquares = Math.floor(comparisonMoney * i);
-      }
-      i--;
-      numComparisonSquares = Math.floor(comparisonMoney * i);
-      if (numComparisonSquares <= (numTaxBreakSquares - filled)) {
-        proportionAreas.push({
-          'text': i + ' x ' + comparison['text'],
-          'numSquares': numComparisonSquares,
-          'color': comparison['color'],
-          'money': getMoneyString(comparisonMoney * i, convertConst)
-        });
+  //   else if (lastComparison < ii) {
+  //     let i = 1;
+  //     numComparisonSquares = Math.floor(comparisonMoney * i);
+  //     console.log(comparison['text']);
+  //     while ((numComparisonSquares < 7) || ((numComparisonSquares < 200) && isValidComparison(comparison, numTaxBreakSquares, numComparisonSquares, filled))) {
+  //       i++;
+  //       numComparisonSquares = Math.floor(comparisonMoney * i);
+  //     }
+  //     i--;
+  //     numComparisonSquares = Math.floor(comparisonMoney * i);
+  //     if (numComparisonSquares <= (numTaxBreakSquares - filled) && numComparisonSquares > 0) {
+  //       console.log(comparison['text'] + 'true');
+  //       proportionAreas.push({
+  //         'text': i + ' x ' + comparison['text'],
+  //         'numSquares': numComparisonSquares,
+  //         'color': comparison['color'],
+  //         'money': getMoneyString(comparisonMoney * i, convertConst)
+  //       });
 
-        filled += numComparisonSquares;
-        lastComparison = ii;
-      }
-    }
-  }
-  // let length = proportionAreas.length,
-  //     propComparison = proportionAreas[length - 1],
-  //   let comparison = comparisons[parseInt(lastComparison) + 1],
-  //       squaresLeft = numTaxBreakSquares - filled;
-
-  // console.log(name);
-  // console.log(squaresLeft);
-  // if (squaresLeft >= 0) {
-  //   let comparisonMoney = comparison['money'] / convertConst,
-  //       i = Math.floor(squaresLeft/comparisonMoney);
-
-  //   if (i > 0)
-  //   {
-  //     proportionAreas.push({
-  //       'text': i + ' x ' + comparison['text'],
-  //       'numSquares': i,
-  //       'color': comparison['color'],
-  //       'money': getMoneyString(comparisonMoney * i, convertConst)
-  //     });
+  //       filled += numComparisonSquares;
+  //       lastComparison = ii;
+  //     }
   //   }
-    
+  }
+  
+  let squaresLeft = numTaxBreakSquares - filled,
+      nextComparisonIndex = parseInt(lastComparison) + 1,
+      comparison = comparisons[nextComparisonIndex];
 
-  // }
-  // console.log(comparison)
-  // console.log(comparisons);
+  while(squaresLeft > 0 && nextComparisonIndex < comparisons.length) {
+    let comparisonMoney = comparison['money'] / convertConst,
+        multiple = Math.floor(squaresLeft / comparisonMoney);
 
+    if(multiple > 0) {
+      proportionAreas.push({
+        'text': multiple + ' x ' + comparison['text'],
+        'numSquares': squaresLeft,
+        'color': comparison['color'],
+        'money': getMoneyString(comparisonMoney * multiple, convertConst)
+      });
+      squaresLeft = 0;
+    }
+    comparison = comparisons[nextComparisonIndex++];
+  }  
   return proportionAreas;
 }
 
