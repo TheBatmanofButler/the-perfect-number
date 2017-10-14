@@ -470,6 +470,7 @@ let openMapView = function (data, company) {
     })
     .then( function () {
 
+      // updateStoryText(500, '');
       removeBarGraphClicks();
       $('.proportion-graph-viewer').css('display', 'flex');
       $('.proportion-graph-viewer').animate({'height': '45vh'}, 1000, 'linear', function () {
@@ -520,7 +521,7 @@ let openMapView = function (data, company) {
 let closeMapView = function () {
   $('.proportion-graph-viewer').animate({'height': '0'}, 1000, 'linear');
   $('.proportion-graph-viewer').hide(500);
-  callStoryText(1000, '');
+  updateStoryText(1000, '');
   addBarGraphClicks();
 
 }
@@ -731,11 +732,14 @@ let fadeStart = function (duration, data, dynamicText, yStart = -15, yEnd = 50, 
   return new Promise( function (resolve, reject) {
     Promise.resolve()
       .then( function () {
+        updateStoryText(duration, '');
         if (shouldFade)
           return fadeAll(duration);
       })
       .then( function () {
-        return fadeOpeningScreen(1000);
+        let isOpeningScreen = d3.select('.bar-graph').attr('viewBox') != null;
+        if (isOpeningScreen)
+          return fadeOpeningScreen(duration);
       })
       .then( function () {
         return highlightAllBars('#000', 0);
@@ -744,26 +748,26 @@ let fadeStart = function (duration, data, dynamicText, yStart = -15, yEnd = 50, 
         let mapModeHeight = $('.graph-viewers').height();
 
         return Promise.all([
-          callStoryText(1000, dynamicText),
+          // updateStoryText(duration, dynamicText),
           closeMapView(),
           updateBarGraphParam('marginBottom', 200),
           updateBarGraphDims(mapModeHeight),
 
           updateXScale(),
           updateYScale(yStart, yEnd),
-          updateBarGraphSVG(1000),
+          updateBarGraphSVG(duration),
 
-          updateBarGraphText(null, 1000),
-          updateCompanyLabel(1000),
+          updateBarGraphText(null, duration),
+          updateCompanyLabel(duration),
 
           updateBarGraphParam('data', data),
           updateBarGraphParam('yParam', 'rate'),
 
           updateBarGraphParam('tickValues', tickValues),
-          updateYAxis(1000),
-          updateXAxis(1000),
-          updatePercentLine(1000),
-          updateBars(0, 1000, 1000)
+          updateYAxis(duration),
+          updateXAxis(duration),
+          updatePercentLine(duration),
+          updateBars(0, duration, duration)
         ]);
       })
       .then( function () {

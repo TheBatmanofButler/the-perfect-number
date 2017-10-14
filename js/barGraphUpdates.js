@@ -141,9 +141,7 @@ let updateBars = function (exitTime, enterTime, updateTime) {
           .attr('y', y(0))
           .attr('height', 0)
           .remove()
-          .end(function () {
-            resolve();
-          });
+          .end(resolve);
       });
     }
 

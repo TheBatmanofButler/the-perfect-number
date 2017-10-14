@@ -62,28 +62,56 @@ let loadInfo = function (infoBoxData) {
   });
 }
 
-let callStoryText = function (duration, newText) {
+let appendStoryText = function (duration, newText, clearDuration = false) {
 	return new Promise( function (resolve, reject) {
 
+    let chain = Promise.resolve();
+
+    if (clearDuration == 0 || clearDuration != false) {
+      chain = chain.then( function () {
+        return new Promise( function (resolve, reject) {
+          d3.select('.dynamic-text')
+            .selectAll('text')
+            .transition()
+            .duration(clearDuration)
+            .style('opacity', 0)
+            .remove()
+            .end(resolve);
+        });
+      });
+    }
+
+    chain.then( function () {
+      d3.select('.dynamic-text')
+        .append('text')
+        .style('opacity', 0)
+        .html(newText)
+        .transition()
+        .duration(duration)
+        .style('opacity', 1)
+        .end(resolve);
+    	});
+    });
+};
+
+let updateStoryText = function (duration, newText, imgSrc) {
+  return new Promise( function (resolve, reject) {
+
     d3.select('.dynamic-text')
-      .append('text')
       .style('opacity', 0)
-      .text(newText)
       .transition()
       .duration(duration)
       .style('opacity', 1)
-      .end(resolve);
-      // .end(function () {
-      //   if (newText2) {
-      //     d3.select('.dynamic-text')
-      //       .append('text')
-      //       .text(newText2)
-      //       .style('opacity', 0)
-      //       .transition()
-      //       .duration(duration)
-      //       .style('opacity', 1)
-      //       .end(resolve);
-      //   }
-      // });
-  	});
+      .call( function (d) {
+        if (imgSrc)
+          newText = '<img src=' + imgSrc + ' class="dynamic-text-img"/>' + newText;
+
+        d3.select('.dynamic-text')
+          .html(newText);
+      })
+      .end(function () {
+        console.log(newText);
+        resolve();
+      });
+  });
 };
