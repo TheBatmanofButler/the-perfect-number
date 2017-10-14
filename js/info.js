@@ -21,7 +21,7 @@ let loadInfo = function (infoBoxData) {
   //   $('.tax-break').html('<b>Tax Break</b>: <font size="3px">$' + infoBoxData['taxBreak'] + '</font>');
 
   $('.info').animate({'opacity': 0}, 500, function () {
-    
+
     $('.info').animate({'opacity': 1}, 500);
 
     $('.company-name').text(infoBoxData['companyName']);
@@ -85,7 +85,6 @@ let changeDynamicText = function (duration, newText, imgSrc) {
       .call( function (d) {
         if (imgSrc)
           newText = '<img src=' + imgSrc + ' class="dynamic-text-img"/>' + newText;
-
         d3.select('.dynamic-text')
           .html(newText);
       })

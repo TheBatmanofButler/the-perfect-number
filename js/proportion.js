@@ -34,9 +34,10 @@ let getSquareOuterLength = function (width, height, numSquares) {
 
 let initPropGraph = function (companyName) {
     allRegionsDrawn = false;
-    propGraphParams['regions'] = comparisonData[companyName].sort(function (a, b) {
-      return b['numSquares'] - a['numSquares'];
-    });
+    propGraphParams['regions'] = comparisonData[companyName]
+    // .sort(function (a, b) {
+    //   return b['numSquares'] - a['numSquares'];
+    // });
 }
 
 let updatePropGraphParams = function () {
@@ -434,13 +435,14 @@ let setAllRegionSquares = function () {
         numSquares = region['numSquares'];
 
     if (ii < 2) {
-      region['squares'] = d3.range(0, numSquares).map( function(index) {
-                            return {
-                              id: index,
-                              x: squareOuterLength * Math.floor(index / columnLength),
-                              y: squareOuterLength * (index % columnLength)
-                            }
-                          });
+      // region['squares'] = d3.range(0, numSquares).map( function(index) {
+      //                       return {
+      //                         id: index,
+      //                         x: squareOuterLength * Math.floor(index / columnLength),
+      //                         y: squareOuterLength * (index % columnLength)
+      //                       }
+      //                     });
+      direction = setSubregionSquares(region, numSquares, 0, 1);
     }
     else
       direction = setSubregionSquares(region, numSquares, startSquareId, direction);
