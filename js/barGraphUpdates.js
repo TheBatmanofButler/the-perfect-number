@@ -7,7 +7,7 @@ let updateBarGraphText = function (text, duration) {
       .transition()
       .duration(duration)
       .ease(d3.easeLinear)
-      .attr('x', barGraphWidth / 2)
+      .attr('x', barGraphWidth * 0.3)
       .text( function () {
         if (text) return text;
       })

@@ -264,7 +264,10 @@ canvas {
 
       .bar-graph {
         position: absolute;
-        font-family: 'Roboto Mono', monospace;
+      }
+
+      .quote-text, .highlight, .cursor, .pedal, .pedal-link {
+        font-family: 'Roboto Mono', monospace;        
       }
 
       .intro-text {

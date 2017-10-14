@@ -67,11 +67,14 @@ let appendStoryText = function (duration, newText, clearDuration = false) {
 
     let chain = Promise.resolve();
 
-    if (clearDuration == 0 || clearDuration != false) {
+    if (clearDuration != false) {
       chain = chain.then( function () {
         return new Promise( function (resolve, reject) {
           d3.select('.dynamic-text')
             .selectAll('text')
+            .call(function (d) {
+              console.log(d.node());
+            })
             .transition()
             .duration(clearDuration)
             .style('opacity', 0)
@@ -109,9 +112,6 @@ let updateStoryText = function (duration, newText, imgSrc) {
         d3.select('.dynamic-text')
           .html(newText);
       })
-      .end(function () {
-        console.log(newText);
-        resolve();
-      });
+      .end(resolve);
   });
 };

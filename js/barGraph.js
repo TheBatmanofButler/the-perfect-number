@@ -604,14 +604,11 @@ let fadeAll = function (duration) {
 
 let showAll = function (duration) {
   return new Promise( function (resolve, reject) {
-    highlightAllBars('#000', 1000)
-    .then( function () {
-      d3.select('.bar-graph-elements')
-        .transition()
-        .duration(duration)
-        .style('opacity', 1)
-        .end(resolve);
-    })
+    d3.select('.bar-graph-elements')
+      .transition()
+      .duration(duration)
+      .style('opacity', 1)
+      .end(resolve);
   });
 }
 
@@ -748,7 +745,7 @@ let fadeStart = function (duration, data, dynamicText, yStart = -15, yEnd = 50, 
         let mapModeHeight = $('.graph-viewers').height();
 
         return Promise.all([
-          // updateStoryText(duration, dynamicText),
+          appendStoryText(duration, dynamicText),
           closeMapView(),
           updateBarGraphParam('marginBottom', 200),
           updateBarGraphDims(mapModeHeight),

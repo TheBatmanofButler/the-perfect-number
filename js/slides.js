@@ -15,7 +15,7 @@ let slide2 = function (data) {
   Promise.resolve()
       .then( function () {
         return Promise.all([
-          updateStoryText(0, ''),
+          appendStoryText(0, '', 1000),
           fadeAll(1000)
         ]);
       })
@@ -36,20 +36,20 @@ let slide2 = function (data) {
       .then( function () {
         return Promise.all([
           showAll(2000),
-          updateStoryText(2000, 'The federal corporate income tax rate is 35 percent...'),
+          appendStoryText(2000, 'The federal corporate income tax rate is 35 percent...'),
           updateYAxis(2000),
           updatePercentLine(2000)
         ]);
       })
       .then( function () {
-        return appendStoryText(2000, 'but large corporations rarely pay that amount', 0);
+        return appendStoryText(2000, 'but large corporations rarely pay that amount');
       })
       .then( function () {
-        return updateStoryText(0, '');
+        return appendStoryText(0, '', 1000);
       })
       .then( function () {
         return Promise.all([
-          updateStoryText(2000, '258 Fortune 500 companies reported consistent profits from 2008 to 2015.'),
+          appendStoryText(1000, '258 Fortune 500 companies reported consistent profits from 2008 to 2015.'),
           updateBarGraphParam('data', data),
           updateBarGraphParam('yParam', 'rate'),
           updateBarGraphParam('tickValues', [0,35]),
@@ -61,58 +61,17 @@ let slide2 = function (data) {
         ]);
       })
       .then( function () {
-        return updateStoryText(0, '', 1000);
+        return appendStoryText(0, '', 1000);
       })
       .then( function () {
+        d3.select('.percent-line')
+          .moveToFront();
+
         return Promise.all([
-          updateStoryText(2000, '241 of those companies paid less than 35% effective tax rate over the 8 years'),
-          highlightBarsSplit('rate', 35, 'red', 'green', 2000)
+          appendStoryText(2000, '241 of those companies paid less than 35% effective tax rate over the 8 years'),
+          highlightBarsSplit('rate', 35, 'red', 'black', 2000)
         ])
       })
-
-      // .then( function () {
-      //   let mapModeHeight = $('.graph-viewers').height();
-
-      //   return Promise.all([
-      //     updateStoryText(1000, 'dynamicText'),
-      //     closeMapView(),
-      //     updateBarGraphParam('marginBottom', 200),
-      //     updateBarGraphDims(mapModeHeight),
-
-      //     updateXScale(),
-      //     updateYScale(-15, 50),
-      //     updateBarGraphSVG(2000),
-
-      //     updateBarGraphText(null, 2000),
-      //     updateCompanyLabel(2000),
-
-      //     updateBarGraphParam('data', data),
-      //     updateBarGraphParam('yParam', 'rate'),
-
-      //     updateBarGraphParam('tickValues', [0,35]),
-      //     updateYAxis(2000),
-      //     updateXAxis(2000),
-      //     updatePercentLine(2000),
-      //     updateBars(0, 2000, 2000)
-      //   ]);
-      // })
-      // .then( function () {
-      //   if (shouldFade) {
-      //     shouldFade = false;
-      //     return showAll(2000);
-      //   }
-      // })
-  // .then( function () {
-  //   return updateStoryText(1000, 'but large corporations rarely pay that amount');
-  // })
-  // .then( function () {
-  //   return updateStoryText(1000, '258 Fortune 500 companies reported consistent profits from 2008 to 2015.', true);
-  // })
-  // .then( function () {
-  //   d3.select('.percent-line')
-  //     .moveToFront();
-  //   return highlightBarsSplit('rate', 35, 'red', 'green', 1000);
-  // })
   .then( function () {
     slideInProgress = false;
   });
@@ -124,14 +83,19 @@ let slide3 = function (data, companiesYearsNoTax) {
 
   fadeStart(100, data)
   .then(function () {
+
+    let numCompanies = 0;
+
     let chain = Promise.resolve();
     for (let ii = Object.keys(companiesYearsNoTax).length; ii > 0; ii--) {
 
+      numCompanies += companiesYearsNoTax[ii].length;
+
       let barGraphText;
       if (ii > 1)
-        barGraphText = 'At least ' + ii + ' years of no federal tax';
+        barGraphText = numCompanies + ' companies went at least ' + ii + ' years without paying federal tax';
       else
-        barGraphText = 'At least ' + ii + ' year of no federal tax';
+        barGraphText = numCompanies + ' companies went at least ' + ii + ' year without paying federal tax';
 
       chain = chain.then(function () {
                 return Promise.all([
