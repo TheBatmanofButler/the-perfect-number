@@ -78,8 +78,6 @@ let createProportionAreas = function (comparisons, actualProfit, actualTaxBreak,
   let filled = 0,
       lastComparison = 0;
 
-  console.log(name);
-
   for (let ii in comparisons) {
     let comparison = comparisons[ii],
         comparisonMoney = comparison['money'] / convertConst,
@@ -103,9 +101,7 @@ let createProportionAreas = function (comparisons, actualProfit, actualTaxBreak,
     else if (lastComparison < ii) {
       let i = 1;
       numComparisonSquares = Math.floor(comparisonMoney * i);
-      console.log(comparison['text']);
       if ((numComparisonSquares < 20) || ((numComparisonSquares < 100) && isValidComparison(comparison, numTaxBreakSquares, numComparisonSquares, filled)))
-        console.log(true);
       while ((numComparisonSquares < 20) || ((numComparisonSquares < 100) && isValidComparison(comparison, numTaxBreakSquares, numComparisonSquares, filled))) {
         i+=1;
         numComparisonSquares = Math.floor(comparisonMoney * i);
@@ -113,7 +109,6 @@ let createProportionAreas = function (comparisons, actualProfit, actualTaxBreak,
       i--;
       numComparisonSquares = Math.floor(comparisonMoney * i);
       if (numComparisonSquares <= (numTaxBreakSquares - filled)) {
-        console.log(comparison['text'] + 'true');
         proportionAreas.push({
           'text': i + ' x ' + comparison['text'],
           'numSquares': numComparisonSquares,

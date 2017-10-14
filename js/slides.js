@@ -12,15 +12,14 @@ let slide2 = function (data) {
   // let barGraph = d3.select('.bar-graph-elements');
   slideInProgress = true;
 
-  fadeStart(1000, data, 'The federal corporate income tax rate is 35 percent...')
+  fadeStart(2000, data, dynamicText = 'The federal corporate income tax rate is 35 percent...')
   .then( function () {
-    // return callStoryText(1000, 'The federal corporate income tax rate is 35 percent...');
+    return callStoryText(1000, 'but large corporations rarely pay that amount');
   })
   .then( function () {
-    // return Promise.all([
-      // callStoryText(1000, 'but large corporations rarely pay that amount'),
-      // highlightBarsSplit('rate', 35, 'red', 'green', 1000)
-    // ]);
+    d3.select('.percent-line')
+      .moveToFront();
+    return highlightBarsSplit('rate', 35, 'red', 'green', 1000);
   })
   .then( function () {
     slideInProgress = false;

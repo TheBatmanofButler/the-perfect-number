@@ -726,7 +726,7 @@ let showOpeningScreen = function(duration) {
   });
 }
 
-let fadeStart = function (duration, data, preBarsText, yStart = -15, yEnd = 50, tickValues = [0,35]) {
+let fadeStart = function (duration, data, dynamicText, yStart = -15, yEnd = 50, tickValues = [0,35]) {
 
   return new Promise( function (resolve, reject) {
     Promise.resolve()
@@ -741,21 +741,10 @@ let fadeStart = function (duration, data, preBarsText, yStart = -15, yEnd = 50, 
         return highlightAllBars('#000', 0);
       })
       .then( function () {
-          console.log(preBarsText)
-        if (preBarsText) {
-          return Promise.all([
-            updateBarGraphParam('tickValues', tickValues),
-            updateYAxis(1000),
-            updateXAxis(1000), 
-            updatePercentLine(1000),
-            callStoryText(1000, preBarsText)
-          ])
-        }
-      })
-      .then( function () {
         let mapModeHeight = $('.graph-viewers').height();
 
         return Promise.all([
+          callStoryText(1000, dynamicText),
           closeMapView(),
           updateBarGraphParam('marginBottom', 200),
           updateBarGraphDims(mapModeHeight),

@@ -50,14 +50,14 @@ let updatePercentLine = function (duration) {
     }
     else {
       percentLine
-          .transition()
-          .duration(duration)
-          .ease(d3.easeLinear)
-          .attr('x1', 0)
-          .attr('x2', barGraphWidth)
-          .attr('y1', y(35))
-          .attr('y2', y(35))
-          .end(resolve);
+        .transition()
+        .duration(duration)
+        .ease(d3.easeLinear)
+        .attr('x1', 0)
+        .attr('x2', barGraphWidth)
+        .attr('y1', y(35))
+        .attr('y2', y(35))
+        .end(resolve);
     }
   });
 }
