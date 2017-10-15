@@ -133,7 +133,10 @@ canvas {
 
   .dynamic-text {
     height: 80px;
-    padding: 10px;
+    padding-top: 20px;
+    /*padding-bottom: 10px;*/
+    padding-left: 30px;
+    padding-right: 30px;
     font-size: 2vw;
     color: black;
     vertical-align: middle;

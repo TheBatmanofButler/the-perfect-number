@@ -9,7 +9,6 @@ let slide1 = function (data) {
 }
 
 let slide2 = function (data) {
-  // let barGraph = d3.select('.bar-graph-elements');
   slideInProgress = true;
 
   Promise.resolve()
@@ -49,7 +48,11 @@ let slide2 = function (data) {
       })
       .then( function () {
         return Promise.all([
-          appendStoryText(1000, 'A study found that 258 Fortune 500 companies reported consistent profits from 2008 to 2015.'),
+          appendStoryText(1000,
+                          'A study by the Institute on Taxation and Economic Policy found that 258 Fortune 500 companies reported consistent profits from 2008 to 2015.',
+                          false,
+                          null,
+                          true),
           updateBarGraphParam('data', data),
           updateBarGraphParam('yParam', 'rate'),
           updateBarGraphParam('tickValues', [0,35]),
@@ -82,6 +85,12 @@ let slide3 = function (data, companiesYearsNoTax) {
   slideInProgress = true;
 
   fadeStart(100, data)
+  .then(function () {
+    return appendStoryText(2000, 'These companies generated so many excess tax breaks that they sometimes reported negative taxes...', 0, null, true);
+  })
+  .then(function () {
+    return appendStoryText(2000, 'this means that they made more after taxes than before taxes in those years.', false, null, true);
+  })
   .then(function () {
 
     let numCompanies = 0;
@@ -165,12 +174,11 @@ let slide5 = function (data, companiesRebates) {
     let chain = highlightAllBars('#000', 1000),
         rebates = Object.keys(companiesRebates),
         lastRebate = rebates[rebates.length - 1],
-        numCompanies = 0,
         barGraphText;
 
     for (let rebate in companiesRebates) {
       chain = chain.then( function () {
-                numCompanies += companiesRebates[rebate].length;
+                let numCompanies = companiesRebates[rebate].length;
                 barGraphText = numCompanies + ' companies used ' + companiesRebatesText[rebate] + '</b> to lower their taxes.';
 
                 return Promise.all([

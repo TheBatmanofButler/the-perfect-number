@@ -6,9 +6,9 @@ let barGraphParams = {
   yParam: null,
   data: null,
   marginTop: 50,
-  marginRight: 80,
-  marginBottom: 200,
-  marginLeft: 80
+  marginRight: 40,
+  marginBottom: 100,
+  marginLeft: 40
 }
 
 let slideInProgress = false;
@@ -465,11 +465,12 @@ let openMapView = function (data, company) {
   let chain = Promise.resolve();
 
   if (currentSlide == 1 && !inMapMode) {
-    currentSlide = null;
     chain = chain.then( function () {
-      return fadeStart(500, allCompanyData);
+      return fadeStart(500, data);
     });
   }
+
+  currentSlide = null;
 
   return chain
     .then( function () {
@@ -652,7 +653,11 @@ let fadeOpeningScreen = function(duration) {
           .attr('width', totalWidth)
           .attr('height', totalHeight)
           .attr("viewBox", null)
-          .attr("preserveAspectRatio", null)
+          .attr("preserveAspectRatio", null);
+
+        d3.selectAll('.quote-text, .highlight, .cursor, .pedal, .pedal-link')
+          .style('visibility', 'hidden')
+          .style('position', 'absolute');
 
         resolve();
       });
@@ -729,6 +734,10 @@ let showOpeningScreen = function(duration) {
         .duration(1000)
         .style('opacity', 1);
 
+    d3.selectAll('.quote-text, .highlight, .cursor, .pedal, .pedal-link')
+      .style('visibility', null)
+      .style('position', null);
+
     });
   });
 }
@@ -753,9 +762,12 @@ let fadeStart = function (duration, data, dynamicText, yStart = -15, yEnd = 50, 
       .then( function () {
         let mapModeHeight = $('.graph-viewers').height();
 
+        if (currentSlide != null)
+          closeMapView();
+
         return Promise.all([
           appendStoryText(duration, dynamicText),
-          closeMapView(),
+
           updateBarGraphParam('marginBottom', 200),
           updateBarGraphDims(mapModeHeight),
 
@@ -776,15 +788,15 @@ let fadeStart = function (duration, data, dynamicText, yStart = -15, yEnd = 50, 
           updateBars(0, duration, duration)
         ]);
       })
-      .then( function () {
-        d3.select('.percent-line')
-          .moveToFront();
+      // .then( function () {
+      //   d3.select('.percent-line')
+      //     .moveToFront();
 
-        if (shouldFade) {
-          shouldFade = false;
-          return showAll(duration);
-        }
-      })
+      //   if (shouldFade) {
+      //     shouldFade = false;
+      //     return showAll(duration);
+      //   }
+      // })
       .then(resolve);
   });
 }
