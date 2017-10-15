@@ -62,7 +62,7 @@ let loadInfo = function (infoBoxData) {
   });
 }
 
-let appendStoryText = function (duration, newText, clearDuration = false, imgSrc = null) {
+let appendStoryText = function (duration, newText, clearDuration = false, imgSrc = null, isHuge = false) {
 	return new Promise( function (resolve, reject) {
 
     let chain = Promise.resolve();
@@ -72,9 +72,6 @@ let appendStoryText = function (duration, newText, clearDuration = false, imgSrc
         return new Promise( function (resolve, reject) {
           d3.select('.dynamic-text')
             .selectAll('text')
-            .call(function (d) {
-              console.log(d.node());
-            })
             .transition()
             .duration(clearDuration)
             .style('opacity', 0)
@@ -86,6 +83,9 @@ let appendStoryText = function (duration, newText, clearDuration = false, imgSrc
 
     chain.then( function () {
       d3.select('.dynamic-text')
+        .style('line-height', function () {
+          return isHuge ? '40px' : '80px';
+        })
         .append('text')
         .style('opacity', 0)
         .html(function () {

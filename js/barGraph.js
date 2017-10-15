@@ -6,12 +6,20 @@ let barGraphParams = {
   yParam: null,
   data: null,
   marginTop: 50,
-  marginRight: 80,
-  marginBottom: 200,
-  marginLeft: 80
+  marginRight: 40,
+  marginBottom: 100,
+  marginLeft: 40
 }
 
 let slideInProgress = false;
+
+let clearTop = function () {
+  $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
+  $('.slide-explore').css('color', '#000');
+  $('.slide-explore').hover( function (e) {
+    $(this).css('color', e.type === 'mouseenter' ? '#fff' : '#000');
+  });
+}
 
 let createSlides = function (data, companiesYearsNoTax, companiesTop25, companiesRebates, companiesIPS, companiesTop3EmpChanges, companiesLostEmployees, companiesCompUp, companiesForeignDiff, companiesCompetitors) {
 
@@ -33,7 +41,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
     if (slideInProgress || !allRegionsDrawn) return;
     slide1(barGraphWidth, barGraphHeight);
     currentSlide = 1;
-    $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
+    clearTop();
     $('#slide1 div:first').addClass('active-slide-no-square');
   });
 
@@ -41,7 +49,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
     if (slideInProgress || !allRegionsDrawn) return;
     slide2(data);
     currentSlide = 2;
-    $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
+    clearTop();
     $('#slide2 div:first').addClass('active-slide-no-square');
   });
 
@@ -57,7 +65,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
     if (slideInProgress || !allRegionsDrawn) return;
     slide4(data, companiesTop25);
     currentSlide = 4;
-    $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
+    clearTop();
     $('#slide4 div:first').addClass('active-slide-no-square');
   });
 
@@ -65,7 +73,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
     if (slideInProgress || !allRegionsDrawn) return;
     slide5(data, companiesRebates);
     currentSlide = 5;
-    $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
+    clearTop();
     $('#slide5 div:first').addClass('active-slide-no-square');
   });
 
@@ -73,38 +81,39 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
     if (slideInProgress || !allRegionsDrawn) return;
     slide6(data, companiesIPS, companiesTop3EmpChanges, companiesLostEmployees, companiesCompUp);
     currentSlide = 6;
-    $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
+    clearTop();
     $('#slide6 div:first').addClass('active-slide-no-square');
   });
 
   $('#slide7').click( function (e) {
     if (slideInProgress || !allRegionsDrawn) return;
-    slide7(companiesLostEmployees);
+    slide7(data, companiesForeignDiff);
     currentSlide = 7;
-    $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
+    clearTop();
     $('#slide7 div:first').addClass('active-slide-no-square');
   });
 
   $('#slide8').click( function (e) {
     if (slideInProgress || !allRegionsDrawn) return;
-    slide8(data, companiesForeignDiff);
+    slide8(data, companiesCompetitors);
     currentSlide = 8;
-    $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
+    clearTop();
     $('#slide8 div:first').addClass('active-slide-no-square');
   });
 
   $('#slide9').click( function (e) {
     if (slideInProgress || !allRegionsDrawn) return;
-    slide9(data, companiesCompetitors);
+    slide9(data);
     currentSlide = 9;
-    $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
+    clearTop();
     $('#slide9 div:first').addClass('active-slide-no-square');
   });
 
   $('.slide-explore').click( function (e) {
     if (slideInProgress || !allRegionsDrawn) return;
-    $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
+    clearTop();
     $('.typeahead').typeahead('val', '');
+    $(this).css('color', '#fff');
     openMapView(allCompanyData, 'All Companies');
   });
 }
@@ -456,11 +465,12 @@ let openMapView = function (data, company) {
   let chain = Promise.resolve();
 
   if (currentSlide == 1 && !inMapMode) {
-    currentSlide = null;
     chain = chain.then( function () {
-      return fadeStart(500, allCompanyData);
+      return fadeStart(500, data);
     });
   }
+
+  currentSlide = null;
 
   return chain
     .then( function () {
@@ -643,7 +653,11 @@ let fadeOpeningScreen = function(duration) {
           .attr('width', totalWidth)
           .attr('height', totalHeight)
           .attr("viewBox", null)
-          .attr("preserveAspectRatio", null)
+          .attr("preserveAspectRatio", null);
+
+        d3.selectAll('.quote-text, .highlight, .cursor, .pedal, .pedal-link')
+          .style('visibility', 'hidden')
+          .style('position', 'absolute');
 
         resolve();
       });
@@ -720,6 +734,10 @@ let showOpeningScreen = function(duration) {
         .duration(1000)
         .style('opacity', 1);
 
+    d3.selectAll('.quote-text, .highlight, .cursor, .pedal, .pedal-link')
+      .style('visibility', null)
+      .style('position', null);
+
     });
   });
 }
@@ -744,9 +762,12 @@ let fadeStart = function (duration, data, dynamicText, yStart = -15, yEnd = 50, 
       .then( function () {
         let mapModeHeight = $('.graph-viewers').height();
 
+        if (currentSlide != null)
+          closeMapView();
+
         return Promise.all([
           appendStoryText(duration, dynamicText),
-          closeMapView(),
+
           updateBarGraphParam('marginBottom', 200),
           updateBarGraphDims(mapModeHeight),
 
@@ -767,15 +788,15 @@ let fadeStart = function (duration, data, dynamicText, yStart = -15, yEnd = 50, 
           updateBars(0, duration, duration)
         ]);
       })
-      .then( function () {
-        d3.select('.percent-line')
-          .moveToFront();
+      // .then( function () {
+      //   d3.select('.percent-line')
+      //     .moveToFront();
 
-        if (shouldFade) {
-          shouldFade = false;
-          return showAll(duration);
-        }
-      })
+      //   if (shouldFade) {
+      //     shouldFade = false;
+      //     return showAll(duration);
+      //   }
+      // })
       .then(resolve);
   });
 }

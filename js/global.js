@@ -304,7 +304,14 @@ d3.queue()
 
     var competitor = d['competitor'];
     if (competitor != '0') {
-      companiesCompetitors[competitor].push(d);
+      if (companiesCompetitors[competitor].length > 0) {
+        if (d['rate'] > companiesCompetitors[competitor][0]['rate'])
+          companiesCompetitors[competitor].unshift(d);
+        else
+          companiesCompetitors[competitor].push(d);
+      }
+      else
+        companiesCompetitors[competitor].push(d);
     }
 
     let convertConst = Math.pow( 10, ( Math.floor( Math.log10(d['profit']) ) - 3 ) );
