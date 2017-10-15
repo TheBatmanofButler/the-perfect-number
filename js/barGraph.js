@@ -13,6 +13,14 @@ let barGraphParams = {
 
 let slideInProgress = false;
 
+let clearTop = function () {
+  $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
+  $('.slide-explore').css('color', '#000');
+  $('.slide-explore').hover( function (e) {
+    $(this).css('color', e.type === 'mouseenter' ? '#fff' : '#000');
+  });
+}
+
 let createSlides = function (data, companiesYearsNoTax, companiesTop25, companiesRebates, companiesIPS, companiesTop3EmpChanges, companiesLostEmployees, companiesCompUp, companiesForeignDiff, companiesCompetitors) {
 
   barGraphParams['data'] = data;
@@ -33,7 +41,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
     if (slideInProgress || !allRegionsDrawn) return;
     slide1(barGraphWidth, barGraphHeight);
     currentSlide = 1;
-    $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
+    clearTop();
     $('#slide1 div:first').addClass('active-slide-no-square');
   });
 
@@ -41,7 +49,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
     if (slideInProgress || !allRegionsDrawn) return;
     slide2(data);
     currentSlide = 2;
-    $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
+    clearTop();
     $('#slide2 div:first').addClass('active-slide-no-square');
   });
 
@@ -57,7 +65,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
     if (slideInProgress || !allRegionsDrawn) return;
     slide4(data, companiesTop25);
     currentSlide = 4;
-    $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
+    clearTop();
     $('#slide4 div:first').addClass('active-slide-no-square');
   });
 
@@ -65,7 +73,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
     if (slideInProgress || !allRegionsDrawn) return;
     slide5(data, companiesRebates);
     currentSlide = 5;
-    $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
+    clearTop();
     $('#slide5 div:first').addClass('active-slide-no-square');
   });
 
@@ -73,7 +81,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
     if (slideInProgress || !allRegionsDrawn) return;
     slide6(data, companiesIPS, companiesTop3EmpChanges, companiesLostEmployees, companiesCompUp);
     currentSlide = 6;
-    $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
+    clearTop();
     $('#slide6 div:first').addClass('active-slide-no-square');
   });
 
@@ -81,7 +89,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
     if (slideInProgress || !allRegionsDrawn) return;
     slide7(data, companiesForeignDiff);
     currentSlide = 7;
-    $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
+    clearTop();
     $('#slide7 div:first').addClass('active-slide-no-square');
   });
 
@@ -89,7 +97,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
     if (slideInProgress || !allRegionsDrawn) return;
     slide8(data, companiesCompetitors);
     currentSlide = 8;
-    $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
+    clearTop();
     $('#slide8 div:first').addClass('active-slide-no-square');
   });
 
@@ -97,13 +105,13 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
     if (slideInProgress || !allRegionsDrawn) return;
     slide9(data);
     currentSlide = 9;
-    $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
+    clearTop();
     $('#slide9 div:first').addClass('active-slide-no-square');
   });
 
   $('.slide-explore').click( function (e) {
     if (slideInProgress || !allRegionsDrawn) return;
-    $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
+    clearTop();
     $('.typeahead').typeahead('val', '');
     $(this).css('color', '#fff');
     openMapView(allCompanyData, 'All Companies');
