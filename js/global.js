@@ -192,6 +192,7 @@ let inMapMode = false,
     shouldFade = false,
     companyNames = ['All companies'],
     companiesIPS = [],
+    companiesCompUp = [],
     companiesYearsNoTax = {
                         '8': [],
                         '7': [],
@@ -253,9 +254,8 @@ d3.queue()
 
     companyNames.push(d['company_name']);
 
-    if (d['ceo_comp_amt'] != '') {
+    if (d['ceo_comp_change'] != '')
       companiesIPS.push(d);
-    }
 
     var yearsNoTax = d['years_no_tax'];
     if (yearsNoTax != '0') {
@@ -291,8 +291,11 @@ d3.queue()
       companiesTop3EmpChanges[empChangeRank].push(d);
     }
 
-    if (d['adjusted_emp_change'] < 0) {
+    if (d['diff_emp_count'] < 0) {
       companiesLostEmployees.push(d);
+
+      if (d['ceo_comp_change'] > 0)
+        companiesCompUp.push(d);
     }
 
     if (d['us_foreign_diff'] != '') {
@@ -343,6 +346,7 @@ d3.queue()
     companiesIPS,
     companiesTop3EmpChanges,
     companiesLostEmployees,
+    companiesCompUp,
     companiesForeignDiff,
     companiesCompetitors);
 

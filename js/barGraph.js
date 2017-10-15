@@ -13,7 +13,7 @@ let barGraphParams = {
 
 let slideInProgress = false;
 
-let createSlides = function (data, companiesYearsNoTax, companiesTop25, companiesRebates, companiesIPS, companiesTop3EmpChanges, companiesLostEmployees, companiesForeignDiff, companiesCompetitors) {
+let createSlides = function (data, companiesYearsNoTax, companiesTop25, companiesRebates, companiesIPS, companiesTop3EmpChanges, companiesLostEmployees, companiesCompUp, companiesForeignDiff, companiesCompetitors) {
 
   barGraphParams['data'] = data;
   let marginTop = barGraphParams['marginTop'],
@@ -71,7 +71,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
 
   $('#slide6').click( function (e) {
     if (slideInProgress || !allRegionsDrawn) return;
-    slide6(data, companiesIPS, companiesTop3EmpChanges, companiesLostEmployees);
+    slide6(data, companiesIPS, companiesTop3EmpChanges, companiesLostEmployees, companiesCompUp);
     currentSlide = 6;
     $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
     $('#slide6 div:first').addClass('active-slide-no-square');

@@ -287,7 +287,7 @@ let updateBarGraphSVG = function (duration) {
       .attr('height', totalHeight);
 }
 
-let updateCompanyLabel = function (duration) {
+let updateCompanyLabel = function (duration, text = null) {
   let y = barGraphParams['y'];
 
   d3.select('.company-label')
@@ -296,6 +296,10 @@ let updateCompanyLabel = function (duration) {
     .ease(d3.easeLinear)
     .attr('dx', 5)
     .attr('y', y(-7))
+    .call( function (d) {
+      if (text != null)
+        d.text(text);
+    })
     .style('font-size', 30);
 }
 

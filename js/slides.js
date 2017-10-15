@@ -192,7 +192,7 @@ let slide5 = function (data, companiesRebates) {
   });
 }
 
-let slide6 = function (data, companiesIPS, companiesTop3EmpChanges, companiesLostEmployees) {
+let slide6 = function (data, companiesIPS, companiesTop3EmpChanges, companiesLostEmployees, companiesCompUp) {
 
   let barGraph = d3.select('.bar-graph-elements');
   slideInProgress = true;
@@ -251,23 +251,30 @@ let slide6 = function (data, companiesIPS, companiesTop3EmpChanges, companiesLos
         barGraphWidth = barGraphParams['barGraphWidth'],
         x = barGraphWidth * 0.7;
     for (let rank in companiesTop3EmpChanges) {
+      let companyData = companiesTop3EmpChanges[rank],
+          companyName = companyData[0]['company_name'],
+          companyNameSlug = slugify(companyName);
+
       chain = chain.then( function () {
                 return Promise.all([
                   highlightSomeBars(companiesTop3EmpChanges[rank], 'red', 1000),
-                  updateBarGraphText(companiesTop3EmpChanges[rank][0]['company_name'], 0, x)
+                  updateCompanyLabel(1000, companyName)
                 ]);
               })
               .then( function () {
                 return Promise.all([
-                  highlightAllBars('#000', 1000),
-                  updateBarGraphText('', 0)
+                  highlightAllBars('#000', 1000)
                 ]);
               });
     }
     return chain;
   })
   .then( function () {
-    return highlightSomeBars(companiesLostEmployees, 'red', 1000);
+    return Promise.all([
+      highlightSomeBars(companiesLostEmployees, 'red', 1000),
+      appendStoryText(1000, 'But the majority of these companies laid off employees while maintaining profits and a low tax rate', 1),
+      updateCompanyLabel(1000, '')
+    ]);
   })
   .then( function () {
     return Promise.all([
@@ -283,8 +290,25 @@ let slide6 = function (data, companiesIPS, companiesTop3EmpChanges, companiesLos
     return highlightAllBars('#000', 1000);
   })
   .then( function () {
-    console.log(companiesLostEmployees);
-    return highlightSomeBars([companiesLostEmployees[1]], 'red', 1000);
+    return Promise.all([
+      appendStoryText(1000, 'The CEOs of 33 of these companies enjoyed raises, some quite heavily', 1),
+      highlightSomeBars(companiesCompUp, 'red', 1000)
+    ]);
+  })
+  .then( function () {
+    return Promise.all([
+      appendStoryText(1000, 
+                      '"Lower taxes drives more investment, drives more hiring, drives greater wages" - Randall L. Stephenson, CEO of AT&T',
+                      1,
+                      'public/img/randall-stephenson.png'),
+      highlightAllBars('#000', 1000)
+    ]);
+  })
+  .then( function () {
+    return Promise.all([
+      appendStoryText(1000, '', 1)
+      highlightSomeBars([companiesLostEmployees[1]], 'red', 1000)
+    ]);
   })
   .then( function () {
     slideInProgress = false;
