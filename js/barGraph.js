@@ -79,7 +79,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
 
   $('#slide7').click( function (e) {
     if (slideInProgress || !allRegionsDrawn) return;
-    slide7(companiesLostEmployees);
+    slide7(data, companiesForeignDiff);
     currentSlide = 7;
     $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
     $('#slide7 div:first').addClass('active-slide-no-square');
@@ -87,7 +87,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
 
   $('#slide8').click( function (e) {
     if (slideInProgress || !allRegionsDrawn) return;
-    slide8(data, companiesForeignDiff);
+    slide8(data, companiesCompetitors);
     currentSlide = 8;
     $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
     $('#slide8 div:first').addClass('active-slide-no-square');

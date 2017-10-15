@@ -330,26 +330,42 @@ let slide6 = function (data, companiesIPS, companiesTop3EmpChanges, companiesLos
     shouldFade = true;
   });
 }
-
-let slide7 = function (data) {
+let slide7 = function (data, companiesForeignDiff) {
   let barGraph = d3.select('.bar-graph-elements');
   slideInProgress = true;
 
-  fadeStart(500, data)
-  .then( function () {
-    slideInProgress = false;
-  });
-}
-
-let slide8 = function (data, companiesForeignDiff) {
-  let barGraph = d3.select('.bar-graph-elements');
-  slideInProgress = true;
-
-  fadeStart(500, data)
+  fadeStart(1000, data)
   .then( function () {
     return Promise.all([
-      fadeOutPercentLine(1000),
+      appendStoryText(3000,
+                      '"America is one of the highest-taxed nations in the world. Reducing taxes will cause new companies and new jobs to come roaring back into our country." - Donald Trump',
+                      false,
+                      'public/img/donald-trump.png', true),
+    ]);
+  })
+  .then( function () {
+    return Promise.all([
+      appendStoryText(1500, 'Of the 258 companies that showed consistent profits over 8 years...', 1000),
+      fadeOutPercentLine(2000),
+      updateBars(0, 2000, 2000)
+    ]);
+  })
+  .then( function () {
+    return Promise.all([
+      appendStoryText(1500, '107 had significant foreign profits (more than 10% of all profits)'),
       highlightSomeBars(companiesForeignDiff, 'red', 1000),
+    ]);
+  })
+  .then( function () {
+    return Promise.all([
+      appendStoryText(1500, '', 1),
+      updateBarGraphParam('data', companiesForeignDiff),
+      updateBarGraphParam('yParam', 'us_foreign_diff'),
+      updateBars(1000, 1000, 1000)
+    ]);
+  })
+  .then( function () {
+    return Promise.all([
       updateBarGraphParam('data', companiesForeignDiff),
       updateBarGraphParam('yParam', 'us_foreign_diff'),
       updateBars(1000, 1000, 1000)
@@ -365,7 +381,21 @@ let slide8 = function (data, companiesForeignDiff) {
     ])
   })
   .then( function () {
-    return highlightBarsSplit('us_foreign_diff', 0, 'red', 'green', 1000);
+      return Promise.all([
+        appendStoryText(1500,
+                        '64 of these companies paid higher foreign tax rates on their foreign profits than they paid in U.S. taxes on their U.S. profits.',
+                        1,
+                        null,
+                        true),
+        highlightBarsSplit('us_foreign_diff', 0, 'red', 'green', 1000)
+      ]);
+  })
+  .then( function () {
+    return appendStoryText(1500,
+                        'These higher foreign tax rates do not seem to hinder companies from doing business abroad. This is just more evidence that corporate income tax levels are usually not a significant determinant of what companies do.',
+                        1,
+                        null,
+                        true);
   })
   .then( function () {
     slideInProgress = false;
@@ -373,19 +403,38 @@ let slide8 = function (data, companiesForeignDiff) {
   });
 }
 
-let slide9 = function (data, companiesCompetitors) {
+let slide8 = function (data, companiesCompetitors) {
   let barGraph = d3.select('.bar-graph-elements');
   slideInProgress = true;
 
   fadeStart(500, data)
   .then( function () {
-    let chain = Promise.resolve();
+    return appendStoryText(1500, 'Who loses out?');
+  })
+  .then( function () {
+    let chain = appendStoryText(1500, 'Competing companies often have drastically different tax rates.', 1000),
+        counter = -1;
     for (let pair in companiesCompetitors) {
+      let competitorPair = companiesCompetitors[pair],
+          competitorHigh = competitorPair[0],
+          competitorLow = competitorPair[1];
+
       chain = chain.then( function () {
-                return highlightSomeBars(companiesCompetitors[pair], 'red', 1000);
+                return Promise.all([
+                  appendStoryText(1000, competitorHigh['company_name'] + ' ' + competitorHigh['rate'] + '%...', 500),
+                  highlightSomeBars([competitorHigh], 'red', 1000)
+                ]);
               })
               .then( function () {
-                return highlightAllBars('#000', 1000);
+                return Promise.all([
+                  appendStoryText(1000, competitorLow['company_name'] + ' ' + competitorLow['rate'] + '%'),
+                  highlightSomeBars([competitorLow], 'red', 1000)
+                ]);
+              })
+              .then( function () {
+                counter++;
+                if (counter < Object.keys(companiesCompetitors).length - 1)
+                  return highlightAllBars('#000', 1000);
               });
     }
     return chain;
