@@ -1,13 +1,16 @@
-let updateBarGraphText = function (text, duration) {
+let updateBarGraphText = function (text, duration, x) {
   let barGraphWidth = barGraphParams['barGraphWidth'],
       barGraphText = d3.select('.bar-graph-text');
+
+  if (!x)
+    x = barGraphWidth * 0.3;
 
   return new Promise( function (resolve, reject) {
     barGraphText
       .transition()
       .duration(duration)
       .ease(d3.easeLinear)
-      .attr('x', barGraphWidth * 0.3)
+      .attr('x', x)
       .text( function () {
         if (text) return text;
       })

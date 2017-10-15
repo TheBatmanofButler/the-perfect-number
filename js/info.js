@@ -62,7 +62,7 @@ let loadInfo = function (infoBoxData) {
   });
 }
 
-let appendStoryText = function (duration, newText, clearDuration = false) {
+let appendStoryText = function (duration, newText, clearDuration = false, imgSrc = null) {
 	return new Promise( function (resolve, reject) {
 
     let chain = Promise.resolve();
@@ -88,7 +88,11 @@ let appendStoryText = function (duration, newText, clearDuration = false) {
       d3.select('.dynamic-text')
         .append('text')
         .style('opacity', 0)
-        .html(newText)
+        .html(function () {
+          if (imgSrc)
+            newText = '<img src=' + imgSrc + ' class="dynamic-text-img"/>' + newText;
+          return newText;
+        })
         .transition()
         .duration(duration)
         .style('opacity', 1)

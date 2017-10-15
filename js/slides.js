@@ -203,12 +203,14 @@ let slide6 = function (data, companiesIPS, companiesTop3EmpChanges, companiesLos
   fadeStart(500, data)
   .then( function () {
     return Promise.all([
+      appendStoryText(1000, '"I am going to cut business taxes massively. They\'re going to start hiring people." - Trump', false, 'public/img/donald-trump.png'),
       fadeOutPercentLine(1000),
       updateBars(0, 1000, 1000)
     ]);
   })
   .then( function () {
     return Promise.all([
+      appendStoryText(1000, '92 of these 258 companies had effective tax rates below 20% for the 8 years', 1),
       updateBarGraphParam('data', companiesIPS),
       updateXAxis(1000),
       updateBarGraphParam('tickValues', [0,20,35]),
@@ -235,6 +237,7 @@ let slide6 = function (data, companiesIPS, companiesTop3EmpChanges, companiesLos
   })
   .then( function () {
     return Promise.all([
+      appendStoryText(1000, 'A few companies did show significant growth over these 8 years...', 1),
       updateYScale(-70, 2000),
       updateBarGraphParam('tickValues', [-70, 0, 500, 1000, 1500, 2000]),
       updateYAxis(1000),
@@ -244,14 +247,21 @@ let slide6 = function (data, companiesIPS, companiesTop3EmpChanges, companiesLos
     ]);
   })
   .then( function () {
-    let chain = Promise.resolve();
+    let chain = Promise.resolve(),
+        barGraphWidth = barGraphParams['barGraphWidth'],
+        x = barGraphWidth * 0.7;
     for (let rank in companiesTop3EmpChanges) {
       chain = chain.then( function () {
-                console.log(companiesTop3EmpChanges);
-                return highlightSomeBars(companiesTop3EmpChanges[rank], 'red', 1000);
+                return Promise.all([
+                  highlightSomeBars(companiesTop3EmpChanges[rank], 'red', 1000),
+                  updateBarGraphText(companiesTop3EmpChanges[rank][0]['company_name'], 0, x)
+                ]);
               })
               .then( function () {
-                return highlightAllBars('#000', 1000);
+                return Promise.all([
+                  highlightAllBars('#000', 1000),
+                  updateBarGraphText('', 0)
+                ]);
               });
     }
     return chain;
