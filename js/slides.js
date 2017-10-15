@@ -115,9 +115,33 @@ let slide4 = function (data, companiesTop25) {
   let barGraph = d3.select('.bar-graph-elements');
   slideInProgress = true;
 
-  fadeStart(100, data)
+  fadeStart(1000, data)
   .then( function () {
-    return highlightSomeBars(companiesTop25, 'red', 1000);
+    return Promise.all([
+      updateYScale(-2500, 40000),
+      updateXAxis(1000),
+      updateBarGraphParam('tickValues', [-2500, 0, 20000, 40000]),
+      updateYAxis(1000, false, ending = ''),
+      fadeOutPercentLine(1000),
+      updateBarGraphParam('yParam', 'tax_break'),
+      updateBars(0, 1000, 1000)
+    ]);
+  })
+  .then( function () {
+    return Promise.all([
+    ])
+  })
+  .then( function () {
+    return Promise.all([
+      appendStoryText(2000, 'Just 25 companies claimed $286 billion in tax breaks (more than half of total) over the eight years between 2008 and 2015', 0),
+      highlightSomeBars(companiesTop25, 'red', 1000)
+    ])
+  })
+  .then( function () {
+    return Promise.all([
+      updateXAxis(1000),
+      updateBars(0, 1000, 1000)
+    ])
   })
   .then( function () {
     slideInProgress = false;
@@ -128,16 +152,31 @@ let slide5 = function (data, companiesRebates) {
   let barGraph = d3.select('.bar-graph-elements');
   slideInProgress = true;
 
-  fadeStart(500, data)
+  let companiesRebatesText = {
+    'deferredTaxes': '<b>deferred taxes',
+    'accDepreciation': '<b>accelerated depreciation',
+    'dpad': 'the <b>Domestic Production Activities Deduction',
+    'researchExperiment': 'the <b>Research and Experimentation Tax Credit',
+    'stockOptions': '<b>executive stock options'
+  };
+
+  fadeStart(1000, data)
   .then( function () {
-    let chain = Promise.resolve();
-    let rebates = Object.keys(companiesRebates);
-    let lastRebate = rebates[rebates.length - 1];
+    let chain = highlightAllBars('#000', 1000),
+        rebates = Object.keys(companiesRebates),
+        lastRebate = rebates[rebates.length - 1],
+        numCompanies = 0,
+        barGraphText;
 
     for (let rebate in companiesRebates) {
       chain = chain.then( function () {
-                console.log(companiesRebates[rebate]);
-                return highlightSomeBars(companiesRebates[rebate], 'red', 1000);
+                numCompanies += companiesRebates[rebate].length;
+                barGraphText = numCompanies + ' companies used ' + companiesRebatesText[rebate] + '</b> to lower their taxes.';
+
+                return Promise.all([
+                  appendStoryText(2000, barGraphText, 1),
+                  highlightSomeBars(companiesRebates[rebate], 'red', 1000)
+                ]);
               })
 
       if (rebate != lastRebate) {

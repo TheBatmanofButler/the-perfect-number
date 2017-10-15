@@ -768,6 +768,9 @@ let fadeStart = function (duration, data, dynamicText, yStart = -15, yEnd = 50, 
         ]);
       })
       .then( function () {
+        d3.select('.percent-line')
+          .moveToFront();
+
         if (shouldFade) {
           shouldFade = false;
           return showAll(duration);

@@ -92,7 +92,7 @@ let updateXAxis = function (duration, hide) {
     });
 }
 
-let updateYAxis = function (duration, hide) {
+let updateYAxis = function (duration, hide, ending = '%') {
   return new Promise( function (resolve, reject) {
     let y = barGraphParams['y'],
         tickValues = barGraphParams['tickValues'];
@@ -100,7 +100,7 @@ let updateYAxis = function (duration, hide) {
     let yAxis = d3.axisLeft()
         .tickValues(tickValues)
         .tickFormat( function (d) {
-          return d + '%';
+          return d + ending;
         })
         .tickSize(0)
         .scale(y);
