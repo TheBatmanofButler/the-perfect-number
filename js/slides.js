@@ -49,7 +49,7 @@ let slide2 = function (data) {
       })
       .then( function () {
         return Promise.all([
-          appendStoryText(1000, '258 Fortune 500 companies reported consistent profits from 2008 to 2015.'),
+          appendStoryText(1000, 'A study found that 258 Fortune 500 companies reported consistent profits from 2008 to 2015.'),
           updateBarGraphParam('data', data),
           updateBarGraphParam('yParam', 'rate'),
           updateBarGraphParam('tickValues', [0,35]),
@@ -200,17 +200,17 @@ let slide6 = function (data, companiesIPS, companiesTop3EmpChanges, companiesLos
   let barGraphWidth = barGraphParams['barGraphWidth'],
       barGraphHeight = barGraphParams['barGraphHeight'];
 
-  fadeStart(500, data)
+  fadeStart(1000, data)
   .then( function () {
     return Promise.all([
       appendStoryText(1000, '"I am going to cut business taxes massively. They\'re going to start hiring people." - Trump', false, 'public/img/donald-trump.png'),
-      fadeOutPercentLine(1000),
-      updateBars(0, 1000, 1000)
+      fadeOutPercentLine(2000),
+      updateBars(0, 2000, 2000)
     ]);
   })
   .then( function () {
     return Promise.all([
-      appendStoryText(1000, '92 of these 258 companies had effective tax rates below 20% for the 8 years', 1),
+      appendStoryText(1000, 'Another study found that 92 of these 258 companies had effective tax rates below 20% for 8 years', 1),
       updateBarGraphParam('data', companiesIPS),
       updateXAxis(1000),
       updateBarGraphParam('tickValues', [0,20,35]),
@@ -226,6 +226,9 @@ let slide6 = function (data, companiesIPS, companiesTop3EmpChanges, companiesLos
       updateXAxis(1000),
       updateBars(0, 1000, 1000)
     ]);
+  })
+  .then( function () {
+    return highlightAllBars('#000', 2000);
   })
   .then( function () {
     return Promise.all([
@@ -291,24 +294,36 @@ let slide6 = function (data, companiesIPS, companiesTop3EmpChanges, companiesLos
   })
   .then( function () {
     return Promise.all([
-      appendStoryText(1000, 'The CEOs of 33 of these companies enjoyed raises, some quite heavily', 1),
-      highlightSomeBars(companiesCompUp, 'red', 1000)
+      appendStoryText(3000, 'The CEOs of 33 of these companies raised their salaries while still cutting jobs.', 1),
+      highlightSomeBars(companiesCompUp, 'red', 3000)
     ]);
   })
   .then( function () {
-    return Promise.all([
-      appendStoryText(1000, 
-                      '"Lower taxes drives more investment, drives more hiring, drives greater wages" - Randall L. Stephenson, CEO of AT&T',
-                      1,
-                      'public/img/randall-stephenson.png'),
-      highlightAllBars('#000', 1000)
-    ]);
+    return highlightAllBars('#000', 1000);
   })
   .then( function () {
     return Promise.all([
-      appendStoryText(1000, '', 1)
+      appendStoryText(1000, 'This is AT&T.', 1),
       highlightSomeBars([companiesLostEmployees[1]], 'red', 1000)
     ]);
+  })
+  .then( function () {
+    return Promise.all([
+      appendStoryText(1500, 'AT&T\'s workforce was reduced by <b>79450 employees</b> from 2008 to 2016', 1000),
+      highlightSomeBars([companiesLostEmployees[1]], 'red', 1000)
+    ]);
+  })
+  .then( function () {
+    return appendStoryText(3000, '...more than any other company in this study.');
+  })
+  .then ( function () {
+    return appendStoryText(1500, 
+                    '"Lower taxes drives more investment, drives more hiring, drives greater wages" - Randall L. Stephenson, CEO of AT&T',
+                    1000,
+                    'public/img/randall-stephenson.png');
+  })
+  .then( function () {
+    return appendStoryText(1500, 'The CEO enjoyed a <b>$9 million raise</b> in this same time period.', 1000);
   })
   .then( function () {
     slideInProgress = false;
