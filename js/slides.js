@@ -443,3 +443,44 @@ let slide8 = function (data, companiesCompetitors) {
     slideInProgress = false;
   });
 }
+
+let slide9 = function (data) {
+  let barGraph = d3.select('.bar-graph-elements');
+  slideInProgress = true;
+
+  fadeStart(1000, data)
+  .then( function () {
+    return highlightBarsSplit('rate', 35, 'red', 'black', 2000);
+  })
+  .then( function () {
+    return appendStoryText(1500, 'Who else loses out?', 1000);
+  })
+  .then( function () {
+    return appendStoryText(1500, ' The American people.');
+  })
+  .then( function () {
+    return appendStoryText(4000,
+      'There is plenty of blame to share for today\'s sad situation. These corporate loopholes and tax breaks are generally legal, and stem from laws passed over the years by Congress and signed by various presidents.',
+      1000,
+      null,
+      true);
+  })
+  .then( function () {
+    return appendStoryText(4000,
+      'But that does not mean that low-tax corporations bear no responsibility. The tax laws were not enacted in a vacuum; they were adopted in response to relentless corporate lobbying, threats and campaign support.',
+      1000,
+      null,
+      true);
+  })
+  .then( function () {
+    return appendStoryText(4000,
+      'These 241 companies saved a total of almost $527 billion over the last eight years.',
+      1000,
+      null,
+      true);
+  })
+  .then( function () {
+    slideInProgress = false;
+    $('.slide-explore').trigger( "click" );
+  })
+}

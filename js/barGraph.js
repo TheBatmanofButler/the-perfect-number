@@ -95,7 +95,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
 
   $('#slide9').click( function (e) {
     if (slideInProgress || !allRegionsDrawn) return;
-    slide9(data, companiesCompetitors);
+    slide9(data);
     currentSlide = 9;
     $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
     $('#slide9 div:first').addClass('active-slide-no-square');
@@ -105,6 +105,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
     if (slideInProgress || !allRegionsDrawn) return;
     $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
     $('.typeahead').typeahead('val', '');
+    $(this).css('color', '#fff');
     openMapView(allCompanyData, 'All Companies');
   });
 }
