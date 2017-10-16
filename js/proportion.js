@@ -430,22 +430,22 @@ let setAllRegionSquares = function () {
       columnLength = propGraphParams['columnLength'],
       startSquareId = regions[1]['numSquares'];
 
+  if (regions[0]['text'] == 'Company Tax Break')
+    startSquareId = 0
+
   for (let ii = 0; ii < regions.length; ii++) {
     let region = regions[ii],
         numSquares = region['numSquares'];
 
     if (ii < 2) {
-      // region['squares'] = d3.range(0, numSquares).map( function(index) {
-      //                       return {
-      //                         id: index,
-      //                         x: squareOuterLength * Math.floor(index / columnLength),
-      //                         y: squareOuterLength * (index % columnLength)
-      //                       }
-      //                     });
       direction = setSubregionSquares(region, numSquares, 0, 1);
     }
-    else
+    else {
+      if (regions[0]['text'] == 'Company Tax Break' && ii == 2)
+        direction = 1
       direction = setSubregionSquares(region, numSquares, startSquareId, direction);
+    }
+      
 
     if (ii > 1)
       startSquareId += numSquares;

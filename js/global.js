@@ -67,7 +67,7 @@ let createProportionAreas = function (comparisons, actualProfit, actualTaxBreak,
       proportionAreas.unshift({
         'text': 'Company Tax Paid',
         'numSquares': numTaxPaidSquares,
-        'color': 'rgba(255, 0, 0, 0.8)',
+        'color': 'rgba(63,42,20,1)',
         'money': getMoneyString(taxPaid, convertConst),
         'unit': unit
       });
@@ -76,7 +76,7 @@ let createProportionAreas = function (comparisons, actualProfit, actualTaxBreak,
       proportionAreas.push({
         'text': 'Company Tax Paid',
         'numSquares': numTaxPaidSquares,
-        'color': 'rgba(255, 0, 0, 0.8)',
+        'color': 'rgba(63,42,20,1)',
         'money': getMoneyString(taxPaid, convertConst),
         'unit': unit
       });
