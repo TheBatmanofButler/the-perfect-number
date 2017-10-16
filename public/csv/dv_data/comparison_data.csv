@@ -1,11 +1,13 @@
 text,money,color,source
-2016 US Deficit,587000,"rgba(0,0,255,1)",https://www.wsj.com/articles/u-s-budget-deficit-rose-in-fiscal-year-2016-first-time-in-five-years-1476475245
-Cost of Hurricane Katrina,108000,"rgba(0,0,255,1)",https://www.thebalance.com/hurricane-katrina-facts-damage-and-economic-effects-3306023
-"Hire 50,000 teachers for 10 years",25000,"rgba(255,255,0,1)","https://www.dailykos.com/stories/2016/8/14/1559053/-Ten-things-we-could-buy-with-25-billion-other-than-a-wall" 
-GDP of Haiti,8260,"rgba(0,255,0,1)",https://en.wikipedia.org/wiki/List_of_countries_by_GDP_(nominal)
-Temp 1,30.27,"rgba(128,0,128,1)",urltemp
-Provide 10 million MacBook Pros,27.99,"rgba(255,255,0,1)",https://www.apple.com/shop/buy-mac/macbook-pro/15-inch
-Temp 2,10,"rgba(255,140,0,1)",urltemp
-Temp 3,8,"rgba(255,255,0,1)",urltemp
-Median Home Price,0.1889,"rgba(255,255,0,1)",http://www.huffingtonpost.com/2014/03/13/median-home-price-2014_n_4957604.html
-5kW solar system for a residential home,0.035000,"rgba(255,255,0,1)",https://www.dailykos.com/stories/2016/8/14/1559053/-Ten-things-we-could-buy-with-25-billion-other-than-a-wall
+Half of the 2016 US Deficit,293500,"rgba(255, 0, 0,1)",https://www.wsj.com/articles/u-s-budget-deficit-rose-in-fiscal-year-2016-first-time-in-five-years-1476475245
+27 billion hours of labor at minimum wage,200000,"rgba(245, 130, 48,1)","http://www.ncsl.org/research/labor-and-employment/state-minimum-wage-chart.aspx"
+Cost of Hurricane Katrina,108000,"rgba(128, 128, 0,1)",https://www.thebalance.com/hurricane-katrina-facts-damage-and-economic-effects-3306023
+"50,000 teachers for 10 years",25000,"rgba(255, 225, 25,1)","https://www.dailykos.com/stories/2016/8/14/1559053/-Ten-things-we-could-buy-with-25-billion-other-than-a-wall" 
+GDP of Haiti,8260,"rgba(210, 245, 60,1)",https://en.wikipedia.org/wiki/List_of_countries_by_GDP_(nominal)
+Titanic movie budget,200,"rgba(60, 180, 75,1)",https://en.wikipedia.org/wiki/Titanic_(1997_film)
+20 million hours of labor at minimum wage,145,"rgba(170, 255, 195,1)","http://www.ncsl.org/research/labor-and-employment/state-minimum-wage-chart.aspx"
+5kW solar panel for 1000 residential home,35,"rgba(0, 128, 128,1)",https://www.dailykos.com/stories/2016/8/14/1559053/-Ten-things-we-could-buy-with-25-billion-other-than-a-wall
+10 million MacBook Pros,27.99,"rgba(0, 0, 128,1)",https://www.apple.com/shop/buy-mac/macbook-pro/15-inch
+4 years of tuition at Harvard for 100 students,17.31,"rgba(70, 240, 240,1)","https://www.harvard.edu/about-harvard/harvard-glance"
+Average Cost of a 30 Second Ad Spot During Super Bowl,5,"rgba(0, 130, 200,1)","https://www.si.com/nfl/2017/01/26/super-bowl-commercial-cost-2017"
+Median Home Price,0.368100,"rgba(145, 30, 180,1)",https://www.census.gov/construction/nrs/pdf/uspricemon.pdf
