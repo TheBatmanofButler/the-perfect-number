@@ -3,6 +3,8 @@ html, body {
   margin: 0;
   color: #fff;
   font-family: 'Asap Condensed', sans-serif;
+
+  background: #F7F7F7;
 }
 
 canvas {
@@ -25,15 +27,13 @@ canvas {
     flex-direction: row;
 
     height: 34px;
-    background: #7C809B;
+    /*background: #7C809B;*/
   }
 
     .square-inner {
       text-align: center;
       vertical-align: middle;
       line-height: 30px;
-
-      border: 2px solid #7C809B;;
 
       height: 30px;
       width: 30px;
@@ -50,12 +50,16 @@ canvas {
       box-shadow: 0 5px 10px rgba(0,0,0,.2);
       max-height: 20vh;
       overflow-y: auto;
+      text-align: left;
     }
 
     .tt-suggestion {
       padding: 3px 20px;
-      font-size: 18px;
-      line-height: 24px;
+
+      font-family: 'Asap Condensed', sans-serif;
+      font-size: 14px;
+
+      line-height: 14px;
     }
 
     .tt-suggestion:hover { 
@@ -67,19 +71,40 @@ canvas {
       background-color: #0097cf;
     }
 
+    .tt-hint {
+      font-family: 'Asap Condensed', sans-serif;
+      font-size: 14px;
+      
+      padding-left: 5px;
+    }
+
     .tt-input {
       background-color: #0097cf;
       opacity: 1;
+
+      font-family: 'Asap Condensed', sans-serif;
+      font-size: 14px;
+
+      padding-left: 5px;
     }
+
+      .tt-input::placeholder {
+        font-family: 'Asap Condensed', sans-serif;
+        font-size: 14px;
+
+        padding-left: 5px;
+      }
 
     .search-wrapper {
       flex: 2;
-      float: right;
+      text-align: right;
     }
       .scrollable-dropdown-menu {
         width: 25vw;
+        height: 24px;
         min-width: 30px;
-        margin: 7px;
+        margin-left: 10px;
+        margin-right: 10px;
       }
 
     .slide-no {
@@ -90,29 +115,33 @@ canvas {
       .slide-no-square-wrapper {
         cursor: pointer;
         color: black;
+        margin-left: 5px;
+        margin-right: 5px;
       }
 
         .slide-no-square {
           background: #D0CCD0;
-          color: black;
+          color: #fff;
         }
 
         .active-slide-no-square {
-          background: #8E8B8E;
+          background: #3E4351;
           color: white;
         }
 
       .slide-explore {
         text-align: center;
         vertical-align: middle;
-        line-height: 34px;
-        margin-left: 5px;
+        line-height: 30px;
 
-        height: 34px;
+        height: 30px;
         width: 110px;
-
-        font-size: 0.9rem;
       }
+
+        .slide-explore-text {
+          padding-bottom: 3px;
+          border-bottom: 1px dotted #3E4351;
+        }
 
     .about-button {
       cursor: pointer;
@@ -135,8 +164,8 @@ canvas {
     color: black;
     vertical-align: middle;
     /*line-height: 80px;*/
-    border-top: 3px solid white;
-    border-bottom: 3px solid white;
+    margin-top: 3px;
+    margin-bottom: 3px;
   }
     .dynamic-text-img {
       height: 50px;
@@ -263,7 +292,8 @@ canvas {
         position: absolute;
       }
 
-      .quote-text, .highlight, .cursor, .pedal, .pedal-link {
+      .quote-text, .highlight, .cursor {
+        color: #3E4351;
         font-family: 'Roboto Mono', monospace;        
       }
 
@@ -271,10 +301,10 @@ canvas {
         fill: #44005B;
       }
 
-      .pedal {
+      .pedal, .pedal-link {
         font-size: 2rem;
         font-family: 'Asap Condensed', sans-serif;
-        color: #224461;
+        color: #566C58;
 
         padding: 1%;
       }

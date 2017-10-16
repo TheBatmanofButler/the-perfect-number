@@ -57,7 +57,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
     if (slideInProgress || !allRegionsDrawn) return;
     slide3(data, companiesYearsNoTax);
     currentSlide = 3;
-    $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
+    clearTop();
     $('#slide3 div:first').addClass('active-slide-no-square');
   });
 
@@ -281,7 +281,7 @@ let createOpeningSlide = function () {
   d3.selectAll('.bolden')
         .on("mouseover", function () {
           d3.selectAll('.bolden')
-            .style('fill', 'red');
+            .style('fill', '#566C58');
         })
         .on("mouseout", function () {
           d3.selectAll('.bolden')
@@ -304,7 +304,7 @@ let createOpeningSlide = function () {
     d3.selectAll('.highlight')
       .transition()
       .duration(1000)
-      .style('fill', 'red')
+      .style('fill', '#367558')
       .style('opacity', 1)
       .transition()
       .delay(1000)
@@ -763,7 +763,7 @@ let showOpeningScreen = function(duration) {
         })
         .transition()
         .duration(1000)
-        .style('fill', 'red')
+        .style('fill', '#367558')
         .style('opacity', 1)
 
     d3.selectAll('.pedal, .pedal-link')
