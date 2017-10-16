@@ -1,11 +1,11 @@
 text,money,color,source
 2016 US Deficit,587000,"rgba(0,0,255,1)",https://www.wsj.com/articles/u-s-budget-deficit-rose-in-fiscal-year-2016-first-time-in-five-years-1476475245
 Cost of Hurricane Katrina,108000,"rgba(0,0,255,1)",https://www.thebalance.com/hurricane-katrina-facts-damage-and-economic-effects-3306023
+"Hire 50,000 teachers for 10 years",25000,"rgba(255,255,0,1)","https://www.dailykos.com/stories/2016/8/14/1559053/-Ten-things-we-could-buy-with-25-billion-other-than-a-wall" 
 GDP of Haiti,8260,"rgba(0,255,0,1)",https://en.wikipedia.org/wiki/List_of_countries_by_GDP_(nominal)
-Temp 1,18.27,"rgba(128,0,128,1)",urltemp
+Temp 1,30.27,"rgba(128,0,128,1)",urltemp
+Provide 10 million MacBook Pros,27.99,"rgba(255,255,0,1)",https://www.apple.com/shop/buy-mac/macbook-pro/15-inch
 Temp 2,10,"rgba(255,140,0,1)",urltemp
 Temp 3,8,"rgba(255,255,0,1)",urltemp
 Median Home Price,0.1889,"rgba(255,255,0,1)",http://www.huffingtonpost.com/2014/03/13/median-home-price-2014_n_4957604.html
-Average teacher's salary for a year,0.057200,"rgba(0,0,255,1)",https://money.usnews.com/careers/best-jobs/high-school-teacher/salary
 5kW solar system for a residential home,0.035000,"rgba(255,255,0,1)",https://www.dailykos.com/stories/2016/8/14/1559053/-Ten-things-we-could-buy-with-25-billion-other-than-a-wall
-Cost of MacBookPro,0.002799,"rgba(255,255,0,1)",https://www.apple.com/shop/buy-mac/macbook-pro/15-inch
