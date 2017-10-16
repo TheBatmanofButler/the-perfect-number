@@ -206,7 +206,7 @@ let createOpeningSlide = function () {
   let quote1 = '"That\'s the number I wanted to get to. I wanted to start at 15 to get there.';
   let quote2 = 'We really had to start there because of the complexity of the numbers,'; 
   let quote3 = 'but 20 is a perfect number."';
-  let quote4 = '- Donald Trump on US Corporate Tax|';
+  let quote4 = '- Donald Trump on US Corporate Tax';
 
   let width = 1415,
       height = 407;
@@ -221,14 +221,15 @@ let createOpeningSlide = function () {
       totalHeight = barGraphHeight + marginTop + marginBottom;
 
   let quoteChars = quote1.split('').concat(quote2.split(''))
-                                    .concat(quote3.split(''))
-                                    .concat(quote4.split('')),
+                                   .concat(quote3.split(''))
+                                   .concat(quote4.split('')),
       openingScreen = d3.select('.bar-graph')
                         .attr('width', null)
                         .attr('height', null)
-                        .attr("viewBox", "0 0 " + totalWidth + " " + totalHeight)
+                        .attr("viewBox", '0 0 1400 500')
                         .attr("preserveAspectRatio", "xMidYMid meet");
 
+  console.log(totalWidth, totalHeight);
 
   let chars = openingScreen
                 .selectAll('.char')
@@ -663,7 +664,6 @@ let showAll = function (duration) {
 
 let fadeOpeningScreen = function(duration) {
   return new Promise( function (resolve, reject) {
-    // showAll(1000);
 
     for (let ii in openingScreenTimeouts) {
       let timeout = openingScreenTimeouts[ii];
@@ -671,8 +671,6 @@ let fadeOpeningScreen = function(duration) {
       timeout = 0;
     }
     openingScreenTimeouts = [];
-
-    showAll(1000);
 
     d3.selectAll('.quote-text, .highlight, .cursor, .pedal, .pedal-link')
       .transition()
@@ -726,7 +724,7 @@ let showOpeningScreen = function(duration) {
       d3.select('.bar-graph')
         .attr('width', null)
         .attr('height', null)
-        .attr("viewBox", "0 0 " + totalWidth + " " + totalHeight)
+        .attr("viewBox", '0 0 1400 500')
         .attr("preserveAspectRatio", "xMidYMid meet");
 
       d3.selectAll('.highlight')
@@ -793,7 +791,10 @@ let fadeStart = function (duration, data, dynamicText, yStart = -15, yEnd = 50, 
       .then( function () {
         let isOpeningScreen = d3.select('.bar-graph').attr('viewBox') != null;
         if (isOpeningScreen)
-          return fadeOpeningScreen(duration);
+          return Promise.all([
+            fadeOpeningScreen(duration),
+            showAll(duration)
+          ]);
       })
       .then( function () {
         return highlightAllBars('#000', 0);

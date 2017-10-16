@@ -13,6 +13,11 @@ let slide2 = function (data) {
 
   Promise.resolve()
       .then( function () {
+        let isOpeningScreen = d3.select('.bar-graph').attr('viewBox') != null;
+        if (isOpeningScreen)
+          return fadeOpeningScreen(1000);
+      })
+      .then( function () {
         if (currentSlide != null)
           closeMapView();
 
@@ -31,11 +36,6 @@ let slide2 = function (data) {
           appendStoryText(0, '', 1000),
           fadeAll(1000)
         ]);
-      })
-      .then( function () {
-        let isOpeningScreen = d3.select('.bar-graph').attr('viewBox') != null;
-        if (isOpeningScreen)
-          return fadeOpeningScreen(1000);
       })
       .then( function () {
         return Promise.all([
