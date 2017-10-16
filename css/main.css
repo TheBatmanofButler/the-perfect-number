@@ -74,7 +74,7 @@ canvas {
     .tt-hint {
       font-family: 'Asap Condensed', sans-serif;
       font-size: 14px;
-      
+
       padding-left: 5px;
     }
 
@@ -341,4 +341,8 @@ canvas {
 
 .bold {
   font-weight: bold;
+}
+
+.bar {
+  fill: rgba(0,0,0,0.4);
 }

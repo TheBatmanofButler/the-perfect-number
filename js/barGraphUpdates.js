@@ -272,6 +272,7 @@ let updateBarSize = function (bars) {
       }
     })
     .style('stroke', 'black')
+    .style('stroke-width', 0.5)
     .attr('width', width / (data.length + 100))
     .attr('height', function(d) {
       return Math.abs(y(d[yParam]) - y(0));
@@ -301,21 +302,24 @@ let updateBarGraphSVG = function (duration) {
 let updateCompanyLabel = function (duration, text = null, xValue = 5, yValue = -30) {
   let y = barGraphParams['y'];
 
-  d3.select('.company-label')
-    .attr('x', xValue)
-    .attr('y', y(yValue))
-    .transition()
-    .duration(300)
-    .style('opacity', 0)
-    .transition()
-    .duration(duration)
-    .ease(d3.easeLinear)
-    .call( function (d) {
-      if (text != null)
-        d.text(text);
-    })
-    .style('opacity', 1)
-    .style('font-size', 30);
+  return new Promise( function (resolve, reject) {
+    d3.select('.company-label')
+      .attr('x', xValue)
+      .attr('y', y(yValue))
+      .transition()
+      .duration(300)
+      .style('opacity', 0)
+      .transition()
+      .duration(duration)
+      .ease(d3.easeLinear)
+      .call( function (d) {
+        if (text != null)
+          d.text(text);
+      })
+      .style('opacity', 1)
+      .style('font-size', 30)
+      .end(resolve);
+  });
 }
 
 let updateBarGraphDims = function (mapModeHeight) {
@@ -363,14 +367,19 @@ let updateBarGraphYLabel = function (duration) {
   }
 
   return new Promise( function (resolve, reject) {
-    d3.select('.y-label')
-      .attr('transform', 'translate('+ ( marginLeft * -0.5 ) + ',' + ( barGraphHeight * 0.5 )+')rotate(-90)')
-      .style('opacity', 0)
-      .text(yLabels[yParam])
-      .transition()
-      .duration(duration)
-      .style('opacity', 1)
-      .end(resolve);
+    if (d3.select('.y-label').text() != yLabels[yParam]) {
+      d3.select('.y-label')
+        .attr('transform', 'translate('+ ( marginLeft * -0.5 ) + ',' + ( barGraphHeight * 0.5 )+')rotate(-90)')
+        .style('opacity', 0)
+        .text(yLabels[yParam])
+        .transition()
+        .duration(duration)
+        .style('opacity', 1)
+        .end(resolve);
+    }
+    else {
+      resolve();
+    }
   });
 }
 

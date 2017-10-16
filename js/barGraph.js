@@ -504,7 +504,7 @@ let openMapView = function (data, company) {
     .then( function () {
       slideInProgress = false;
       if (!inMapMode)
-        return highlightAllBars('#000', 0);
+        return highlightAllBars('rgba(0,0,0,0.4)', 0);
     })
     .then( function () {
       return hideBarGraphYLabel(500);
@@ -554,7 +554,7 @@ let openMapView = function (data, company) {
       if (!inMapMode) {
         return Promise.all([
           fadeOutPercentLine(1000),
-          highlightBarsSplit('rate', 35, 'red', 'green', 1000)        
+          highlightBarsSplit('rate', 35, '#F2C14E', 'green', 1000)        
         ]);
       }
     })
@@ -797,7 +797,7 @@ let fadeStart = function (duration, data, dynamicText, yStart = -15, yEnd = 50, 
           ]);
       })
       .then( function () {
-        return highlightAllBars('#000', 0);
+        return highlightAllBars('rgba(0,0,0,0.4)', duration);
       })
       .then( function () {
         let mapModeHeight = $('.graph-viewers').height();

@@ -208,8 +208,8 @@ let inMapMode = false,
                         'stockOptions': [],
                         'researchExperiment': [],
                         'dpad': [],
-                        'accDepreciation': [],
-                        'deferredTaxes': []
+                        'deferredTaxes': [],
+                        'accDepreciation': []
                       },
     companies92 = [],
     companiesTop3EmpChanges = {
