@@ -20,14 +20,30 @@ let updateBarGraphText = function (text, duration, x) {
   });
 }
 
+let hideBarGraphText = function (duration) {
+  let barGraphWidth = barGraphParams['barGraphWidth'],
+      barGraphText = d3.select('.bar-graph-text');
+
+  return new Promise( function (resolve, reject) {
+    barGraphText
+      .transition()
+      .duration(duration)
+      .ease(d3.easeLinear)
+      .style('opacity', 0)
+      .end(resolve);
+  });
+}
+
 let updateXScale = function () {
   let barGraphWidth = barGraphParams['barGraphWidth'];
   barGraphParams['x'] = d3.scaleBand()
                           .range([0, barGraphWidth, .1, 1]);
 }
 
-let updateYScale = function (domainStart, domainEnd) {
-  let barGraphHeight = barGraphParams['barGraphHeight'];
+let updateYScale = function () {
+  let domainStart = barGraphParams['domainStart'],
+      domainEnd = barGraphParams['domainEnd'],
+      barGraphHeight = barGraphParams['barGraphHeight'];
   barGraphParams['y'] = d3.scaleLinear()
                           .domain([domainStart, domainEnd])
                           .range([barGraphHeight, 0]);
@@ -95,15 +111,16 @@ let updateXAxis = function (duration, hide) {
     });
 }
 
-let updateYAxis = function (duration, hide, ending = '%') {
+let updateYAxis = function (duration, hide) {
   return new Promise( function (resolve, reject) {
     let y = barGraphParams['y'],
-        tickValues = barGraphParams['tickValues'];
+        tickValues = barGraphParams['tickValues'],
+        axisEnding = barGraphParams['axisEnding'];
 
     let yAxis = d3.axisLeft()
         .tickValues(tickValues)
         .tickFormat( function (d) {
-          return d + ending;
+          return d + axisEnding;
         })
         .tickSize(0)
         .scale(y);
@@ -158,10 +175,7 @@ let updateBars = function (exitTime, enterTime, updateTime) {
                         })
                         .on('mouseover', function (d) {
                           if (inMapMode && allRegionsDrawn && d != currentCompany) {
-                            d3.select('.company-label')
-                              .transition()
-                              .ease(d3.easeLinear)
-                              .text(d['company_name']);
+                            updateCompanyLabel(300, d['company_name']);
 
                             d3.select(this)
                               .style('fill', 'yellow')
@@ -170,10 +184,7 @@ let updateBars = function (exitTime, enterTime, updateTime) {
                         })
                         .on('mouseout', function (d) {
                           if (inMapMode && allRegionsDrawn && d != currentCompany) {
-                            d3.select('.company-label')
-                              .transition()
-                              .ease(d3.easeLinear)
-                              .text('');
+                            updateCompanyLabel(300, '');
 
                             let color;
                             if (d['rate'] > 35) {
@@ -287,19 +298,23 @@ let updateBarGraphSVG = function (duration) {
       .attr('height', totalHeight);
 }
 
-let updateCompanyLabel = function (duration, text = null) {
+let updateCompanyLabel = function (duration, text = null, xValue = 5, yValue = -30) {
   let y = barGraphParams['y'];
 
   d3.select('.company-label')
+    .attr('x', xValue)
+    .attr('y', y(yValue))
+    .transition()
+    .duration(300)
+    .style('opacity', 0)
     .transition()
     .duration(duration)
     .ease(d3.easeLinear)
-    .attr('dx', 5)
-    .attr('y', y(-7))
     .call( function (d) {
       if (text != null)
         d.text(text);
     })
+    .style('opacity', 1)
     .style('font-size', 30);
 }
 
@@ -333,4 +348,38 @@ let restartSlide = function (duration) {
       currentSlide -= 1;
       $('.bar-graph-viewer').trigger('click');
     });
+}
+
+let updateBarGraphYLabel = function (duration) {
+  let marginLeft = barGraphParams['marginLeft'],
+      barGraphHeight = barGraphParams['barGraphHeight'],
+      yParam = barGraphParams['yParam'];
+
+  let yLabels = {
+    'rate': 'Effective Tax Rate (2008-2015)',
+    'tax_break': 'Total Tax Break (2008-2015)',
+    'adjusted_emp_change': 'Adjusted change in employees (% 2008-2016)',
+    'us_foreign_diff': 'US tax rate - Foreign tax rate',
+  }
+
+  return new Promise( function (resolve, reject) {
+    d3.select('.y-label')
+      .attr('transform', 'translate('+ ( marginLeft * -0.5 ) + ',' + ( barGraphHeight * 0.5 )+')rotate(-90)')
+      .style('opacity', 0)
+      .text(yLabels[yParam])
+      .transition()
+      .duration(duration)
+      .style('opacity', 1)
+      .end(resolve);
+  });
+}
+
+let hideBarGraphYLabel = function (duration) {
+  return new Promise( function (resolve, reject) {
+    d3.select('.y-label')
+      .transition()
+      .duration(duration)
+      .style('opacity', 0)
+      .end(resolve);
+  });
 }

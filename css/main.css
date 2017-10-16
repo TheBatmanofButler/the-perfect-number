@@ -96,10 +96,7 @@ canvas {
           background: #D0CCD0;
           color: black;
         }
-        .slide-no-square:hover {
-          background: #8E8B8E;
-          color: white;
-        }
+
         .active-slide-no-square {
           background: #8E8B8E;
           color: white;
@@ -116,9 +113,6 @@ canvas {
 
         font-size: 0.9rem;
       }
-        .slide-explore:hover {
-          color: white;
-        }
 
     .about-button {
       cursor: pointer;
@@ -134,7 +128,7 @@ canvas {
   .dynamic-text {
     height: 80px;
     padding-top: 20px;
-    /*padding-bottom: 10px;*/
+    padding-bottom: 20px;
     padding-left: 30px;
     padding-right: 30px;
     font-size: 2vw;

@@ -22,6 +22,11 @@ $('.typeahead').bind('typeahead:select', function(ev, suggestion) {
     openMapView(allCompanyData, suggestion);
 });
 
+$('.slide-no-square, .slide-explore').hover( function (e) {
+  if (!slideInProgress && allRegionsDrawn)
+    $(this).toggleClass('active-slide-no-square');
+});
+
 $('.toggle-label').click( function () {
 
   if ($(this).find('.arrow-right').length == 1) {

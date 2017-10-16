@@ -8,7 +8,10 @@ let barGraphParams = {
   marginTop: 50,
   marginRight: 40,
   marginBottom: 100,
-  marginLeft: 40
+  marginLeft: 80,
+  axisEnding: '%',
+  domainStart: null,
+  domainEnd: null
 }
 
 let slideInProgress = false;
@@ -16,9 +19,6 @@ let slideInProgress = false;
 let clearTop = function () {
   $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
   $('.slide-explore').css('color', '#000');
-  $('.slide-explore').hover( function (e) {
-    $(this).css('color', e.type === 'mouseenter' ? '#fff' : '#000');
-  });
 }
 
 let createSlides = function (data, companiesYearsNoTax, companiesTop25, companiesRebates, companiesIPS, companiesTop3EmpChanges, companiesLostEmployees, companiesCompUp, companiesForeignDiff, companiesCompetitors) {
@@ -39,8 +39,8 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
 
   $('#slide1').click( function (e) {
     if (slideInProgress || !allRegionsDrawn) return;
-    slide1(barGraphWidth, barGraphHeight);
     currentSlide = 1;
+    slide1(barGraphWidth, barGraphHeight);
     clearTop();
     $('#slide1 div:first').addClass('active-slide-no-square');
   });
@@ -128,7 +128,9 @@ let initBarGraph = function () {
       marginLeft = barGraphParams['marginLeft'];
 
   updateXScale(barGraphWidth);
-  updateYScale(-15, 50);
+  updateBarGraphParam('domainStart', -15);
+  updateBarGraphParam('domainEnd', 50);
+  updateYScale();
 
   let totalWidth = barGraphWidth + marginLeft + marginRight,
       totalHeight = barGraphHeight + marginTop + marginBottom;
@@ -160,9 +162,7 @@ let initBarGraph = function () {
   barGraph
     .append('text')
     .attr('class', 'company-label')
-    .attr('x', 5)
-    .attr('y', y(-20))
-    .style('font-size', 30);
+    .style('font-size', '15px');
 
   let yDomain = barGraphParams['y'].domain(),
       barGraphTextY = yDomain[yDomain.length - 1];
@@ -182,6 +182,15 @@ let initBarGraph = function () {
       .attr('x1', 0)
       .attr('x2', barGraphWidth)
       .style('opacity', 0);
+
+
+  barGraph
+    .append('g')
+    .append("text")
+    .attr('class', 'y-label')
+    .attr("text-anchor", "middle")
+    .style('font-size', '15px');
+
 }
 
 let getWordX = function (arr, pos) {
@@ -198,10 +207,7 @@ let createOpeningSlide = function () {
   let quote2 = 'We really had to start there because of the complexity of the numbers,'; 
   let quote3 = 'but 20 is a perfect number."';
   let quote4 = '- Donald Trump on US Corporate Tax|';
-  console.log(quote1.length)
-  console.log(quote2.length)
-  console.log(quote3.length)
-  console.log(quote4.length)
+
   let width = 1415,
       height = 407;
 
@@ -435,19 +441,40 @@ let updateQuoteText = function (duration, lineBreak1, lineBreak2, lineBreak3) {
 
 let resizeBarGraph = function () {
 
-  if (currentSlide > 1) {
+  if (currentSlide == null) {
+    let mapModeHeight = $('.visualization').outerHeight() 
+                                         - $('.top').outerHeight() 
+                                         - $('.dynamic-text').outerHeight()
+                                         - $(window).outerHeight() * 0.45;
     updateBarGraphParam('tickValues', []);
+    updateBarGraphDims(mapModeHeight);
+
+    updateXScale();
+    updateYScale();
+
+    // updateYAxis(0, false);
+    updateXAxis(0);
+
+    updateBarGraphSVG(0);
+    updateBars(0, 0, 0);
+  }
+
+  if (currentSlide > 1) {
     updateBarGraphDims();
 
     updateXScale();
-    updateYScale(-15, 50);
+    updateYScale();
+
     updateBarGraphSVG(0);
 
     updateBarGraphText(null, 0);
     updateCompanyLabel(0);
+    updateBarGraphYLabel(0);
 
-    updatePercentLine(0);
-    updateYAxis(0);
+    if (d3.select('.percent-line').style('opacity') != 0)
+      updatePercentLine(0);
+
+    updateYAxis(0, false);
     updateXAxis(0);
     updateBars(0, 0, 0);
 
@@ -479,6 +506,12 @@ let openMapView = function (data, company) {
         return highlightAllBars('#000', 0);
     })
     .then( function () {
+      return hideBarGraphYLabel(500);
+    })
+    .then( function () {
+
+      d3.select('.dynamic-text')
+        .style('line-height', '80px');
 
       // updateStoryText(500, '');
       removeBarGraphClicks();
@@ -498,7 +531,9 @@ let openMapView = function (data, company) {
               updateBarGraphDims(mapModeHeight),
 
               updateXScale(),
-              updateYScale(-15, 50),
+              updateBarGraphParam('domainStart', -15),
+              updateBarGraphParam('domainEnd', 50),
+              updateYScale(),
               updateBarGraphSVG(1000),
 
               updateBarGraphText(null, 1000),
@@ -529,10 +564,14 @@ let openMapView = function (data, company) {
 }
 
 let closeMapView = function () {
-  $('.proportion-graph-viewer').animate({'height': '0'}, 1000, 'linear');
-  $('.proportion-graph-viewer').hide(500);
-  updateStoryText(1000, '');
-  addBarGraphClicks();
+  console.log(currentSlide);
+  if (currentSlide != null) {
+    $('.proportion-graph-viewer').animate({'height': '0'}, 1000, 'linear');
+    $('.proportion-graph-viewer').hide(500);
+    addBarGraphClicks();
+
+    return updateStoryText(1000, '');
+  }
 
 }
 
@@ -762,17 +801,18 @@ let fadeStart = function (duration, data, dynamicText, yStart = -15, yEnd = 50, 
       .then( function () {
         let mapModeHeight = $('.graph-viewers').height();
 
-        if (currentSlide != null)
-          closeMapView();
-
         return Promise.all([
           appendStoryText(duration, dynamicText),
+          closeMapView(),
 
-          updateBarGraphParam('marginBottom', 200),
+          updateBarGraphParam('marginBottom', 100),
           updateBarGraphDims(mapModeHeight),
 
+          updateBarGraphParam('axisEnding', '%'),
           updateXScale(),
-          updateYScale(yStart, yEnd),
+          updateBarGraphParam('domainStart', yStart),
+          updateBarGraphParam('domainEnd', yEnd),
+          updateYScale(),
           updateBarGraphSVG(duration),
 
           updateBarGraphText(null, duration),
@@ -782,21 +822,22 @@ let fadeStart = function (duration, data, dynamicText, yStart = -15, yEnd = 50, 
           updateBarGraphParam('yParam', 'rate'),
 
           updateBarGraphParam('tickValues', tickValues),
+          updateBarGraphYLabel(duration),
           updateYAxis(duration),
           updateXAxis(duration),
           updatePercentLine(duration),
           updateBars(0, duration, duration)
         ]);
       })
-      // .then( function () {
-      //   d3.select('.percent-line')
-      //     .moveToFront();
+      .then( function () {
+        d3.select('.percent-line')
+          .moveToFront();
 
-      //   if (shouldFade) {
-      //     shouldFade = false;
-      //     return showAll(duration);
-      //   }
-      // })
+        if (shouldFade) {
+          shouldFade = false;
+          return showAll(duration);
+        }
+      })
       .then(resolve);
   });
 }
