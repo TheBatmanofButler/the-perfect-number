@@ -1,6 +1,7 @@
 
 let slide1 = function (data) {
   slideInProgress = true;
+  $('.typeahead').typeahead('val', '');
   closeMapView();
   let mapModeHeight = $('.graph-viewers').height();
   updateBarGraphParam('marginBottom', 100);
@@ -508,7 +509,8 @@ let slide8 = function (data, companiesCompetitors) {
               .then( function () {
                 return Promise.all([
                   appendStoryText(1000, 'and ' + competitorLow['company_name'] + ' ' + competitorLow['rate'] + '% in the ' + competitorLow['industry'] + ' industry.'),
-                  highlightSomeBars([competitorLow], '#0FEA00', 1000)
+                  highlightSomeBars([competitorLow], '#0FEA00', 1000),
+                  (competitorHigh['rate'] - competitorLow['rate'])
                 ]);
               })
               .then( function () {
@@ -533,10 +535,10 @@ let slide9 = function (data) {
 
   fadeStart(1000, data)
   .then( function () {
-    return highlightBarsSplit('rate', 35, '#0FEA00', 'rgba(0,0,0,0.4)', 2000);
-  })
-  .then( function () {
-    return appendStoryText(1500, 'Who else loses out?', 1000);
+    return Promise.all([
+      highlightBarsSplit('rate', 35, '#0FEA00', 'rgba(0,0,0,0.4)', 1000),
+      appendStoryText(1500, 'Who else loses out?', 1000)
+    ]);
   })
   .then( function () {
     return appendStoryText(1500, ' The American people.');
