@@ -780,8 +780,10 @@ let showOpeningScreen = function(duration) {
 }
 
 let fadeStart = function (duration, data, dynamicText, yStart = -15, yEnd = 50, tickValues = [0,35]) {
-
+  let isOpeningScreen = d3.select('.bar-graph').attr('viewBox') != null;
+  
   return new Promise( function (resolve, reject) {
+
     Promise.resolve()
       .then( function () {
         updateStoryText(duration, '');
@@ -789,12 +791,12 @@ let fadeStart = function (duration, data, dynamicText, yStart = -15, yEnd = 50, 
           return fadeAll(duration);
       })
       .then( function () {
-        let isOpeningScreen = d3.select('.bar-graph').attr('viewBox') != null;
-        if (isOpeningScreen)
+        if (isOpeningScreen) {
           return Promise.all([
-            fadeOpeningScreen(duration),
-            showAll(duration)
+            fadeAll(duration),
+            fadeOpeningScreen(duration)
           ]);
+        }
       })
       .then( function () {
         return highlightAllBars('rgba(0,0,0,0.4)', duration);
@@ -834,7 +836,7 @@ let fadeStart = function (duration, data, dynamicText, yStart = -15, yEnd = 50, 
         d3.select('.percent-line')
           .moveToFront();
 
-        if (shouldFade) {
+        if (shouldFade || isOpeningScreen) {
           shouldFade = false;
           return showAll(duration);
         }

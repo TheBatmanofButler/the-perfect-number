@@ -507,9 +507,12 @@ let slide8 = function (data, companiesCompetitors) {
               })
               .then( function () {
                 return Promise.all([
-                  appendStoryText(1000, competitorLow['company_name'] + ' ' + competitorLow['rate'] + '%'),
+                  appendStoryText(1000, 'and ' + competitorLow['company_name'] + ' ' + competitorLow['rate'] + '% in the ' + competitorLow['industry'] + ' industry.'),
                   highlightSomeBars([competitorLow], '#0FEA00', 1000)
                 ]);
+              })
+              .then( function () {
+                return highlightSomeBars([competitorLow], '#0FEA00', 2000);
               })
               .then( function () {
                 counter++;
