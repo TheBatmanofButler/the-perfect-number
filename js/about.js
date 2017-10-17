@@ -1,7 +1,7 @@
 let getAboutDiv = function () {
   console.log($('.about').width());
 	if ($('.about').width()==0)
-		$('.about').animate({'width': '30vw'});	
+		$('.about').animate({'width': '50vw'});	
 	else
 		$('.about').animate({'width': '0'});
 }

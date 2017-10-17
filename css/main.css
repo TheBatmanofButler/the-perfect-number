@@ -317,10 +317,13 @@ canvas {
 .about {
   position: absolute;
 
+  font-family: 'Muli', sans-serif;
+
   height: calc(100vh - 65px);
   width: 0;
 
-  background: green;
+  background: #3E4351;
+
   z-index: 4;
   top: 39px; right: 0;
 
@@ -331,16 +334,28 @@ canvas {
 }
 
   .about-text {
-    text-overflow: clip;
     text-align: justify;
 
     height: 100%;
-    width: 90%;
     padding: 20px;
   }
 
+  .report-link {
+    text-decoration: none;
+    color: inherit;
+    border-bottom: 1px #F7F7F7 dotted;
+  }
+
+    .report-link:hover {
+      color: #566C58;
+    }
+
 .bold {
   font-weight: bold;
+}
+
+.heading {
+  font-size: 23px;
 }
 
 .bar {
