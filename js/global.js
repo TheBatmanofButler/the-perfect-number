@@ -12,13 +12,17 @@ var slugify = function (string) {
     .replace(/-+$/, '');
 }
 
-var type = function (d) {
+var typeCompanies = function (d) {
   d['profit'] = +d['profit'];
   d['rate'] = +d['rate'];
   d['years_no_tax'] = +d['years_no_tax'];
   d['tax_break'] = +d['tax_break'];
-  d['money'] = +d['money'];
 
+  return d;
+}
+
+var typeComparisons = function (d) {
+  d['money'] = +d['money'];
   return d;
 }
 
@@ -92,7 +96,7 @@ let createProportionAreas = function (comparisons, actualProfit, actualTaxBreak,
         numComparisonSquares = Math.floor(comparisonMoney);
 
 
-    if (isValidComparison(comparison, numTaxBreakSquares, numComparisonSquares, filled)) {
+    if (isWholeComparison(comparison, numTaxBreakSquares, numComparisonSquares, filled)) {
 
       proportionAreas.push({
         'text': comparison['text'],
@@ -104,32 +108,8 @@ let createProportionAreas = function (comparisons, actualProfit, actualTaxBreak,
       filled += numComparisonSquares;
       lastComparison = ii;
     }
-
-
-  //   else if (lastComparison < ii) {
-  //     let i = 1;
-  //     numComparisonSquares = Math.floor(comparisonMoney * i);
-  //     console.log(comparison['text']);
-  //     while ((numComparisonSquares < 7) || ((numComparisonSquares < 200) && isValidComparison(comparison, numTaxBreakSquares, numComparisonSquares, filled))) {
-  //       i++;
-  //       numComparisonSquares = Math.floor(comparisonMoney * i);
-  //     }
-  //     i--;
-  //     numComparisonSquares = Math.floor(comparisonMoney * i);
-  //     if (numComparisonSquares <= (numTaxBreakSquares - filled) && numComparisonSquares > 0) {
-  //       console.log(comparison['text'] + 'true');
-  //       proportionAreas.push({
-  //         'text': i + ' x ' + comparison['text'],
-  //         'numSquares': numComparisonSquares,
-  //         'color': comparison['color'],
-  //         'money': getMoneyString(comparisonMoney * i, convertConst)
-  //       });
-
-  //       filled += numComparisonSquares;
-  //       lastComparison = ii;
-  //     }
-  //   }
   }
+
   let squaresLeft = numTaxBreakSquares - filled,
       nextComparisonIndex = parseInt(lastComparison) + 1,
       comparison = comparisons[nextComparisonIndex];
@@ -138,6 +118,11 @@ let createProportionAreas = function (comparisons, actualProfit, actualTaxBreak,
     let comparisonMoney = comparison['money'] / convertConst,
         multiple = Math.floor(squaresLeft / comparisonMoney),
         numSquares = Math.ceil(comparisonMoney * multiple);
+
+
+    if (name == 'ABM Industries') {
+      console.log(comparison, nextComparisonIndex);
+    }
 
     if (multiple > 0) {
       proportionAreas.push({
@@ -148,7 +133,9 @@ let createProportionAreas = function (comparisons, actualProfit, actualTaxBreak,
       });
       squaresLeft -= numSquares;
     }
-    comparison = comparisons[nextComparisonIndex++];
+
+    nextComparisonIndex++;
+    comparison = comparisons[nextComparisonIndex];
   }  
   return proportionAreas;
 }
@@ -169,7 +156,7 @@ let getMoneyString = function (money, convertConst) {
   return String(money.toFixed(2)) + unit;
 }
 
-var isValidComparison = function (comparison, numTaxBreakSquares, numComparisonSquares, filled) {
+var isWholeComparison = function (comparison, numTaxBreakSquares, numComparisonSquares, filled) {
   let enough = numComparisonSquares > 4,
       remaining = numTaxBreakSquares - filled,
       notTooMany = numComparisonSquares <= remaining;
@@ -228,10 +215,10 @@ let inMapMode = false,
                           };
 
 d3.queue()
-.defer(d3.csv, '/public/csv/dv_data/interactive_data.csv', type)
-.defer(d3.csv, '/public/csv/dv_data/comparison_data.csv', type)
+.defer(d3.csv, '/public/csv/dv_data/interactive_data.csv', typeCompanies)
+.defer(d3.csv, '/public/csv/dv_data/comparison_data.csv', typeComparisons)
 .await( function (error, companies, comparisons) {
-
+  console.log(comparisons);
   allCompanyData = companies;
 
   companies.map(function (d) {
