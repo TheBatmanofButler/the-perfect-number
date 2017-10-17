@@ -18,7 +18,6 @@ let slideInProgress = false;
 
 let clearTop = function () {
   $('.slide-no-square-wrapper div').removeClass('active-slide-no-square');
-  $('.slide-explore').css('color', '#000');
 }
 
 let createSlides = function (data, companiesYearsNoTax, companiesTop25, companiesRebates, companiesIPS, companiesTop3EmpChanges, companiesLostEmployees, companiesCompUp, companiesForeignDiff, companiesCompetitors) {
@@ -112,6 +111,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
   $('.slide-explore').click( function (e) {
     if (slideInProgress || !allRegionsDrawn) return;
     clearTop();
+    $('.slide-explore').addClass('active-slide-no-square');
     $('.typeahead').typeahead('val', '');
     openMapView(allCompanyData, 'All Companies');
   });

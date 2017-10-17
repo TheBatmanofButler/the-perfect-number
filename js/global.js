@@ -49,7 +49,7 @@ let createProportionAreas = function (comparisons, actualProfit, actualTaxBreak,
 
   let proportionAreas = [
     {
-      'text': 'Company Tax if rate is 35%',
+      'text': 'If the 35% tax rate was paid, it would be ',
       'numSquares': num35PercentSquares,
       'color': 'rgba(128, 0, 0, 0.8)',
       'money': getMoneyString(money35, convertConst),
@@ -59,7 +59,7 @@ let createProportionAreas = function (comparisons, actualProfit, actualTaxBreak,
 
   if (taxPaid < 0) {
     proportionAreas.unshift({
-      'text': 'Company Tax Break',
+      'text': 'Tax breaks totaled ',
       'numSquares': numTaxBreakSquares,
       'color': 'rgba(48, 0, 0, 1)',
       'money': getMoneyString(taxBreak, convertConst),
@@ -69,7 +69,7 @@ let createProportionAreas = function (comparisons, actualProfit, actualTaxBreak,
   else {
     if (numTaxPaidSquares > num35PercentSquares) {
       proportionAreas.unshift({
-        'text': 'Company Tax Paid',
+        'text': 'Taxes paid totaled ',
         'numSquares': numTaxPaidSquares,
         'color': 'rgba(63,42,20,1)',
         'money': getMoneyString(taxPaid, convertConst),
@@ -78,7 +78,7 @@ let createProportionAreas = function (comparisons, actualProfit, actualTaxBreak,
     }
     else {
       proportionAreas.push({
-        'text': 'Company Tax Paid',
+        'text': 'Taxes paid totaled ',
         'numSquares': numTaxPaidSquares,
         'color': 'rgba(63,42,20,1)',
         'money': getMoneyString(taxPaid, convertConst),
@@ -146,14 +146,18 @@ let getMoneyString = function (money, convertConst) {
   money *= convertConst;
   ordMag = Math.floor( Math.log10(money) );
 
-  if (ordMag > 2) {
+  if (ordMag > 5) {
+    unit = ' trillion';
+    money /= 1e6
+  }
+  else if (ordMag > 2) {
     unit = ' billion';
     money /= 1e3
   }
   else
     unit = ' million';
 
-  return String(money.toFixed(2)) + unit;
+  return String(money.toFixed(1)) + unit;
 }
 
 var isWholeComparison = function (comparison, numTaxBreakSquares, numComparisonSquares, filled) {

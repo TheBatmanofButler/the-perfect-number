@@ -1,7 +1,7 @@
 html, body {
   padding: 0;
   margin: 0;
-  color: #fff;
+  color: #000;
   font-family: 'Asap Condensed', sans-serif;
 
   background: #F7F7F7;
@@ -105,6 +105,7 @@ canvas {
         min-width: 30px;
         margin-left: 10px;
         margin-right: 10px;
+        border-radius: 5px;
       }
 
     .slide-no {
@@ -114,7 +115,6 @@ canvas {
 
       .slide-no-square-wrapper {
         cursor: pointer;
-        color: black;
         margin-left: 5px;
         margin-right: 5px;
       }
@@ -126,7 +126,7 @@ canvas {
 
         .active-slide-no-square {
           background: #3E4351;
-          color: white;
+          color: #fff;
         }
 
       .slide-explore {
@@ -141,6 +141,7 @@ canvas {
         .slide-explore-text {
           padding-bottom: 3px;
           border-bottom: 1px dotted #3E4351;
+          color: inherit;
         }
 
     .about-button {
@@ -212,12 +213,13 @@ canvas {
 
       .info {
         opacity: 0;
-        background: #4C2A85;
+        background: #000050;
         margin-right: 10px;
         padding: 10px 20px 10px 20px;
         width: 290px;
         overflow-y: scroll; 
         z-index: 2;
+        color: #fff;
       }
         .company-name {
           font-size: 28px;

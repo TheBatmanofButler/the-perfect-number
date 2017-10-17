@@ -98,7 +98,7 @@ let drawAllCanvases = function (firstDraw) {
           return Promise.all([
             showCanvas(regionId, 1000),
             drawRegion(regionId),
-            showHoverText(regionId, 1000)
+            showHoverText(regionId, 2000)
           ])
         });
       }
@@ -109,8 +109,10 @@ let drawAllCanvases = function (firstDraw) {
                   ]);
                 })
                 .then( function () {
-                  showHoverText(regionId, 1000);
-                  return drawRegion(regionId, firstDraw)
+                  return Promise.all([
+                    showHoverText(regionId, 2000),
+                    drawRegion(regionId, firstDraw)
+                  ]);
                 });
       }
     }
@@ -123,7 +125,7 @@ let drawAllCanvases = function (firstDraw) {
 
   chain = chain.then( function () {
     let unit = propGraphParams['regions'][0]['unit'];
-    return updateStoryText(1000, 'Each square is the equivalent of $' + unit);
+    return updateStoryText(2000, 'Each square is the equivalent of $' + unit);
   })
   .then( function () {
     allRegionsDrawn = true;
@@ -148,7 +150,7 @@ let createCanvases = function () {
         canvases = propGraphParams['canvases'] = [],
         unit = propGraphParams['regions'][0]['unit'];
 
-    updateStoryText(500, 'Each square is the equivalent of $' + unit);
+    updateStoryText(2000, 'Each square is the equivalent of $' + unit);
 
     let canvasObj;
     for (let ii in regions) {
@@ -225,9 +227,10 @@ let getHoverMap = function () {
 
 let showHoverText = function (regionId, duration) {
   let region = propGraphParams['regions'][regionId];
-  let text = '<b>' + region['text'] + '</b>' + ', ' + region['money'];
+  let text = region['text'] + ' <b>$' + region['money'] + '</b>';
 
   if ($('.dynamic-text').html() != text) {
+    console.log(duration);
     return updateStoryText(duration, text);
   }
   else
@@ -238,22 +241,22 @@ let showProperRegion = function (squareId) {
   let hoverMap = propGraphParams['hoverMap'],
       regionId = hoverMap[squareId];
 
-  showHoverText(regionId, 1000);
+  showHoverText(regionId, 2000);
 
-  if (regionId == 0)
-    showOuterMainRegion();
+  // if (regionId == 0)
+  //   showOuterMainRegion();
 
-  else if (regionId == 1)
-    showInnerMainRegion();
+  // else if (regionId == 1)
+  //   showInnerMainRegion();
 
-  else
-    showComparisonRegion(regionId);
+  // else
+  //   showComparisonRegion(regionId);
 }
 
 let showAllRegions = function () {
   let canvases = propGraphParams['canvases'],
       unit = propGraphParams['regions'][0]['unit'];
-  updateStoryText(500, 'Each square is the equivalent of $' + unit);
+  updateStoryText(2000, 'Each square is the equivalent of $' + unit);
 
   for (let ii = 0; ii < canvases.length; ii++)
     showCanvas(ii);

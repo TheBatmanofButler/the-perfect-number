@@ -22,17 +22,24 @@ $('.typeahead').bind('typeahead:select', function(ev, suggestion) {
     openMapView(allCompanyData, suggestion);
 });
 
-$('.slide-no-square, .slide-explore').hover( function (e) {
-  $(this).mouseover( function () {
-    if (!slideInProgress && allRegionsDrawn) 
-      $(this).addClass('active-slide-no-square');
-  })
-  $(this).mouseout( function () {
-    if ($(this).text() != currentSlide)
-      $(this).removeClass('active-slide-no-square');
-  })
-  
-    // $(this).toggleClass('active-slide-no-square');
+$('.slide-no-square').mouseover( function () {
+  if (!slideInProgress && allRegionsDrawn) 
+    $(this).addClass('active-slide-no-square');
+});
+
+$('.slide-no-square').mouseout( function () {
+  if ($(this).text() != currentSlide)
+    $(this).removeClass('active-slide-no-square');
+});
+
+$('.slide-explore').mouseover( function () {
+  if (!slideInProgress && allRegionsDrawn) 
+    $(this).addClass('active-slide-no-square');
+});
+
+$('.slide-explore').mouseout( function () {
+  if (currentSlide != null)
+    $(this).removeClass('active-slide-no-square');
 });
 
 $('.toggle-label').click( function () {
