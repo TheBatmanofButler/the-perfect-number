@@ -188,10 +188,10 @@ let updateBars = function (exitTime, enterTime, updateTime) {
 
                             let color;
                             if (d['rate'] > 35) {
-                              color = 'green';
+                              color = 'rgba(0,0,0,0.4)';
                             }
                             else {
-                              color = 'red'; 
+                              color = '#0FEA00'; 
                             }
 
                             d3.select(this)

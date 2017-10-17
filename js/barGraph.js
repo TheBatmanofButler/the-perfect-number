@@ -206,7 +206,7 @@ let createOpeningSlide = function () {
   let quote1 = '"That\'s the number I wanted to get to. I wanted to start at 15 to get there.';
   let quote2 = 'We really had to start there because of the complexity of the numbers,'; 
   let quote3 = 'but 20 is a perfect number."';
-  let quote4 = '- Donald Trump on US Corporate Tax';
+  let quote4 = '- Donald Trump on the U.S. corporate tax rate';
 
   let width = 1415,
       height = 407;
@@ -554,7 +554,7 @@ let openMapView = function (data, company) {
       if (!inMapMode) {
         return Promise.all([
           fadeOutPercentLine(1000),
-          highlightBarsSplit('rate', 35, '#F2C14E', 'green', 1000)        
+          highlightBarsSplit('rate', 35, '#0FEA00', 'rgba(0,0,0,0.4)', 1000)        
         ]);
       }
     })

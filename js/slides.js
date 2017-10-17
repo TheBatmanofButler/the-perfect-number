@@ -318,6 +318,9 @@ let slide6 = function (data, companiesIPS, companiesTop3EmpChanges, companiesLos
     ]);
   })
   .then( function () {
+    return highlightAllBars('rgba(0,0,0,0.4)', 1000);
+  })
+  .then( function () {
     let chain = Promise.resolve(),
         barGraphWidth = barGraphParams['barGraphWidth'],
         x = barGraphWidth * 0.7;
@@ -415,7 +418,7 @@ let slide7 = function (data, companiesForeignDiff) {
   .then( function () {
     return Promise.all([
       appendStoryText(3000,
-                      '"America is one of the highest-taxed nations in the world. reducing taxes will cause new companies and new jobs to come roaring back into our country." - Donald Trump',
+                      '"America is one of the highest-taxed nations in the world. Reducing taxes will cause new companies and new jobs to come roaring back into our country." - Donald Trump',
                       false,
                       'public/img/donald-trump.png', true),
     ]);
@@ -435,23 +438,9 @@ let slide7 = function (data, companiesForeignDiff) {
   })
   .then( function () {
     return Promise.all([
-      appendStoryText(1500, '', 1),
       updateBarGraphParam('data', companiesForeignDiff),
       updateBarGraphParam('yParam', 'us_foreign_diff'),
       updateBarGraphYLabel(1000),
-      updateBars(1000, 1000, 1000)
-    ]);
-  })
-  .then( function () {
-    return Promise.all([
-      updateBarGraphParam('data', companiesForeignDiff),
-      updateBarGraphParam('yParam', 'us_foreign_diff'),
-      updateBarGraphYLabel(1000),
-      updateBars(1000, 1000, 1000)
-    ]);
-  })
-  .then( function () {
-    return Promise.all([
       updateBarGraphParam('domainStart', -40),
       updateBarGraphParam('domainEnd', 40),
       updateYScale(),
@@ -459,7 +448,7 @@ let slide7 = function (data, companiesForeignDiff) {
       updateBarGraphParam('tickValues', [-40, 0, 40]),
       updateYAxis(1000),
       updateBars(0, 1000, 1000)
-    ])
+    ]);
   })
   .then( function () {
       return Promise.all([
@@ -468,7 +457,7 @@ let slide7 = function (data, companiesForeignDiff) {
                         1,
                         null,
                         true),
-        highlightBarsSplit('us_foreign_diff', 0, '#0FEA00', 'green', 1000)
+        highlightBarsSplit('us_foreign_diff', 0, '#08BDBD', '#FF9914', 1000)
       ]);
   })
   .then( function () {
