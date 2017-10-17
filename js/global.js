@@ -61,7 +61,7 @@ let createProportionAreas = function (comparisons, actualProfit, actualTaxBreak,
     proportionAreas.unshift({
       'text': 'Tax breaks totaled ',
       'numSquares': numTaxBreakSquares,
-      'color': 'rgba(48, 0, 0, 1)',
+      'color': 'rgba(181,46,46, 1)',
       'money': getMoneyString(taxBreak, convertConst),
       'unit': unit
     });
@@ -219,8 +219,8 @@ let inMapMode = false,
                           };
 
 d3.queue()
-.defer(d3.csv, '/public/csv/dv_data/interactive_data.csv', typeCompanies)
-.defer(d3.csv, '/public/csv/dv_data/comparison_data.csv', typeComparisons)
+.defer(d3.csv, '/csv/dv_data/interactive_data.csv', typeCompanies)
+.defer(d3.csv, '/csv/dv_data/comparison_data.csv', typeComparisons)
 .await( function (error, companies, comparisons) {
   console.log(comparisons);
   allCompanyData = companies;

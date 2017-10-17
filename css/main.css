@@ -213,25 +213,29 @@ canvas {
 
       .info {
         opacity: 0;
-        background: #000050;
+        background:#ffc;
         margin-right: 10px;
         padding: 10px 20px 10px 20px;
-        width: 290px;
+        width: 44vh;
         overflow-y: scroll; 
         z-index: 2;
-        color: #fff;
+        margin-left: 30px;
+        /*color: #fff;*/
+        /*box-shadow: 5px 5px 7px rgba(33,33,33,1);*/
       }
         .company-name {
           font-size: 28px;
-          text-align: center;
+          /*text-align: center;*/
           font-weight: bold;
           /*padding-bottom: 2px;*/
+          padding-bottom: 10px;
         }
         .industry {
           font-size: 19px;
           padding-bottom: 15px;
           font-style: italic;
-          text-align: center;
+          padding-bottom: 10px;
+          /*text-align: center;*/
         }
         .main-info {
           padding-bottom: 10px;
@@ -337,7 +341,7 @@ canvas {
 
   .about-text {
     text-align: justify;
-
+    color: #fff;
     padding: 20px;
   }
 

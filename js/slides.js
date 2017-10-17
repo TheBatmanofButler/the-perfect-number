@@ -396,7 +396,7 @@ let slide6 = function (data, companiesIPS, companiesTop3EmpChanges, companiesLos
     return appendStoryText(3000, 
                     '"Lower taxes drives more investment, drives more hiring, drives greater wages." - Randall L. Stephenson, CEO of AT&T',
                     1000,
-                    'public/img/randall-stephenson.png');
+                    'img/randall-stephenson.png');
   })
   .then( function () {
     return highlightSomeBars([companiesLostEmployees[1]], '#0FEA00', 2000);
@@ -420,7 +420,7 @@ let slide7 = function (data, companiesForeignDiff) {
       appendStoryText(3000,
                       '"America is one of the highest-taxed nations in the world. Reducing taxes will cause new companies and new jobs to come roaring back into our country." - Donald Trump',
                       false,
-                      'public/img/donald-trump.png', true),
+                      'img/donald-trump.png', true),
     ]);
   })
   .then( function () {

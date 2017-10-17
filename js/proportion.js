@@ -243,14 +243,14 @@ let showProperRegion = function (squareId) {
 
   showHoverText(regionId, 2000);
 
-  // if (regionId == 0)
-  //   showOuterMainRegion();
+  if (regionId == 0)
+    showOuterMainRegion();
 
-  // else if (regionId == 1)
-  //   showInnerMainRegion();
+  else if (regionId == 1)
+    showInnerMainRegion();
 
-  // else
-  //   showComparisonRegion(regionId);
+  else
+    showComparisonRegion(regionId);
 }
 
 let showAllRegions = function () {
