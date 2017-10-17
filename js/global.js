@@ -130,23 +130,23 @@ let createProportionAreas = function (comparisons, actualProfit, actualTaxBreak,
   //     }
   //   }
   }
-  
   let squaresLeft = numTaxBreakSquares - filled,
       nextComparisonIndex = parseInt(lastComparison) + 1,
       comparison = comparisons[nextComparisonIndex];
 
-  while(squaresLeft > 0 && nextComparisonIndex < comparisons.length) {
+  while (squaresLeft > 0 && nextComparisonIndex < comparisons.length) {
     let comparisonMoney = comparison['money'] / convertConst,
-        multiple = Math.floor(squaresLeft / comparisonMoney);
+        multiple = Math.floor(squaresLeft / comparisonMoney),
+        numSquares = Math.ceil(comparisonMoney * multiple);
 
-    if(multiple > 0) {
+    if (multiple > 0) {
       proportionAreas.push({
         'text': multiple + ' x ' + comparison['text'],
-        'numSquares': squaresLeft,
+        'numSquares': numSquares,
         'color': comparison['color'],
         'money': getMoneyString(comparisonMoney * multiple, convertConst)
       });
-      squaresLeft = 0;
+      squaresLeft -= numSquares;
     }
     comparison = comparisons[nextComparisonIndex++];
   }  
@@ -170,7 +170,7 @@ let getMoneyString = function (money, convertConst) {
 }
 
 var isValidComparison = function (comparison, numTaxBreakSquares, numComparisonSquares, filled) {
-  let enough = numComparisonSquares > 6,
+  let enough = numComparisonSquares > 4,
       remaining = numTaxBreakSquares - filled,
       notTooMany = numComparisonSquares <= remaining;
 

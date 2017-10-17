@@ -206,9 +206,9 @@ let updateBars = function (exitTime, enterTime, updateTime) {
                             d3.selectAll('.bar')
                               .style('fill', function (d2) {
                                 if (d2['rate'] > 35)
-                                  return 'green';
+                                  return 'rgba(0,0,0,0.4)';
                                 else
-                                  return 'red';
+                                  return '#0FEA00';
                               })
 
                             d3.select(this)
