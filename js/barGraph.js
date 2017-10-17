@@ -113,7 +113,6 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
     if (slideInProgress || !allRegionsDrawn) return;
     clearTop();
     $('.typeahead').typeahead('val', '');
-    $(this).css('color', '#fff');
     openMapView(allCompanyData, 'All Companies');
   });
 }

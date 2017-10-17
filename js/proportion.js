@@ -192,7 +192,7 @@ let addMouseEvent = function (canvasObj) {
             column = Math.floor(mouseX / squareOuterLength),
             row = Math.floor(mouseY / squareOuterLength),
             squareId = column * columnLength + row;
-        if (squareId < numSquares)
+        if (squareId in propGraphParams['hoverMap'])
           showProperRegion(squareId);
         else {
           showAllRegions();
@@ -348,9 +348,14 @@ let drawRegion = function (regionId, firstDraw = false) {
         squares = region['squares'],
         numSquares = region['numSquares'],
         ctx = canvas.getContext('2d'),
-        squareSpacing = Math.floor(squareOuterLength / 9),
-        squareInnerLength = squareOuterLength - squareSpacing,
+        squareSpacing,
+        squareInnerLength,
         sparkleTime;
+
+        squareSpacing = Math.floor(squareOuterLength / 9);
+        if (squareSpacing == 0)
+          squareSpacing = 0.5;
+        squareInnerLength = squareOuterLength - squareSpacing;
 
     if (firstDraw) {
       squares = shuffleArray(squares);
@@ -395,9 +400,14 @@ let drawRegionByColumn = function (regionId) {
       squares = region['squares'],
       numSquares = region['numSquares'],
       ctx = canvas.getContext('2d'),
-      squareSpacing = Math.floor(squareOuterLength / 3),
-      squareInnerLength = squareOuterLength - squareSpacing,
+      squareSpacing,
+      squareInnerLength,
       columnLength = propGraphParams['columnLength'];
+
+      squareSpacing = Math.floor(squareOuterLength / 9);
+      if (squareSpacing == 0)
+        squareSpacing = 0.5;
+      squareInnerLength = squareOuterLength - squareSpacing;
 
   ctx.fillStyle = region['color'];
 

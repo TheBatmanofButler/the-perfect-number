@@ -23,8 +23,16 @@ $('.typeahead').bind('typeahead:select', function(ev, suggestion) {
 });
 
 $('.slide-no-square, .slide-explore').hover( function (e) {
-  if (!slideInProgress && allRegionsDrawn)
-    $(this).toggleClass('active-slide-no-square');
+  $(this).mouseover( function () {
+    if (!slideInProgress && allRegionsDrawn) 
+      $(this).addClass('active-slide-no-square');
+  })
+  $(this).mouseout( function () {
+    if ($(this).text() != currentSlide)
+      $(this).removeClass('active-slide-no-square');
+  })
+  
+    // $(this).toggleClass('active-slide-no-square');
 });
 
 $('.toggle-label').click( function () {
