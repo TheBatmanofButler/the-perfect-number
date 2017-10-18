@@ -250,7 +250,7 @@ let createOpeningSlide = function () {
         .append('text')
         .text('by')
         .attr('class', 'pedal')
-        .attr('x', 20)
+        .attr('x', 25)
         .attr('y', 260)
         .style('opacity', 0)
         
@@ -259,7 +259,7 @@ let createOpeningSlide = function () {
         .append('text')
         .text('Pedal')
         .attr('class', 'pedal bolden')
-        .attr('x', 55)
+        .attr('x', 70)
         .attr('y', 260)
         .style('opacity', 0)
 
@@ -268,7 +268,7 @@ let createOpeningSlide = function () {
         .append('svg')
         .attr('class', 'pedal-link bolden')
         .attr('xmlns', 'http://www.w3.org/2000/svg')
-        .attr('x', 130)
+        .attr('x', 160)
         .attr('y', 245)
         .attr('viewBox', '0 0 8 8')
         .attr('width', 15)
@@ -292,7 +292,7 @@ let createOpeningSlide = function () {
     let i = 0;
     let totalWidth1 = 20;
     let totalWidth2 = 20;
-    let totalWidth3 = 13;
+    let totalWidth3 = 12;
     
 
     d3.selectAll('.quote-text')
@@ -502,8 +502,10 @@ let openMapView = function (data, company) {
   return chain
     .then( function () {
       slideInProgress = false;
+      barGraphParams['marginLeft'] = 20;
       if (!inMapMode)
         return highlightAllBars('rgba(0,0,0,0.4)', 0);
+
     })
     .then( function () {
       return hideBarGraphYLabel(500);
@@ -717,7 +719,7 @@ let showOpeningScreen = function(duration) {
       let barGraphWidth = barGraphParams['barGraphWidth'],
           totalWidth1 = 20;
           totalWidth2 = 20;
-          totalWidth3 = 13;
+          totalWidth3 = 12;
 
 
       d3.select('.bar-graph')

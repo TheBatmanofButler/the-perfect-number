@@ -2,7 +2,7 @@ html, body {
   padding: 0;
   margin: 0;
   color: #000;
-  font-family: 'Asap Condensed', sans-serif;
+  font-family: 'Muli', sans-serif;
 
   background: #F7F7F7;
 }
@@ -56,7 +56,7 @@ canvas {
     .tt-suggestion {
       padding: 3px 20px;
 
-      font-family: 'Asap Condensed', sans-serif;
+      font-family: 'Muli', sans-serif;
       font-size: 14px;
 
       line-height: 14px;
@@ -72,7 +72,7 @@ canvas {
     }
 
     .tt-hint {
-      font-family: 'Asap Condensed', sans-serif;
+      font-family: 'Muli', sans-serif;
       font-size: 14px;
 
       padding-left: 5px;
@@ -82,14 +82,14 @@ canvas {
       background-color: #0097cf;
       opacity: 1;
 
-      font-family: 'Asap Condensed', sans-serif;
+      font-family: 'Muli', sans-serif;
       font-size: 14px;
 
       padding-left: 5px;
     }
 
       .tt-input::placeholder {
-        font-family: 'Asap Condensed', sans-serif;
+        font-family: 'Muli', sans-serif;
         font-size: 14px;
 
         padding-left: 5px;
@@ -125,7 +125,8 @@ canvas {
         }
 
         .active-slide-no-square {
-          background: #3E4351;
+          /*background: #3E4351;*/
+          background: #454545;
           color: #fff;
         }
 
@@ -135,12 +136,12 @@ canvas {
         line-height: 30px;
 
         height: 30px;
-        width: 110px;
+        width: 140px;
       }
 
         .slide-explore-text {
           padding-bottom: 3px;
-          border-bottom: 1px dotted #3E4351;
+          border-bottom: 1px dotted #454545;
           color: inherit;
         }
 
@@ -225,17 +226,14 @@ canvas {
       }
         .company-name {
           font-size: 28px;
-          /*text-align: center;*/
           font-weight: bold;
-          /*padding-bottom: 2px;*/
-          padding-bottom: 10px;
+          padding-bottom: 2px;
         }
         .industry {
           font-size: 19px;
           padding-bottom: 15px;
           font-style: italic;
           padding-bottom: 10px;
-          /*text-align: center;*/
         }
         .main-info {
           padding-bottom: 10px;
@@ -300,7 +298,7 @@ canvas {
 
       .quote-text, .highlight, .cursor {
         color: #3E4351;
-        font-family: 'Roboto Mono', monospace;        
+        font-family: 'Muli', sans-serif;        
       }
 
       .intro-text {
@@ -309,7 +307,7 @@ canvas {
 
       .pedal, .pedal-link {
         font-size: 2rem;
-        font-family: 'Asap Condensed', sans-serif;
+        font-family: 'Muli', sans-serif;
         color: #566C58;
 
         padding: 1%;
@@ -328,7 +326,7 @@ canvas {
   height: calc(100vh - 65px);
   width: 0;
 
-  background: #3E4351;
+  background: #454545;
 
   z-index: 4;
   top: 39px; right: 0;
