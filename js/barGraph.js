@@ -282,7 +282,7 @@ let createOpeningSlide = function () {
         })
         .on("mouseout", function () {
           d3.selectAll('.bolden')
-            .style('fill', '#FFF');
+            .style('fill', '#000');
         })
 
 
