@@ -214,8 +214,8 @@ let inMapMode = false,
                           };
 
 d3.queue()
-.defer(d3.csv, '/csv/dv_data/interactive_data.csv', typeCompanies)
-.defer(d3.csv, '/csv/dv_data/comparison_data.csv', typeComparisons)
+.defer(d3.csv, '../csv/dv_data/interactive_data.csv', typeCompanies)
+.defer(d3.csv, '../csv/dv_data/comparison_data.csv', typeComparisons)
 .await( function (error, companies, comparisons) {
   allCompanyData = companies;
 
