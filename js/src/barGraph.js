@@ -225,7 +225,7 @@ let createOpeningSlide = function () {
       openingScreen = d3.select('.bar-graph')
                         .attr('width', null)
                         .attr('height', null)
-                        .attr("viewBox", '0 0 1400 500')
+                        .attr("viewBox", '0 0 1300 500')
                         .attr("preserveAspectRatio", "xMidYMid meet");
 
   let chars = openingScreen
