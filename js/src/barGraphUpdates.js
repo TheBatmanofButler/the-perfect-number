@@ -37,7 +37,7 @@ let hideBarGraphText = function (duration) {
 let updateXScale = function () {
   let barGraphWidth = barGraphParams['barGraphWidth'];
   barGraphParams['x'] = d3.scaleBand()
-                          .range([0, barGraphWidth, .1, 1]);
+                          .range([0, barGraphWidth]);
 }
 
 let updateYScale = function () {
@@ -299,7 +299,7 @@ let updateBarGraphSVG = function (duration) {
       .attr('height', totalHeight);
 }
 
-let updateCompanyLabel = function (duration, text = null, xValue = 5, yValue = -30) {
+let updateCompanyLabel = function (duration, text = null, xValue = 5, yValue = -20) {
   let y = barGraphParams['y'];
 
   return new Promise( function (resolve, reject) {
@@ -317,7 +317,6 @@ let updateCompanyLabel = function (duration, text = null, xValue = 5, yValue = -
           d.text(text);
       })
       .style('opacity', 1)
-      .style('font-size', 30)
       .end(resolve);
   });
 }
@@ -354,10 +353,12 @@ let restartSlide = function (duration) {
     });
 }
 
-let updateBarGraphYLabel = function (duration) {
+let updateBarGraphYLabel = function (duration, customText) {
   let marginLeft = barGraphParams['marginLeft'],
       barGraphHeight = barGraphParams['barGraphHeight'],
       yParam = barGraphParams['yParam'];
+      if (customText)
+        yParam = null;
 
   let yLabels = {
     'rate': 'Effective Tax Rate (2008-2015)',
@@ -371,7 +372,14 @@ let updateBarGraphYLabel = function (duration) {
       d3.select('.y-label')
         .attr('transform', 'translate('+ ( marginLeft * -0.5 ) + ',' + ( barGraphHeight * 0.5 )+')rotate(-90)')
         .style('opacity', 0)
-        .text(yLabels[yParam])
+        .text( function () {
+          if (customText) {
+            console.log(customText);
+            return customText;
+          }
+
+          return yLabels[yParam];
+        })
         .transition()
         .duration(duration)
         .style('opacity', 1)

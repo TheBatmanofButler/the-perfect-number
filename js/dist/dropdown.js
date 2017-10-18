@@ -1,0 +1,1 @@
+var substringMatcher=function(a){return function(b,c){var d;d=[],substrRegex=new RegExp(b,'i'),$.each(a,function(a,b){substrRegex.test(b)&&d.push(b)}),c(d)}},populateDropdown=function(a){$('.typeahead').typeahead({hint:!0,highlight:!0,minLength:0},{name:'companyNames',limit:300,source:substringMatcher(a)})};

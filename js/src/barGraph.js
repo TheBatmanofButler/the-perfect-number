@@ -39,7 +39,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
   $('#slide1').click( function (e) {
     if (slideInProgress || !allRegionsDrawn) return;
     currentSlide = 1;
-    slide1(barGraphWidth, barGraphHeight);
+    slide1();
     clearTop();
     $('#slide1 div:first').addClass('active-slide-no-square');
   });
@@ -126,7 +126,7 @@ let initBarGraph = function () {
       marginBottom = barGraphParams['marginBottom'],
       marginLeft = barGraphParams['marginLeft'];
 
-  updateXScale(barGraphWidth);
+  updateXScale();
   updateBarGraphParam('domainStart', -15);
   updateBarGraphParam('domainEnd', 50);
   updateYScale();
@@ -161,7 +161,7 @@ let initBarGraph = function () {
   barGraph
     .append('text')
     .attr('class', 'company-label')
-    .style('font-size', '15px');
+    .style('font-size', '2vw');
 
   let yDomain = barGraphParams['y'].domain(),
       barGraphTextY = yDomain[yDomain.length - 1];
@@ -169,9 +169,9 @@ let initBarGraph = function () {
   barGraph
     .append('text')
     .attr('class', 'bar-graph-text')
-    .attr('x', barGraphWidth / 2)
+    .attr('x', barGraphWidth * 0.3)
     .attr('y', y(barGraphTextY))
-    .style('font-size', '30px');
+    .style('font-size', '2vh');
 
   barGraph
     .append('g')
@@ -225,10 +225,8 @@ let createOpeningSlide = function () {
       openingScreen = d3.select('.bar-graph')
                         .attr('width', null)
                         .attr('height', null)
-                        .attr("viewBox", '0 0 1400 500')
+                        .attr("viewBox", '0 0 1300 500')
                         .attr("preserveAspectRatio", "xMidYMid meet");
-
-  console.log(totalWidth, totalHeight);
 
   let chars = openingScreen
                 .selectAll('.char')
@@ -284,7 +282,7 @@ let createOpeningSlide = function () {
         })
         .on("mouseout", function () {
           d3.selectAll('.bolden')
-            .style('fill', '#FFF');
+            .style('fill', '#000');
         })
 
 
@@ -341,22 +339,9 @@ let createOpeningSlide = function () {
           return 130;
         else
           return 200;
+
       });
-    // while(i < 10) {
-    //   d3.select('#cursor')
-    //     .transition()
-    //     .style('opacity', 0)
-    //     .on('end', function() {
-    //       console.log(i);
-    //       i += 1;
-    //       // d3.select('#cursor')
-    //       // .transition()
-    //       // .style('opacity', 1)
-    //       // .on('end', function() {
-    //       //   i += 1;
-    //       // })
-    //     })
-    // }
+
     d3.selectAll('.pedal, .pedal-link')
       .transition()
       .delay(3000)
@@ -448,13 +433,15 @@ let resizeBarGraph = function () {
                                          - $('.top').outerHeight() 
                                          - $('.dynamic-text').outerHeight()
                                          - $(window).outerHeight() * 0.45;
-    updateBarGraphParam('tickValues', []);
+    updateBarGraphParam('tickValues', [0, 35]);
     updateBarGraphDims(mapModeHeight);
 
     updateXScale();
     updateYScale();
 
-    // updateYAxis(0, false);
+    updateYAxis(0, false);
+    updateCompanyLabel(0);
+    updateBarGraphYLabel(0, 'Rate');
     updateXAxis(0);
 
     updateBarGraphSVG(0);
@@ -509,7 +496,7 @@ let openMapView = function (data, company) {
 
     })
     .then( function () {
-      return hideBarGraphYLabel(500);
+      // return hideBarGraphYLabel(500);
     })
     .then( function () {
 
@@ -530,7 +517,8 @@ let openMapView = function (data, company) {
 
       return Promise.all([
               $('.bar-graph-elements').animate({'opacity': 1}),
-              updateBarGraphParam('marginBottom', 60),
+              updateBarGraphParam('marginTop', 0),
+              updateBarGraphParam('marginBottom', 90),
               updateBarGraphDims(mapModeHeight),
 
               updateXScale(),
@@ -547,8 +535,9 @@ let openMapView = function (data, company) {
               updatePercentLine(1000),
 
               updateBarGraphParam('tickValues', [0, 35]),
-              updateYAxis(1000, true),
-              updateXAxis(1000, true),
+              updateBarGraphYLabel(1000, 'Rate'),
+              updateYAxis(1000),
+              updateXAxis(1000),
               updateBars(0, 1000, 1000)
             ]);
     })
@@ -567,7 +556,6 @@ let openMapView = function (data, company) {
 }
 
 let closeMapView = function () {
-  console.log(currentSlide);
   if (currentSlide != null) {
     $('.proportion-graph-viewer').animate({'height': '0'}, 1000, 'linear');
     $('.proportion-graph-viewer').hide(500);
@@ -811,6 +799,7 @@ let fadeStart = function (duration, data, dynamicText, yStart = -15, yEnd = 50, 
           closeMapView(),
 
           updateBarGraphParam('marginBottom', 100),
+          updateBarGraphParam('marginTop', 50),
           updateBarGraphDims(mapModeHeight),
 
           updateBarGraphParam('axisEnding', '%'),

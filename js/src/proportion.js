@@ -49,8 +49,6 @@ let updatePropGraphParams = function () {
       columnLength = Math.floor(propHeight / squareOuterLength),
       squares = getGridSquares(numSquares, squareOuterLength, columnLength);
 
-  // console.log(propWidth);
-
   propGraphParams['propWidth'] = propWidth;
   propGraphParams['propHeight'] = propHeight;
   propGraphParams['numSquares'] = numSquares;
@@ -125,7 +123,7 @@ let drawAllCanvases = function (firstDraw) {
 
   chain = chain.then( function () {
     let unit = propGraphParams['regions'][0]['unit'];
-    return updateStoryText(2000, 'Each square is the equivalent of $' + unit);
+    return updateStoryText(2000, 'Each square is the equivalent of <b>$' + unit + '</b>');
   })
   .then( function () {
     allRegionsDrawn = true;
@@ -150,7 +148,7 @@ let createCanvases = function () {
         canvases = propGraphParams['canvases'] = [],
         unit = propGraphParams['regions'][0]['unit'];
 
-    updateStoryText(2000, 'Each square is the equivalent of $' + unit);
+    updateStoryText(2000, 'Each square is the equivalent of <b>$' + unit + '</b>');
 
     let canvasObj;
     for (let ii in regions) {
@@ -229,10 +227,8 @@ let showHoverText = function (regionId, duration) {
   let region = propGraphParams['regions'][regionId];
   let text = region['text'] + ' <b>$' + region['money'] + '</b>';
 
-  if ($('.dynamic-text').html() != text) {
-    console.log(duration);
+  if ($('.dynamic-text').html() != text)
     return updateStoryText(duration, text);
-  }
   else
     return Promise.resolve();
 }
@@ -256,7 +252,7 @@ let showProperRegion = function (squareId) {
 let showAllRegions = function () {
   let canvases = propGraphParams['canvases'],
       unit = propGraphParams['regions'][0]['unit'];
-  updateStoryText(2000, 'Each square is the equivalent of $' + unit);
+  updateStoryText(2000, 'Each square is the equivalent of <b>$' + unit + '</b>');
 
   for (let ii = 0; ii < canvases.length; ii++)
     showCanvas(ii);
@@ -343,11 +339,7 @@ let drawRegion = function (regionId, firstDraw = false) {
   return new Promise( function (resolve, reject) {
     let canvas = propGraphParams['canvases'][regionId],
         region = propGraphParams['regions'][regionId],
-        squareOuterLength = propGraphParams['squareOuterLength'];
-
-    if (!region)
-      console.log(propGraphParams['regions'], regionId)
-    let
+        squareOuterLength = propGraphParams['squareOuterLength'],
         squares = region['squares'],
         numSquares = region['numSquares'],
         ctx = canvas.getContext('2d'),

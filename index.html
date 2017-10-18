@@ -1,12 +1,25 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title></title>
 
-    <link rel="stylesheet" type="text/css" href="css/barGraph.css">
+    <title>The Perfect Number.</title>
+
+    <meta charset="utf-8"/>
+
     <link rel="stylesheet" type="text/css" href="css/main.css">
 
     <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:700|Asap+Condensed|Muli:400,700" rel="stylesheet">
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-108263869-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-108263869-1');
+    </script>
 
   </head>
 
@@ -85,7 +98,7 @@
         </div>
 
         <div class="about-button square-inner">
-          ?
+          About
         </div>
       </div>
 
@@ -191,7 +204,9 @@
         </span>
         <p>
           The federal corporate income tax rate in the United States is supposedly 35%, but the truth is that corporations rarely pay that amount. Many large companies pay well below this rate using loopholes and tax breaks, often the result of aggressive corporate lobbying and campaign support. Republican leaders in Washington are currently discussing massive corporate tax cuts. They claim that reducing taxes will make the US more competitive with foreign nations. They also claim that companies will take their extra profits and reinvestment in the American workforce.
+        </p>
 
+        <p>
           This project visualizes the data behind these claims.
         </p>
 
@@ -202,7 +217,7 @@
           We use data from two different sources.
           <p>
             The Institute on Taxation and Economic Policy (ITEP) produced a 
-            <a class="report-link" href="https://itep.org/wp-content/uploads/35percentfullreport.pdf">report</a> 
+            <a class="report-link" href="https://itep.org/wp-content/uploads/35percentfullreport.pdf" target="_blank">report</a> 
             in March 2017 that documents 258 Fortune 500 corporations and their use of tax loopholes and special breaks over the past eight years. The 258 companies were selected on the basis that they were 
             <span class="bold">
               "consistently profitable over the eight-year period from 2008 to 2015."
@@ -215,7 +230,7 @@
           </p>
           <p>
             The Institute for Policy Studies (IPS) looked at a subset of the 258 companies explored in the ITEP report. In their August 2017 
-            <a class="report-link" href="http://www.ips-dc.org/wp-content/uploads/2017/08/EE17-final-embargoed-for-August-30.pdf">report</a>, IPS focuses on 92 corporations that paid less than 20 percent of their earnings in federal corporate income tax. They investigated the claim that lower corporate tax rates would encourage companies to create more jobs by looking at companies that already benefitted from the tax rates that Republicans want to implement. IPS found that many of these "have not
+            <a class="report-link" href="http://www.ips-dc.org/wp-content/uploads/2017/08/EE17-final-embargoed-for-August-30.pdf" target="_blank">report</a>, IPS focuses on 92 corporations that paid less than 20 percent of their earnings in federal corporate income tax. They investigated the claim that lower corporate tax rates would encourage companies to create more jobs by looking at companies that already benefitted from the tax rates that Republicans want to implement. IPS found that many of these "have not
             become powerful engines of economic growth." Many companies have slashed their employee numbers while increasing the compensation of their CEOs.
           </p>
         </p>
@@ -229,7 +244,7 @@
         </p>
 
         <p>
-          <a class="report-link" href="https://pedal.tech">Pedal</a>
+          <a class="report-link" href="https://pedal.tech" target="_blank">Pedal</a>
           is a data visualization firm that helps companies and organizations find these patterns in their data and visualize them through beautiful interactive visualizations.
         </p>
 
@@ -238,7 +253,7 @@
         </p>
 
       </div>
-      
+
 
     </div>
   </div>
@@ -246,16 +261,16 @@
     <script type="text/javascript" src="js/vendor/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="js/vendor/d3.min.js"></script>
     <script type="text/javascript" src="js/vendor/typeahead.bundle.min.js"></script>
-    <script type="text/javascript" src="js/d3extras.js"></script>
-    <script type="text/javascript" src="js/barGraph.js"></script>
-    <script type="text/javascript" src="js/barGraphUpdates.js"></script>
-    <script type="text/javascript" src="js/slides.js"></script>
-    <script type="text/javascript" src="js/proportion.js"></script>
-    <script type="text/javascript" src="js/info.js"></script>
-    <script type="text/javascript" src="js/dropdown.js"></script>
-    <script type="text/javascript" src="js/about.js"></script>
-    <script type="text/javascript" src="js/global.js"></script>
-    <script type="text/javascript" src="js/main.js"></script>
+    <script type="text/javascript" src="js/dist/d3extras.js"></script>
+    <script type="text/javascript" src="js/dist/barGraph.js"></script>
+    <script type="text/javascript" src="js/dist/barGraphUpdates.js"></script>
+    <script type="text/javascript" src="js/dist/slides.js"></script>
+    <script type="text/javascript" src="js/dist/proportion.js"></script>
+    <script type="text/javascript" src="js/dist/info.js"></script>
+    <script type="text/javascript" src="js/dist/dropdown.js"></script>
+    <script type="text/javascript" src="js/dist/about.js"></script>
+    <script type="text/javascript" src="js/dist/global.js"></script>
+    <script type="text/javascript" src="js/dist/main.js"></script>
 
   </body>
 

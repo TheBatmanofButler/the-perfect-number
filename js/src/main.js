@@ -61,7 +61,7 @@ $('.toggle-label').click( function () {
       )
     $(this).find('.description').slideUp();
   }
-})
+});
 
 let addBarGraphClicks = function () {
   inMapMode = false;

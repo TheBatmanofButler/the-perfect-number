@@ -148,8 +148,13 @@ canvas {
 
     .about-button {
       cursor: pointer;
-      /*background: #D0CCD0;*/
       color: black;
+
+      width: 60px;
+
+      text-align: center;
+      vertical-align: middle;
+
     }
 
     .about-button:hover {
@@ -340,7 +345,6 @@ canvas {
 }
 
   .about-text {
-    text-align: justify;
     color: #fff;
     padding: 20px;
   }
@@ -352,7 +356,8 @@ canvas {
   }
 
     .report-link:hover {
-      color: #566C58;
+      color: rgba(255, 225, 25, 1);
+    border-bottom: 1px rgba(255, 225, 25, 1) dotted;
     }
 
 .bold {
@@ -365,4 +370,13 @@ canvas {
 
 .bar {
   fill: rgba(0,0,0,0.4);
+}
+
+.percent-line {
+  stroke: #000;
+}
+
+.axis path,
+.axis line {
+  stroke: #000;
 }
