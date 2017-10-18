@@ -119,11 +119,6 @@ let createProportionAreas = function (comparisons, actualProfit, actualTaxBreak,
         multiple = Math.floor(squaresLeft / comparisonMoney),
         numSquares = Math.ceil(comparisonMoney * multiple);
 
-
-    if (name == 'ABM Industries') {
-      console.log(comparison, nextComparisonIndex);
-    }
-
     if (multiple > 0) {
       proportionAreas.push({
         'text': multiple + ' x ' + comparison['text'],
@@ -222,7 +217,6 @@ d3.queue()
 .defer(d3.csv, '/csv/dv_data/interactive_data.csv', typeCompanies)
 .defer(d3.csv, '/csv/dv_data/comparison_data.csv', typeComparisons)
 .await( function (error, companies, comparisons) {
-  console.log(comparisons);
   allCompanyData = companies;
 
   companies.map(function (d) {

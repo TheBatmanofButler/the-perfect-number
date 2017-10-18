@@ -39,7 +39,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
   $('#slide1').click( function (e) {
     if (slideInProgress || !allRegionsDrawn) return;
     currentSlide = 1;
-    slide1(barGraphWidth, barGraphHeight);
+    slide1();
     clearTop();
     $('#slide1 div:first').addClass('active-slide-no-square');
   });
@@ -126,7 +126,7 @@ let initBarGraph = function () {
       marginBottom = barGraphParams['marginBottom'],
       marginLeft = barGraphParams['marginLeft'];
 
-  updateXScale(barGraphWidth);
+  updateXScale();
   updateBarGraphParam('domainStart', -15);
   updateBarGraphParam('domainEnd', 50);
   updateYScale();
@@ -227,8 +227,6 @@ let createOpeningSlide = function () {
                         .attr('height', null)
                         .attr("viewBox", '0 0 1400 500')
                         .attr("preserveAspectRatio", "xMidYMid meet");
-
-  console.log(totalWidth, totalHeight);
 
   let chars = openingScreen
                 .selectAll('.char')
@@ -339,22 +337,9 @@ let createOpeningSlide = function () {
           return 130;
         else
           return 200;
+
       });
-    // while(i < 10) {
-    //   d3.select('#cursor')
-    //     .transition()
-    //     .style('opacity', 0)
-    //     .on('end', function() {
-    //       console.log(i);
-    //       i += 1;
-    //       // d3.select('#cursor')
-    //       // .transition()
-    //       // .style('opacity', 1)
-    //       // .on('end', function() {
-    //       //   i += 1;
-    //       // })
-    //     })
-    // }
+
     d3.selectAll('.pedal, .pedal-link')
       .transition()
       .delay(3000)
@@ -502,13 +487,12 @@ let openMapView = function (data, company) {
   return chain
     .then( function () {
       slideInProgress = false;
-      barGraphParams['marginLeft'] = 20;
       if (!inMapMode)
         return highlightAllBars('rgba(0,0,0,0.4)', 0);
 
     })
     .then( function () {
-      return hideBarGraphYLabel(500);
+      // return hideBarGraphYLabel(500);
     })
     .then( function () {
 
@@ -546,8 +530,9 @@ let openMapView = function (data, company) {
               updatePercentLine(1000),
 
               updateBarGraphParam('tickValues', [0, 35]),
-              updateYAxis(1000, true),
-              updateXAxis(1000, true),
+              updateBarGraphYLabel(1000, 'Rate'),
+              updateYAxis(1000),
+              updateXAxis(1000),
               updateBars(0, 1000, 1000)
             ]);
     })
@@ -566,7 +551,6 @@ let openMapView = function (data, company) {
 }
 
 let closeMapView = function () {
-  console.log(currentSlide);
   if (currentSlide != null) {
     $('.proportion-graph-viewer').animate({'height': '0'}, 1000, 'linear');
     $('.proportion-graph-viewer').hide(500);
@@ -810,6 +794,7 @@ let fadeStart = function (duration, data, dynamicText, yStart = -15, yEnd = 50, 
           closeMapView(),
 
           updateBarGraphParam('marginBottom', 100),
+          updateBarGraphParam('marginLeft', 80),
           updateBarGraphDims(mapModeHeight),
 
           updateBarGraphParam('axisEnding', '%'),

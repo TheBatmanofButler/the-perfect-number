@@ -1,5 +1,5 @@
 
-let slide1 = function (data) {
+let slide1 = function () {
   slideInProgress = true;
   $('.typeahead').typeahead('val', '');
   closeMapView();

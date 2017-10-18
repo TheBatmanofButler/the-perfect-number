@@ -37,7 +37,7 @@ let hideBarGraphText = function (duration) {
 let updateXScale = function () {
   let barGraphWidth = barGraphParams['barGraphWidth'];
   barGraphParams['x'] = d3.scaleBand()
-                          .range([0, barGraphWidth, .1, 1]);
+                          .range([0, barGraphWidth]);
 }
 
 let updateYScale = function () {
@@ -354,10 +354,12 @@ let restartSlide = function (duration) {
     });
 }
 
-let updateBarGraphYLabel = function (duration) {
+let updateBarGraphYLabel = function (duration, customText) {
   let marginLeft = barGraphParams['marginLeft'],
       barGraphHeight = barGraphParams['barGraphHeight'],
       yParam = barGraphParams['yParam'];
+      if (customText)
+        yParam = null;
 
   let yLabels = {
     'rate': 'Effective Tax Rate (2008-2015)',
@@ -371,7 +373,14 @@ let updateBarGraphYLabel = function (duration) {
       d3.select('.y-label')
         .attr('transform', 'translate('+ ( marginLeft * -0.5 ) + ',' + ( barGraphHeight * 0.5 )+')rotate(-90)')
         .style('opacity', 0)
-        .text(yLabels[yParam])
+        .text( function () {
+          if (customText) {
+            console.log(customText);
+            return customText;
+          }
+
+          return yLabels[yParam];
+        })
         .transition()
         .duration(duration)
         .style('opacity', 1)
