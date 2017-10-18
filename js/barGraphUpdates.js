@@ -299,7 +299,7 @@ let updateBarGraphSVG = function (duration) {
       .attr('height', totalHeight);
 }
 
-let updateCompanyLabel = function (duration, text = null, xValue = 5, yValue = -30) {
+let updateCompanyLabel = function (duration, text = null, xValue = 5, yValue = -20) {
   let y = barGraphParams['y'];
 
   return new Promise( function (resolve, reject) {
@@ -317,7 +317,6 @@ let updateCompanyLabel = function (duration, text = null, xValue = 5, yValue = -
           d.text(text);
       })
       .style('opacity', 1)
-      .style('font-size', 30)
       .end(resolve);
   });
 }

@@ -1,5 +1,5 @@
 
-let slide1 = function () {
+let slide1 = function (data) {
   slideInProgress = true;
   $('.typeahead').typeahead('val', '');
   closeMapView();
@@ -101,12 +101,12 @@ let slide3 = function (data, companiesYearsNoTax) {
   let barGraph = d3.select('.bar-graph-elements');
   slideInProgress = true;
 
-  fadeStart(2000, data)
+  fadeStart(1000, data)
   .then(function () {
     return appendStoryText(2000, 'These companies generated so many excess tax breaks that they sometimes reported negative taxes...', 0, null, true);
   })
   .then(function () {
-    return appendStoryText(2000, ' this means that they made <b>more</b> after taxes than before taxes in those years.', false, null, true);
+    return appendStoryText(2000, 'this means that they made <b>more</b> after taxes than before taxes in those years.', false, null, true);
   })
   .then(function () {
 
@@ -117,11 +117,16 @@ let slide3 = function (data, companiesYearsNoTax) {
 
       numCompanies += companiesYearsNoTax[ii].length;
 
-      let barGraphText;
+      let company_ies = ' companies',
+          barGraphText;
+
+      if (numCompanies == 1)
+        company_ies = ' company'
+
       if (ii > 1)
-        barGraphText = numCompanies + ' companies went at least ' + ii + ' years without paying federal tax';
+        barGraphText = numCompanies + company_ies + ' went at least ' + ii + ' years without paying federal tax';
       else
-        barGraphText = numCompanies + ' companies went at least ' + ii + ' year without paying federal tax';
+        barGraphText = numCompanies + company_ies + ' went at least ' + ii + ' year without paying federal tax';
 
       chain = chain.then(function () {
                 return Promise.all([
@@ -163,7 +168,7 @@ let slide4 = function (data, companiesTop25) {
   })
   .then( function () {
     return Promise.all([
-      appendStoryText(2000, 'Just 25 companies claimed $286 billion in tax breaks (more than half of total) over the eight years between 2008 and 2015', 0, null, true),
+      appendStoryText(2000, 'Just 25 companies claimed $286 billion in tax breaks (more than half of total) over the eight years between 2008 and 2015', 0),
       highlightSomeBars(companiesTop25, '#0FEA00', 1000)
     ])
   })
@@ -186,8 +191,8 @@ let slide5 = function (data, companiesRebates) {
     'deferredTaxes': ['<b>deferred taxes</b>.', ' These are taxes that are not paid in the current year, but may or may not come due in future years.'],
     'accDepreciation': ['<b>accelerated depreciation</b>.', ' By deducting assets faster than they actually decline, companies benefit from higher interest savings or investment returns. It is one type of deferred tax.'],
     'dpad': ['the <b>Domestic Production Activities Deduction</b>, which incentivizes U.S. manufacturing.',
-             ' The law is so broadly written that Hollywood film companies deduce the films they "manufacture."'],
-    'researchExperiment': ['the <b>Research and Experimentation Tax Credit</b>, which is meant to incentivize research activities.', ' "Research" is defined very broadly in the tax code.'],
+             ' The law so broadly written that Hollywood film companies deduce the films they "manufacture."'],
+    'researchExperiment': ['the <b>Research and Experimentation Tax Credit</b>, which is meant to incentivize research activities.', ' "Research" defined very broadly in the tax code.'],
     'stockOptions': ['<b>executive stock options</b> to lower their taxes by generating phantom "costs" they never incur.']
   };
 
@@ -225,7 +230,7 @@ let slide5 = function (data, companiesRebates) {
                   let barGraphText = numCompanies + ' companies used ' + rebateLines[0];
 
                   return Promise.all([
-                    appendStoryText(2000, barGraphText, 1, null, true),
+                    appendStoryText(2000, barGraphText, 1),
                     highlightSomeBars(companiesRebates[rebate], '#0FEA00', 700)
                   ])
                   .then( function () {
@@ -262,7 +267,7 @@ let slide6 = function (data, companiesIPS, companiesTop3EmpChanges, companiesLos
   fadeStart(1000, data)
   .then( function () {
     return Promise.all([
-      appendStoryText(1000, '"I am going to cut business taxes massively. They\'re going to start hiring people." - Trump', false, 'img/donald-trump.png'),
+      appendStoryText(1000, '"I am going to cut business taxes massively. They\'re going to start hiring people." - Trump', false, 'public/img/donald-trump.png'),
       fadeOutPercentLine(3000),
       updateBars(0, 3000, 3000)
     ]);
@@ -270,7 +275,7 @@ let slide6 = function (data, companiesIPS, companiesTop3EmpChanges, companiesLos
   .then( function () {
     return Promise.all([
       highlightSomeBars(companiesIPS, '#0FEA00', 2000),
-      appendStoryText(3000, 'The Institute for Policy Studies looked at 92 of these 258 companies which had effective tax rates below 20%.', 1, null, true)
+      appendStoryText(3000, 'The Institute for Policy Studies looked at 92 of these 258 companies which had effective tax rates below 20%.', 1)
     ]);
   })
   .then( function () {
@@ -385,18 +390,18 @@ let slide6 = function (data, companiesIPS, companiesTop3EmpChanges, companiesLos
   })
   .then( function () {
     return Promise.all([
-      appendStoryText(3000, 'AT&T\'s workforce was reduced by <b>79,450 employees</b> from 2008 to 2016', 1, null, true),
+      appendStoryText(3000, 'AT&T\'s workforce was reduced by <b>79,450 employees</b> from 2008 to 2016', 1),
       highlightSomeBars([companiesLostEmployees[1]], '#0FEA00', 1000)
     ]);
   })
   .then( function () {
-    return appendStoryText(3000, '...more than any other company in this study.',false,null,true);
+    return appendStoryText(3000, '...more than any other company in this study.');
   })
   .then ( function () {
     return appendStoryText(3000, 
                     '"Lower taxes drives more investment, drives more hiring, drives greater wages." - Randall L. Stephenson, CEO of AT&T',
                     1000,
-                    'img/randall-stephenson.png', true);
+                    'img/randall-stephenson.png');
   })
   .then( function () {
     return highlightSomeBars([companiesLostEmployees[1]], '#0FEA00', 2000);
@@ -417,7 +422,7 @@ let slide7 = function (data, companiesForeignDiff) {
   fadeStart(1000, data)
   .then( function () {
     return Promise.all([
-      appendStoryText(4000,
+      appendStoryText(3000,
                       '"America is one of the highest-taxed nations in the world. Reducing taxes will cause new companies and new jobs to come roaring back into our country." - Donald Trump',
                       false,
                       'img/donald-trump.png', true),
@@ -426,13 +431,13 @@ let slide7 = function (data, companiesForeignDiff) {
   .then( function () {
     return Promise.all([
       appendStoryText(1500, 'Of the 258 companies that showed consistent profits over 8 years...', 1000, null, true),
-      fadeOutPercentLine(3000),
-      updateBars(0, 3000, 3000)
+      fadeOutPercentLine(2000),
+      updateBars(0, 2000, 2000)
     ]);
   })
   .then( function () {
     return Promise.all([
-      appendStoryText(3000, '107 had significant foreign profits (more than 10% of all profits)', false, null, true),
+      appendStoryText(1500, '107 had significant foreign profits (more than 10% of all profits)', false, null, true),
       highlightSomeBars(companiesForeignDiff, '#0FEA00', 1000),
     ]);
   })
@@ -440,28 +445,28 @@ let slide7 = function (data, companiesForeignDiff) {
     return Promise.all([
       updateBarGraphParam('data', companiesForeignDiff),
       updateBarGraphParam('yParam', 'us_foreign_diff'),
-      updateBarGraphYLabel(2000),
+      updateBarGraphYLabel(1000),
       updateBarGraphParam('domainStart', -40),
       updateBarGraphParam('domainEnd', 40),
       updateYScale(),
-      updateXAxis(2000),
+      updateXAxis(1000),
       updateBarGraphParam('tickValues', [-40, 0, 40]),
-      updateYAxis(2000),
-      updateBars(0, 2000, 2000)
+      updateYAxis(1000),
+      updateBars(0, 1000, 1000)
     ]);
   })
   .then( function () {
       return Promise.all([
-        appendStoryText(3000,
+        appendStoryText(1500,
                         '64 of these companies paid higher foreign tax rates on their foreign profits than they paid in U.S. taxes on their U.S. profits.',
                         1,
                         null,
                         true),
-        highlightBarsSplit('us_foreign_diff', 0, '#08BDBD', '#FF9914', 4000)
+        highlightBarsSplit('us_foreign_diff', 0, '#08BDBD', '#FF9914', 1000)
       ]);
   })
   .then( function () {
-    return appendStoryText(3000,
+    return appendStoryText(1500,
                         'These higher foreign tax rates do not seem to hinder companies from doing business abroad. This is just more evidence that corporate income tax levels are usually not a significant determinant of what companies do.',
                         1,
                         null,
@@ -482,7 +487,7 @@ let slide8 = function (data, companiesCompetitors) {
     return appendStoryText(1500, 'Who loses out?');
   })
   .then( function () {
-    let chain = appendStoryText(3000, 'Competing companies often have drastically different tax rates.', 1000),
+    let chain = appendStoryText(1500, 'Competing companies often have drastically different tax rates.', 1000),
         counter = -1;
     for (let pair in companiesCompetitors) {
       let competitorPair = companiesCompetitors[pair],
@@ -535,21 +540,23 @@ let slide9 = function (data) {
   .then( function () {
     return appendStoryText(4000,
       'There is plenty of blame to share for today\'s sad situation. These corporate loopholes and tax breaks are generally legal, and stem from laws passed over the years by Congress and signed by various presidents.',
-      2000,
+      1000,
       null,
       true);
   })
   .then( function () {
     return appendStoryText(4000,
       'But that does not mean that low-tax corporations bear no responsibility. The tax laws were not enacted in a vacuum; they were adopted in response to relentless corporate lobbying, threats and campaign support.',
-      2000,
+      1000,
       null,
       true);
   })
   .then( function () {
     return appendStoryText(4000,
       'These 241 companies saved a total of almost $527 billion over the last eight years.',
-      5000);
+      1000,
+      null,
+      true);
   })
   .then( function () {
     slideInProgress = false;

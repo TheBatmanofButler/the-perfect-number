@@ -161,7 +161,7 @@ let initBarGraph = function () {
   barGraph
     .append('text')
     .attr('class', 'company-label')
-    .style('font-size', '15px');
+    .style('font-size', '2vw');
 
   let yDomain = barGraphParams['y'].domain(),
       barGraphTextY = yDomain[yDomain.length - 1];
@@ -169,9 +169,9 @@ let initBarGraph = function () {
   barGraph
     .append('text')
     .attr('class', 'bar-graph-text')
-    .attr('x', barGraphWidth / 2)
+    .attr('x', barGraphWidth * 0.3)
     .attr('y', y(barGraphTextY))
-    .style('font-size', '30px');
+    .style('font-size', '2vh');
 
   barGraph
     .append('g')
@@ -433,13 +433,15 @@ let resizeBarGraph = function () {
                                          - $('.top').outerHeight() 
                                          - $('.dynamic-text').outerHeight()
                                          - $(window).outerHeight() * 0.45;
-    updateBarGraphParam('tickValues', []);
+    updateBarGraphParam('tickValues', [0, 35]);
     updateBarGraphDims(mapModeHeight);
 
     updateXScale();
     updateYScale();
 
-    // updateYAxis(0, false);
+    updateYAxis(0, false);
+    updateCompanyLabel(0);
+    updateBarGraphYLabel(0, 'Rate');
     updateXAxis(0);
 
     updateBarGraphSVG(0);
@@ -515,7 +517,8 @@ let openMapView = function (data, company) {
 
       return Promise.all([
               $('.bar-graph-elements').animate({'opacity': 1}),
-              updateBarGraphParam('marginBottom', 60),
+              updateBarGraphParam('marginTop', 0),
+              updateBarGraphParam('marginBottom', 90),
               updateBarGraphDims(mapModeHeight),
 
               updateXScale(),
@@ -796,7 +799,7 @@ let fadeStart = function (duration, data, dynamicText, yStart = -15, yEnd = 50, 
           closeMapView(),
 
           updateBarGraphParam('marginBottom', 100),
-          updateBarGraphParam('marginLeft', 80),
+          updateBarGraphParam('marginTop', 50),
           updateBarGraphDims(mapModeHeight),
 
           updateBarGraphParam('axisEnding', '%'),

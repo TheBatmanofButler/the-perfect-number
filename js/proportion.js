@@ -123,7 +123,7 @@ let drawAllCanvases = function (firstDraw) {
 
   chain = chain.then( function () {
     let unit = propGraphParams['regions'][0]['unit'];
-    return updateStoryText(2000, 'Each square is the equivalent of $' + unit);
+    return updateStoryText(2000, 'Each square is the equivalent of <b>$' + unit + '</b>');
   })
   .then( function () {
     allRegionsDrawn = true;
@@ -148,7 +148,7 @@ let createCanvases = function () {
         canvases = propGraphParams['canvases'] = [],
         unit = propGraphParams['regions'][0]['unit'];
 
-    updateStoryText(2000, 'Each square is the equivalent of $' + unit);
+    updateStoryText(2000, 'Each square is the equivalent of <b>$' + unit + '</b>');
 
     let canvasObj;
     for (let ii in regions) {
@@ -252,7 +252,7 @@ let showProperRegion = function (squareId) {
 let showAllRegions = function () {
   let canvases = propGraphParams['canvases'],
       unit = propGraphParams['regions'][0]['unit'];
-  updateStoryText(2000, 'Each square is the equivalent of $' + unit);
+  updateStoryText(2000, 'Each square is the equivalent of <b>$' + unit + '</b>');
 
   for (let ii = 0; ii < canvases.length; ii++)
     showCanvas(ii);
