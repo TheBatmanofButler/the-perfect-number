@@ -51,7 +51,7 @@ let createProportionAreas = function (comparisons, actualProfit, actualTaxBreak,
     {
       'text': 'If the 35% tax rate was paid, it would be ',
       'numSquares': num35PercentSquares,
-      'color': 'rgba(128, 0, 0, 0.8)',
+      'color': 'rgba(0, 39, 0, 0.8)',
       'money': getMoneyString(money35, convertConst),
       'unit': unit
     }
@@ -61,7 +61,7 @@ let createProportionAreas = function (comparisons, actualProfit, actualTaxBreak,
     proportionAreas.unshift({
       'text': 'Tax breaks totaled ',
       'numSquares': numTaxBreakSquares,
-      'color': 'rgba(181,46,46, 1)',
+      'color': 'rgba(0, 98, 0, 1)',
       'money': getMoneyString(taxBreak, convertConst),
       'unit': unit
     });
@@ -71,7 +71,7 @@ let createProportionAreas = function (comparisons, actualProfit, actualTaxBreak,
       proportionAreas.unshift({
         'text': 'Taxes paid totaled ',
         'numSquares': numTaxPaidSquares,
-        'color': 'rgba(63,42,20,1)',
+        'color': 'rgba(0, 137, 0, 1)',
         'money': getMoneyString(taxPaid, convertConst),
         'unit': unit
       });
@@ -80,7 +80,7 @@ let createProportionAreas = function (comparisons, actualProfit, actualTaxBreak,
       proportionAreas.push({
         'text': 'Taxes paid totaled ',
         'numSquares': numTaxPaidSquares,
-        'color': 'rgba(63,42,20,1)',
+        'color': 'rgba(0, 137, 0, 1)',
         'money': getMoneyString(taxPaid, convertConst),
         'unit': unit
       });

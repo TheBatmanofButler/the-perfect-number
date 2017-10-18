@@ -262,7 +262,7 @@ let slide6 = function (data, companiesIPS, companiesTop3EmpChanges, companiesLos
   fadeStart(1000, data)
   .then( function () {
     return Promise.all([
-      appendStoryText(1000, '"I am going to cut business taxes massively. They\'re going to start hiring people." - Trump', false, 'public/img/donald-trump.png'),
+      appendStoryText(1000, '"I am going to cut business taxes massively. They\'re going to start hiring people." - Trump', false, 'img/donald-trump.png'),
       fadeOutPercentLine(3000),
       updateBars(0, 3000, 3000)
     ]);
