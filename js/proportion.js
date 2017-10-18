@@ -435,7 +435,7 @@ let setAllRegionSquares = function () {
       columnLength = propGraphParams['columnLength'],
       startSquareId = regions[1]['numSquares'];
 
-  if (regions[0]['text'] == 'Company Tax Break')
+  if (regions[0]['text'] == 'Tax breaks totaled ')
     startSquareId = 0
 
   for (let ii = 0; ii < regions.length; ii++) {
@@ -446,7 +446,7 @@ let setAllRegionSquares = function () {
       direction = setSubregionSquares(region, numSquares, 0, 1);
     }
     else {
-      if (regions[0]['text'] == 'Company Tax Break' && ii == 2)
+      if (regions[0]['text'] == 'Tax breaks totaled ' && ii == 2)
         direction = 1
       direction = setSubregionSquares(region, numSquares, startSquareId, direction);
     }

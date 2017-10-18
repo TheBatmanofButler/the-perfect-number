@@ -282,7 +282,7 @@ let createOpeningSlide = function () {
         })
         .on("mouseout", function () {
           d3.selectAll('.bolden')
-            .style('fill', 'black');
+            .style('fill', '#FFF');
         })
 
 
@@ -310,6 +310,8 @@ let createOpeningSlide = function () {
         let charWidth;
         if (d == ' ')
           charWidth = 0.01 * barGraphWidth;
+        else if (d == 'r' || d == 'c')
+          charWidth = this.getComputedTextLength() * 2.5 + 3;
         else
           charWidth = this.getComputedTextLength() * 2.5;
 

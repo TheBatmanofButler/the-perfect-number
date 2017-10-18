@@ -115,19 +115,20 @@ canvas {
 
       .slide-no-square-wrapper {
         cursor: pointer;
-        margin-left: 5px;
-        margin-right: 5px;
+        margin-left: 2px;
+        margin-right: 2px;
       }
 
         .slide-no-square {
-          background: #D0CCD0;
-          color: #fff;
+          /*background: #D0CCD0;*/
+          color: #000;
         }
 
         .active-slide-no-square {
           /*background: #3E4351;*/
           background: #454545;
           color: #fff;
+          /*font-weight: bold;*/
         }
 
       .slide-explore {
@@ -147,7 +148,7 @@ canvas {
 
     .about-button {
       cursor: pointer;
-      background: #D0CCD0;
+      /*background: #D0CCD0;*/
       color: black;
     }
 
@@ -214,13 +215,14 @@ canvas {
 
       .info {
         opacity: 0;
-        background:#ffc;
+        background:#fff;
         margin-right: 10px;
         padding: 10px 20px 10px 20px;
         width: 44vh;
         overflow-y: scroll; 
         z-index: 2;
         margin-left: 30px;
+        background: #ededed;
         /*color: #fff;*/
         /*box-shadow: 5px 5px 7px rgba(33,33,33,1);*/
       }
