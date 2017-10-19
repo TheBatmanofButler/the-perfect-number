@@ -101,7 +101,7 @@ let slide3 = function (data, companiesYearsNoTax) {
   let barGraph = d3.select('.bar-graph-elements');
   slideInProgress = true;
 
-  fadeStart(1000, data)
+  fadeStart(500, data)
   .then(function () {
     return appendStoryText(2000, 'These companies generated so many excess tax breaks that they sometimes reported negative taxes...', 0, null, true);
   })
@@ -168,7 +168,7 @@ let slide4 = function (data, companiesTop25) {
   })
   .then( function () {
     return Promise.all([
-      appendStoryText(2000, 'Just 25 companies claimed $286 billion in tax breaks (more than half of total) over the eight years between 2008 and 2015', 0),
+      appendStoryText(2000, 'Just 25 companies claimed $286 billion in tax breaks (more than half of total) over the eight years between 2008 and 2015', 1, null, true),
       highlightSomeBars(companiesTop25, '#0FEA00', 1000)
     ])
   })

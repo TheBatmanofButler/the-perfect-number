@@ -53,7 +53,11 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
   });
 
   $('#slide3').click( function (e) {
-    if (slideInProgress || !allRegionsDrawn) return;
+    if (!allRegionsDrawn) return;
+    console.log(333);
+    if (slideInProgress)
+      shouldFade = true;
+
     slide3(data, companiesYearsNoTax);
     currentSlide = 3;
     clearTop();
@@ -251,7 +255,7 @@ let createOpeningSlide = function () {
         .attr('x', 25)
         .attr('y', 260)
         .style('opacity', 0)
-        
+
   openingScreen
         .append('g')
         .append('text')
@@ -259,7 +263,7 @@ let createOpeningSlide = function () {
         .attr('class', 'pedal bolden')
         .attr('x', 70)
         .attr('y', 260)
-        .style('opacity', 0)
+        .style('opacity', 0);
 
   openingScreen
         .append('g')
@@ -274,6 +278,15 @@ let createOpeningSlide = function () {
         .style('opacity', 0)
         .append('path')
         .attr('d', 'M0 0v8h8v-2h-1v1h-6v-6h1v-1h-2zm4 0l1.5 1.5-2.5 2.5 1 1 2.5-2.5 1.5 1.5v-4h-4z')
+
+  // openingScreen
+  //       .append('g')
+  //       .append('text')
+  //       .text('Click to advance')
+  //       .attr('class', 'click')
+  //       .attr('x', 70)
+  //       .attr('y', 300)
+  //       .style('opacity', 0)
 
   d3.selectAll('.bolden')
         .on("mouseover", function () {
@@ -496,14 +509,10 @@ let openMapView = function (data, company) {
 
     })
     .then( function () {
-      // return hideBarGraphYLabel(500);
-    })
-    .then( function () {
 
       d3.select('.dynamic-text')
         .style('line-height', '80px');
 
-      // updateStoryText(500, '');
       removeBarGraphClicks();
       $('.proportion-graph-viewer').css('display', 'flex');
       $('.proportion-graph-viewer').animate({'height': '45vh'}, 1000, 'linear', function () {
@@ -634,7 +643,7 @@ let highlightBars = function (bars, color, duration) {
 
 let fadeAll = function (duration) {
   return new Promise( function (resolve, reject) {
-    d3.select('.bar-graph-elements')
+    d3.selectAll('.bar-graph-elements, .dynamic-text')
       .transition()
       .duration(duration)
       .style('opacity', 0)
@@ -776,7 +785,6 @@ let fadeStart = function (duration, data, dynamicText, yStart = -15, yEnd = 50, 
 
     Promise.resolve()
       .then( function () {
-        updateStoryText(duration, '');
         if (shouldFade)
           return fadeAll(duration);
       })
