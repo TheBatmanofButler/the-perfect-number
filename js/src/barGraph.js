@@ -37,7 +37,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
   initBarGraph();
 
   $('#slide1').click( function (e) {
-    if (slideInProgress || !allRegionsDrawn) return;
+    if (!allRegionsDrawn) return;
     currentSlide = 1;
     slide1();
     clearTop();
@@ -45,7 +45,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
   });
 
   $('#slide2').click( function (e) {
-    if (slideInProgress || !allRegionsDrawn) return;
+    if (!allRegionsDrawn) return;
     slide2(data);
     currentSlide = 2;
     clearTop();
@@ -65,7 +65,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
   });
 
   $('#slide4').click( function (e) {
-    if (slideInProgress || !allRegionsDrawn) return;
+    if (!allRegionsDrawn) return;
     slide4(data, companiesTop25);
     currentSlide = 4;
     clearTop();
@@ -73,7 +73,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
   });
 
   $('#slide5').click( function (e) {
-    if (slideInProgress || !allRegionsDrawn) return;
+    if (!allRegionsDrawn) return;
     slide5(data, companiesRebates);
     currentSlide = 5;
     clearTop();
@@ -81,7 +81,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
   });
 
   $('#slide6').click( function (e) {
-    if (slideInProgress || !allRegionsDrawn) return;
+    if (!allRegionsDrawn) return;
     slide6(data, companiesIPS, companiesTop3EmpChanges, companiesLostEmployees, companiesCompUp);
     currentSlide = 6;
     clearTop();
@@ -89,7 +89,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
   });
 
   $('#slide7').click( function (e) {
-    if (slideInProgress || !allRegionsDrawn) return;
+    if (!allRegionsDrawn) return;
     slide7(data, companiesForeignDiff);
     currentSlide = 7;
     clearTop();
@@ -97,7 +97,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
   });
 
   $('#slide8').click( function (e) {
-    if (slideInProgress || !allRegionsDrawn) return;
+    if (!allRegionsDrawn) return;
     slide8(data, companiesCompetitors);
     currentSlide = 8;
     clearTop();
@@ -105,7 +105,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
   });
 
   $('#slide9').click( function (e) {
-    if (slideInProgress || !allRegionsDrawn) return;
+    if (!allRegionsDrawn) return;
     slide9(data);
     currentSlide = 9;
     clearTop();
@@ -113,7 +113,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
   });
 
   $('.slide-explore').click( function (e) {
-    if (slideInProgress || !allRegionsDrawn) return;
+    if (!allRegionsDrawn) return;
     clearTop();
     $('.slide-explore').addClass('active-slide-no-square');
     $('.typeahead').typeahead('val', '');
@@ -279,14 +279,14 @@ let createOpeningSlide = function () {
         .append('path')
         .attr('d', 'M0 0v8h8v-2h-1v1h-6v-6h1v-1h-2zm4 0l1.5 1.5-2.5 2.5 1 1 2.5-2.5 1.5 1.5v-4h-4z')
 
-  // openingScreen
-  //       .append('g')
-  //       .append('text')
-  //       .text('Click to advance')
-  //       .attr('class', 'click')
-  //       .attr('x', 70)
-  //       .attr('y', 300)
-  //       .style('opacity', 0)
+  openingScreen
+        .append('g')
+        .append('text')
+        .text('Click to advance')
+        .attr('class', 'click')
+        .attr('x', 70)
+        .attr('y', 300)
+        .style('opacity', 0)
 
   d3.selectAll('.bolden')
         .on("mouseover", function () {
@@ -653,7 +653,7 @@ let fadeAll = function (duration) {
 
 let showAll = function (duration) {
   return new Promise( function (resolve, reject) {
-    d3.select('.bar-graph-elements')
+    d3.selectAll('.bar-graph-elements, .dynamic-text')
       .transition()
       .duration(duration)
       .style('opacity', 1)
