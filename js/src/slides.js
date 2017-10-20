@@ -51,9 +51,6 @@ let slide2 = function (data) {
         ]);
       })
       .then( function () {
-        console.log(12123);
-      })
-      .then( function () {
         return Promise.all([
           updateBarGraphParam('data', []),
           updateBars(0, 0, 0),
@@ -225,7 +222,7 @@ let slide5 = function (data, companiesRebates) {
                 let numCompanies = companiesRebates[rebate].length,
                     rebateLines = companiesRebatesText[rebate];
 
-                if (rebateLines.length == 2) {
+                if (rebateLines.length == 2 || rebate == 'stockOptions') {
                   let barGraphText0 = numCompanies + ' companies used ' + rebateLines[0],
                       barGraphText1 = rebateLines[1];
                   
@@ -245,7 +242,7 @@ let slide5 = function (data, companiesRebates) {
                   let barGraphText = numCompanies + ' companies used ' + rebateLines[0];
 
                   return Promise.all([
-                    appendStoryText(2000, barGraphText, 1),
+                    appendStoryText(2000, barGraphText, 1, null, true),
                     highlightSomeBars(companiesRebates[rebate], '#0FEA00', 700)
                   ])
                   .then( function () {

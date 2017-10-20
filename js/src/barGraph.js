@@ -320,7 +320,7 @@ let createOpeningSlide = function () {
         .append('text')
         .text('Click to advance')
         .attr('class', 'click-advance')
-        .attr('x', 1100)
+        .attr('x', 1093)
         .attr('y', 30)
         .style('opacity', 0)
 
@@ -329,7 +329,7 @@ let createOpeningSlide = function () {
         .append('svg')
         .attr('class', 'click-advance')
         .attr('xmlns', 'http://www.w3.org/2000/svg')
-        .attr('x', 1287)
+        .attr('x', 1280)
         .attr('y', 14)
         .attr('viewBox', '0 0 8 8')
         .attr('width', 17)
@@ -410,7 +410,14 @@ let createOpeningSlide = function () {
       .transition()
       .delay(3000)
       .duration(3000)
-      .style('opacity', 1);
+      .style('opacity', 1)
+      .end( function () {
+        d3.selectAll('.click-advance')
+          .transition()
+          .duration(3000)
+          .style('opacity', 1)
+      })
+
   }, 50 * quoteChars.length);
 
   openingScreenTimeouts.push(timeout);
@@ -886,7 +893,7 @@ let fadeStart = function (duration, data, dynamicText, yStart = -15, yEnd = 50, 
       .then( function () {
         d3.select('.percent-line')
           .moveToFront();
-
+        console.log(shouldFade);
         if (shouldFade || isOpeningScreen) {
           shouldFade = false;
           return showAll(duration);
