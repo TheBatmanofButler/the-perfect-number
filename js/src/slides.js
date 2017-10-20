@@ -11,20 +11,33 @@ let slide1 = function (data) {
 
 let slide2 = function (data) {
   slideInProgress = true;
+  let isOpeningScreen = d3.select('.bar-graph').attr('viewBox') != null;
+  let otherFadeAllDuration = 1000;
 
   Promise.resolve()
       .then( function () {
-        let isOpeningScreen = d3.select('.bar-graph').attr('viewBox') != null;
-        if (isOpeningScreen)
-          return fadeOpeningScreen(1000);
+        if (shouldFade) {
+          otherFadeAllDuration = 0;
+          return fadeAll(1000);
+        }
       })
       .then( function () {
-        if (currentSlide != null)
-          closeMapView();
-
+        if (isOpeningScreen) {
+          otherFadeAllDuration = 0;
+          return Promise.all([
+            fadeAll(1000),
+            fadeOpeningScreen(1000)
+          ]);
+        }
+      })
+      .then( function () {
         let mapModeHeight = $('.graph-viewers').height();
 
+        closeMapView();
+
         return Promise.all([
+          appendStoryText(0, '', 1000),
+
           updateBarGraphParam('marginBottom', 100),
           updateBarGraphDims(mapModeHeight),
 
@@ -34,9 +47,11 @@ let slide2 = function (data) {
           updateBarGraphParam('domainEnd', 50),
           updateYScale(),
           updateBarGraphSVG(1000),
-          appendStoryText(0, '', 1000),
-          fadeAll(1000)
+          fadeAll(otherFadeAllDuration)
         ]);
+      })
+      .then( function () {
+        console.log(12123);
       })
       .then( function () {
         return Promise.all([
@@ -51,7 +66,7 @@ let slide2 = function (data) {
       .then( function () {
         return Promise.all([
           showAll(2000),
-          appendStoryText(2000, 'The federal corporate income tax rate is 35 percent...'),
+          appendStoryText(2000, 'The federal corporate income tax rate is 35 percent...', 1),
           updateYAxis(2000),
           updatePercentLine(2000)
         ]);
@@ -191,7 +206,7 @@ let slide5 = function (data, companiesRebates) {
     'deferredTaxes': ['<b>deferred taxes</b>.', ' These are taxes that are not paid in the current year, but may or may not come due in future years.'],
     'accDepreciation': ['<b>accelerated depreciation</b>.', ' By deducting assets faster than they actually decline, companies benefit from higher interest savings or investment returns. It is one type of deferred tax.'],
     'dpad': ['the <b>Domestic Production Activities Deduction</b>, which incentivizes U.S. manufacturing.',
-             ' The law so broadly written that Hollywood film companies deduce the films they "manufacture."'],
+             ' The law so broadly written that Hollywood film companies deduct the films they "manufacture."'],
     'researchExperiment': ['the <b>Research and Experimentation Tax Credit</b>, which is meant to incentivize research activities.', ' "Research" defined very broadly in the tax code.'],
     'stockOptions': ['<b>executive stock options</b> to lower their taxes by generating phantom "costs" they never incur.']
   };

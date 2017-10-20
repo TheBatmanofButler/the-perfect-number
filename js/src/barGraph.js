@@ -38,6 +38,10 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
 
   $('#slide1').click( function (e) {
     if (!allRegionsDrawn) return;
+
+    if (slideInProgress)
+      shouldFade = true;
+
     currentSlide = 1;
     slide1();
     clearTop();
@@ -46,6 +50,10 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
 
   $('#slide2').click( function (e) {
     if (!allRegionsDrawn) return;
+
+    if (slideInProgress)
+      shouldFade = true;
+
     slide2(data);
     currentSlide = 2;
     clearTop();
@@ -54,7 +62,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
 
   $('#slide3').click( function (e) {
     if (!allRegionsDrawn) return;
-    console.log(333);
+
     if (slideInProgress)
       shouldFade = true;
 
@@ -66,6 +74,10 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
 
   $('#slide4').click( function (e) {
     if (!allRegionsDrawn) return;
+
+    if (slideInProgress)
+      shouldFade = true;
+
     slide4(data, companiesTop25);
     currentSlide = 4;
     clearTop();
@@ -74,6 +86,10 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
 
   $('#slide5').click( function (e) {
     if (!allRegionsDrawn) return;
+
+    if (slideInProgress)
+      shouldFade = true;
+
     slide5(data, companiesRebates);
     currentSlide = 5;
     clearTop();
@@ -82,6 +98,10 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
 
   $('#slide6').click( function (e) {
     if (!allRegionsDrawn) return;
+
+    if (slideInProgress)
+      shouldFade = true;
+
     slide6(data, companiesIPS, companiesTop3EmpChanges, companiesLostEmployees, companiesCompUp);
     currentSlide = 6;
     clearTop();
@@ -90,6 +110,10 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
 
   $('#slide7').click( function (e) {
     if (!allRegionsDrawn) return;
+
+    if (slideInProgress)
+      shouldFade = true;
+
     slide7(data, companiesForeignDiff);
     currentSlide = 7;
     clearTop();
@@ -98,6 +122,10 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
 
   $('#slide8').click( function (e) {
     if (!allRegionsDrawn) return;
+
+    if (slideInProgress)
+      shouldFade = true;
+
     slide8(data, companiesCompetitors);
     currentSlide = 8;
     clearTop();
@@ -106,6 +134,10 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
 
   $('#slide9').click( function (e) {
     if (!allRegionsDrawn) return;
+
+    if (slideInProgress)
+      shouldFade = true;
+
     slide9(data);
     currentSlide = 9;
     clearTop();
@@ -114,6 +146,10 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
 
   $('.slide-explore').click( function (e) {
     if (!allRegionsDrawn) return;
+
+    if (slideInProgress)
+      shouldFade = true;
+
     clearTop();
     $('.slide-explore').addClass('active-slide-no-square');
     $('.typeahead').typeahead('val', '');
@@ -283,10 +319,25 @@ let createOpeningSlide = function () {
         .append('g')
         .append('text')
         .text('Click to advance')
-        .attr('class', 'click')
-        .attr('x', 70)
-        .attr('y', 300)
+        .attr('class', 'click-advance')
+        .attr('x', 1100)
+        .attr('y', 30)
         .style('opacity', 0)
+
+  openingScreen
+        .append('g')
+        .append('svg')
+        .attr('class', 'click-advance')
+        .attr('xmlns', 'http://www.w3.org/2000/svg')
+        .attr('x', 1287)
+        .attr('y', 14)
+        .attr('viewBox', '0 0 8 8')
+        .attr('width', 17)
+        .attr('height', 17)
+        .style('opacity', 0)
+        .append('path')
+        .attr('d', 'M0 0v8l4-4-4-4z')
+        .attr('transform', 'translate(2)')
 
   d3.selectAll('.bolden')
         .on("mouseover", function () {
@@ -671,7 +722,7 @@ let fadeOpeningScreen = function(duration) {
     }
     openingScreenTimeouts = [];
 
-    d3.selectAll('.quote-text, .highlight, .cursor, .pedal, .pedal-link')
+    d3.selectAll('.quote-text, .highlight, .cursor, .pedal, .pedal-link, .click-advance')
       .transition()
       .duration(duration)
       .style('opacity', 0)
@@ -691,7 +742,7 @@ let fadeOpeningScreen = function(duration) {
           .attr("viewBox", null)
           .attr("preserveAspectRatio", null);
 
-        d3.selectAll('.quote-text, .highlight, .cursor, .pedal, .pedal-link')
+        d3.selectAll('.quote-text, .highlight, .cursor, .pedal, .pedal-link, click-advance')
           .style('visibility', 'hidden')
           .style('position', 'absolute');
 
@@ -765,12 +816,12 @@ let showOpeningScreen = function(duration) {
         .style('fill', '#367558')
         .style('opacity', 1)
 
-    d3.selectAll('.pedal, .pedal-link')
+    d3.selectAll('.pedal, .pedal-link, .click-advance')
         .transition()
         .duration(1000)
         .style('opacity', 1);
 
-    d3.selectAll('.quote-text, .highlight, .cursor, .pedal, .pedal-link')
+    d3.selectAll('.quote-text, .highlight, .cursor, .pedal, .pedal-link, .click-advance')
       .style('visibility', null)
       .style('position', null);
 
@@ -802,9 +853,10 @@ let fadeStart = function (duration, data, dynamicText, yStart = -15, yEnd = 50, 
       .then( function () {
         let mapModeHeight = $('.graph-viewers').height();
 
+        closeMapView();
+
         return Promise.all([
           appendStoryText(duration, dynamicText),
-          closeMapView(),
 
           updateBarGraphParam('marginBottom', 100),
           updateBarGraphParam('marginTop', 50),
