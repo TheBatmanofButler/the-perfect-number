@@ -391,24 +391,30 @@ let updateBarGraphYLabel = function (duration, customText) {
 
   return new Promise( function (resolve, reject) {
     if (d3.select('.y-label').text() != yLabels[yParam]) {
+          console.log(yParam);
       d3.select('.y-label')
         .attr('transform', 'translate('+ ( marginLeft * -0.5 ) + ',' + ( barGraphHeight * 0.5 )+')rotate(-90)')
         .style('opacity', 0)
         .text( function () {
-          if (customText) {
-            console.log(customText);
+          if (customText)
             return customText;
-          }
 
           return yLabels[yParam];
         })
         .transition()
         .duration(duration)
         .style('opacity', 1)
-        .end(resolve);
+        .end( function () {
+          resolve();
+        });
     }
     else {
+      d3.select('.y-label')
+        .attr('transform', 'translate('+ ( marginLeft * -0.5 ) + ',' + ( barGraphHeight * 0.5 )+')rotate(-90)')
+        .text(yLabels[yParam]);
+
       resolve();
+
     }
   });
 }

@@ -533,7 +533,7 @@ let resizeBarGraph = function () {
     updateBars(0, 0, 0);
   }
 
-  if (currentSlide > 1) {
+  else if (currentSlide > 1) {
     updateBarGraphDims();
 
     updateXScale();
@@ -543,6 +543,7 @@ let resizeBarGraph = function () {
 
     updateBarGraphText(0);
     updateCompanyLabel(0);
+    console.log(888);
     updateBarGraphYLabel(0);
 
     if (d3.select('.percent-line').style('opacity') != 0)
