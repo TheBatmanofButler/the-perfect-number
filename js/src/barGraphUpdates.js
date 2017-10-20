@@ -1,19 +1,41 @@
-let updateBarGraphText = function (text, duration, x) {
+let updateBarGraphText = function (duration) {
   let barGraphWidth = barGraphParams['barGraphWidth'],
-      barGraphText = d3.select('.bar-graph-text');
-
-  if (!x)
-    x = barGraphWidth * 0.3;
+      barGraphHeight = barGraphParams['barGraphHeight'],
+      text = barGraphParams['barGraphTextValue'],
+      x = barGraphParams['barGraphTextX'],
+      barGraphText = d3.select('.bar-graph-text'),
+      barGraphTextArrow = d3.select('.bar-graph-text-arrow'),
+      showableElements = barGraphText;
 
   return new Promise( function (resolve, reject) {
     barGraphText
-      .transition()
-      .duration(duration)
-      .ease(d3.easeLinear)
-      .attr('x', x)
+      .attr('x', barGraphWidth * x)
       .text( function () {
         if (text) return text;
       })
+      .style('font-size', function () {
+        if (text == 'Click to continue')
+          return '2vw';
+        else
+          return '1vw';
+      });
+
+    let barGraphTextLength = barGraphText.node().getBBox().width;
+
+    if (text == 'Click to continue') {
+      barGraphTextArrow
+        .attr('x', barGraphWidth * x + barGraphTextLength)
+        .attr('y', barGraphText.attr('y') - barGraphText.node().getBBox().height * 0.5)
+        .style('width', barGraphWidth * 0.02)
+        .style('height', barGraphHeight * 0.02);
+
+      showableElements = d3.selectAll('.bar-graph-text, .bar-graph-text-arrow');
+    }
+
+    showableElements
+      .transition()
+      .duration(duration)
+      .ease(d3.easeLinear)
       .style('opacity', 1)
       .end(resolve);
 
@@ -22,10 +44,10 @@ let updateBarGraphText = function (text, duration, x) {
 
 let hideBarGraphText = function (duration) {
   let barGraphWidth = barGraphParams['barGraphWidth'],
-      barGraphText = d3.select('.bar-graph-text');
+      barGraphTextAndArrow = d3.selectAll('.bar-graph-text, .bar-graph-text-arrow');
 
   return new Promise( function (resolve, reject) {
-    barGraphText
+    barGraphTextAndArrow
       .transition()
       .duration(duration)
       .ease(d3.easeLinear)

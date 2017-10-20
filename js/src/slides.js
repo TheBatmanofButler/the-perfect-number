@@ -106,11 +106,16 @@ let slide2 = function (data) {
       })
   .then( function () {
     slideInProgress = false;
+    let barGraphWidth = barGraphParams['barGraphWidth'];
+    updateBarGraphParam('barGraphTextValue', 'Click to continue');
+    updateBarGraphParam('barGraphTextX', 0.6);
+    updateBarGraphText(1500);
   });
 }
 
 let slide3 = function (data, companiesYearsNoTax) {
-  let barGraph = d3.select('.bar-graph-elements');
+  let barGraph = d3.select('.bar-graph-elements'),
+      barGraphWidth = barGraphParams['barGraphWidth'];
   slideInProgress = true;
 
   fadeStart(500, data)
@@ -125,6 +130,9 @@ let slide3 = function (data, companiesYearsNoTax) {
     let numCompanies = 0;
 
     let chain = Promise.resolve();
+    
+    updateBarGraphParam('barGraphTextX', 0.6);
+    
     for (let ii = Object.keys(companiesYearsNoTax).length; ii > 0; ii--) {
 
       numCompanies += companiesYearsNoTax[ii].length;
@@ -142,7 +150,8 @@ let slide3 = function (data, companiesYearsNoTax) {
 
       chain = chain.then(function () {
                 return Promise.all([
-                  updateBarGraphText(barGraphText, 1500),
+                  updateBarGraphParam('barGraphTextValue', barGraphText),
+                  updateBarGraphText(1500),
                   highlightSomeBars(companiesYearsNoTax[ii], '#0FEA00', 500)
                 ]);
               });
@@ -151,6 +160,10 @@ let slide3 = function (data, companiesYearsNoTax) {
   })
   .then( function () {
     slideInProgress = false;
+    let barGraphWidth = barGraphParams['barGraphWidth'];
+    updateBarGraphParam('barGraphTextValue', 'Click to continue');
+    updateBarGraphParam('barGraphTextX', 0.6);
+    updateBarGraphText(1500);
   });
 }
 
@@ -192,6 +205,10 @@ let slide4 = function (data, companiesTop25) {
   })
   .then( function () {
     slideInProgress = false;
+    let barGraphWidth = barGraphParams['barGraphWidth'];
+    updateBarGraphParam('barGraphTextValue', 'Click to continue');
+    updateBarGraphParam('barGraphTextX', 0.6);
+    updateBarGraphText(1500);
   });
 }
 
@@ -265,6 +282,10 @@ let slide5 = function (data, companiesRebates) {
   })
   .then( function () {
     slideInProgress = false;
+    let barGraphWidth = barGraphParams['barGraphWidth'];
+    updateBarGraphParam('barGraphTextValue', 'Click to continue');
+    updateBarGraphParam('barGraphTextX', 0.6);
+    updateBarGraphText(1500);
   });
 }
 
@@ -424,6 +445,10 @@ let slide6 = function (data, companiesIPS, companiesTop3EmpChanges, companiesLos
   .then( function () {
     slideInProgress = false;
     shouldFade = true;
+    let barGraphWidth = barGraphParams['barGraphWidth'];
+    updateBarGraphParam('barGraphTextValue', 'Click to continue');
+    updateBarGraphParam('barGraphTextX', 0.6);
+    updateBarGraphText(1500);
   });
 }
 
@@ -487,6 +512,10 @@ let slide7 = function (data, companiesForeignDiff) {
   .then( function () {
     slideInProgress = false;
     shouldFade = true;
+    let barGraphWidth = barGraphParams['barGraphWidth'];
+    updateBarGraphParam('barGraphTextValue', 'Click to continue');
+    updateBarGraphParam('barGraphTextX', 0.6);
+    updateBarGraphText(1500);
   });
 }
 
@@ -532,6 +561,10 @@ let slide8 = function (data, companiesCompetitors) {
   })
   .then( function () {
     slideInProgress = false;
+    let barGraphWidth = barGraphParams['barGraphWidth'];
+    updateBarGraphParam('barGraphTextValue', 'Click to continue');
+    updateBarGraphParam('barGraphTextX', 0.6);
+    updateBarGraphText(1500);
   });
 }
 

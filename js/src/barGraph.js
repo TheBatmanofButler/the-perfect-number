@@ -11,7 +11,9 @@ let barGraphParams = {
   marginLeft: 80,
   axisEnding: '%',
   domainStart: null,
-  domainEnd: null
+  domainEnd: null,
+  barGraphTextX: null,
+  barGraphTextValue: null
 }
 
 let slideInProgress = false;
@@ -210,8 +212,21 @@ let initBarGraph = function () {
     .append('text')
     .attr('class', 'bar-graph-text')
     .attr('x', barGraphWidth * 0.3)
-    .attr('y', y(barGraphTextY))
-    .style('font-size', '2vh');
+    .attr('y', y(barGraphTextY));
+
+
+  barGraph
+    .append('g')
+    .append('svg')
+    .attr('class', 'bar-graph-text-arrow')
+    .attr('xmlns', 'http://www.w3.org/2000/svg')
+    .attr('viewBox', '0 0 8 8')
+    .attr('width', 17)
+    .attr('height', 17)
+    .style('opacity', 0)
+    .append('path')
+    .attr('d', 'M0 0v8l4-4-4-4z')
+    .attr('transform', 'translate(2)')
 
   barGraph
     .append('g')
@@ -221,7 +236,6 @@ let initBarGraph = function () {
       .attr('x1', 0)
       .attr('x2', barGraphWidth)
       .style('opacity', 0);
-
 
   barGraph
     .append('g')
@@ -527,7 +541,7 @@ let resizeBarGraph = function () {
 
     updateBarGraphSVG(0);
 
-    updateBarGraphText(null, 0);
+    updateBarGraphText(0);
     updateCompanyLabel(0);
     updateBarGraphYLabel(0);
 
@@ -594,7 +608,7 @@ let openMapView = function (data, company) {
               updateYScale(),
               updateBarGraphSVG(1000),
 
-              updateBarGraphText(null, 1000),
+              updateBarGraphText(1000),
               updateCompanyLabel(1000),
 
               updateBarGraphParam('data', data),
@@ -858,7 +872,8 @@ let fadeStart = function (duration, data, dynamicText, yStart = -15, yEnd = 50, 
         return highlightAllBars('rgba(0,0,0,0.4)', duration);
       })
       .then( function () {
-        let mapModeHeight = $('.graph-viewers').height();
+        let mapModeHeight = $('.graph-viewers').height(),
+            barGraphWidth = barGraphParams['barGraphWidth'];
 
         closeMapView();
 
@@ -876,7 +891,9 @@ let fadeStart = function (duration, data, dynamicText, yStart = -15, yEnd = 50, 
           updateYScale(),
           updateBarGraphSVG(duration),
 
-          updateBarGraphText(null, duration),
+          updateBarGraphParam('barGraphTextValue', null),
+          updateBarGraphParam('barGraphTextX', 0.3),
+          hideBarGraphText(duration),
           updateCompanyLabel(duration),
 
           updateBarGraphParam('data', data),
