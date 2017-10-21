@@ -1,6 +1,7 @@
 
 let slide1 = function (data) {
   slideInProgress = true;
+  // $('#slide1').off('click');
   $('.typeahead').typeahead('val', '');
   closeMapView();
   let mapModeHeight = $('.graph-viewers').height();
@@ -249,7 +250,10 @@ let slide5 = function (data, companiesRebates) {
                           highlightSomeBars(companiesRebates[rebate], '#0FEA00', 700)
                         ])
                         .then( function () {
-                          return appendStoryText(4000, barGraphText1, false, null, true);
+                          if (rebate == 'stockOptions')
+                            return appendStoryText(500, barGraphText1, false, null, true);
+                          else
+                            return appendStoryText(4000, barGraphText1, false, null, true);
                         })
                         .then( function () {
                           return highlightSomeBars(companiesRebates[rebate], '#0FEA00', 1500);
@@ -260,7 +264,7 @@ let slide5 = function (data, companiesRebates) {
                   let barGraphText = numCompanies + ' companies used ' + rebateLines[0];
 
                   return Promise.all([
-                    appendStoryText(1500, barGraphText, 1, null, true),
+                    appendStoryText(2000, barGraphText, 1, null, true),
                     highlightSomeBars(companiesRebates[rebate], '#0FEA00', 700)
                   ])
                   .then( function () {

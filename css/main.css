@@ -386,3 +386,21 @@ canvas {
 .axis line {
   stroke: #000;
 }
+
+.comparison-data-source {
+  font-size: 80%;
+  clear: both;
+}
+
+  .comparison-data-source>a {
+    float: right;
+    text-align: right;
+    text-decoration: none;
+    color: inherit;
+    border-bottom: 1px #F7F7F7 dotted;
+  }
+
+  .comparison-data-source>a:hover {
+    color: rgba(255, 225, 25, 1);
+    border-bottom: 1px rgba(255, 225, 25, 1) dotted;
+  }

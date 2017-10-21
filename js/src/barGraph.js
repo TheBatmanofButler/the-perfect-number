@@ -39,7 +39,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
   initBarGraph();
 
   $('#slide1').click( function (e) {
-    if (!allRegionsDrawn) return;
+    if (!allRegionsDrawn || currentSlide == 1) return;
 
     if (slideInProgress)
       shouldFade = true;
@@ -328,6 +328,12 @@ let createOpeningSlide = function () {
         .style('opacity', 0)
         .append('path')
         .attr('d', 'M0 0v8h8v-2h-1v1h-6v-6h1v-1h-2zm4 0l1.5 1.5-2.5 2.5 1 1 2.5-2.5 1.5 1.5v-4h-4z')
+
+  d3.selectAll('.pedal, .pedal-link')
+    .on('click', function () {
+      d3.event.stopPropagation();
+      window.open('http://home.pedal.tech');
+    })
 
   openingScreen
         .append('g')
@@ -783,7 +789,6 @@ let fadeOpeningScreen = function(duration) {
 }
 
 let showOpeningScreen = function(data) {
-  console.log(data);
   slideInProgress = false;
   let barGraphWidth = barGraphParams['barGraphWidth'],
             barGraphHeight = barGraphParams['barGraphHeight'],
