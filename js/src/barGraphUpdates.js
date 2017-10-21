@@ -17,7 +17,7 @@ let updateBarGraphText = function (duration) {
         if (text == 'Click to continue')
           return '2vw';
         else
-          return '1vw';
+          return '1.5vw';
       });
 
     let barGraphTextLength = barGraphText.node().getBBox().width;
@@ -52,10 +52,7 @@ let hideBarGraphText = function (duration) {
       .duration(duration)
       .ease(d3.easeLinear)
       .style('opacity', 0)
-      .end( function () {
-        console.log(123);
-        resolve();
-      });
+      .end(resolve);
   });
 }
 

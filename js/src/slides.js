@@ -37,6 +37,7 @@ let slide2 = function (data) {
 
         return Promise.all([
           appendStoryText(0, '', 1000),
+          hideBarGraphText(0),
 
           updateBarGraphParam('marginBottom', 100),
           updateBarGraphDims(mapModeHeight),
@@ -120,7 +121,7 @@ let slide3 = function (data, companiesYearsNoTax) {
 
   fadeStart(500, data)
   .then(function () {
-    return appendStoryText(2000, 'These companies generated so many excess tax breaks that they sometimes reported negative taxes...', 0, null, true);
+    return appendStoryText(2000, 'These companies generated so many excess tax breaks that they sometimes reported negative taxes... ', 0, null, true);
   })
   .then(function () {
     return appendStoryText(2000, 'this means that they made <b>more</b> after taxes than before taxes in those years.', false, null, true);
@@ -131,7 +132,7 @@ let slide3 = function (data, companiesYearsNoTax) {
 
     let chain = Promise.resolve();
     
-    updateBarGraphParam('barGraphTextX', 0.6);
+    updateBarGraphParam('barGraphTextX', 0.4);
     
     for (let ii = Object.keys(companiesYearsNoTax).length; ii > 0; ii--) {
 
@@ -220,8 +221,8 @@ let slide5 = function (data, companiesRebates) {
     'deferredTaxes': ['<b>deferred taxes</b>.', ' These are taxes that are not paid in the current year, but may or may not come due in future years.'],
     'accDepreciation': ['<b>accelerated depreciation</b>.', ' By deducting assets faster than they actually decline, companies benefit from higher interest savings or investment returns. It is one type of deferred tax.'],
     'dpad': ['the <b>Domestic Production Activities Deduction</b>, which incentivizes U.S. manufacturing.',
-             ' The law so broadly written that Hollywood film companies deduct the films they "manufacture."'],
-    'researchExperiment': ['the <b>Research and Experimentation Tax Credit</b>, which is meant to incentivize research activities.', ' "Research" defined very broadly in the tax code.'],
+             ' The law is so broadly written that Hollywood film companies deduct the films they "manufacture."'],
+    'researchExperiment': ['the <b>Research and Experimentation Tax Credit</b>, which is meant to incentivize research activities.', ' "Research" is defined very broadly in the tax code.'],
     'stockOptions': ['<b>executive stock options</b> to lower their taxes by generating phantom "costs" they never incur.']
   };
 
@@ -423,7 +424,7 @@ let slide6 = function (data, companiesIPS, companiesTop3EmpChanges, companiesLos
   })
   .then( function () {
     return Promise.all([
-      appendStoryText(3000, 'AT&T\'s workforce was reduced by <b>79,450 employees</b> from 2008 to 2016', 1),
+      appendStoryText(3000, 'AT&T\'s workforce was reduced by <b>79,450 employees</b> from 2008 to 2016', 1, null, true),
       highlightSomeBars([companiesLostEmployees[1]], '#0FEA00', 1000)
     ]);
   })
@@ -434,7 +435,8 @@ let slide6 = function (data, companiesIPS, companiesTop3EmpChanges, companiesLos
     return appendStoryText(3000, 
                     '"Lower taxes drives more investment, drives more hiring, drives greater wages." - Randall L. Stephenson, CEO of AT&T',
                     1000,
-                    './img/randall-stephenson.png');
+                    './img/randall-stephenson.png',
+                    true);
   })
   .then( function () {
     return highlightSomeBars([companiesLostEmployees[1]], '#0FEA00', 2000);
