@@ -17,7 +17,7 @@ let updateBarGraphText = function (duration) {
         if (text == 'Click to continue')
           return '2vw';
         else
-          return '1vw';
+          return '1.5vw';
       });
 
     let barGraphTextLength = barGraphText.node().getBBox().width;

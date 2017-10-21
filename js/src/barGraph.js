@@ -577,9 +577,12 @@ let openMapView = function (data, company) {
   return chain
     .then( function () {
       slideInProgress = false;
+      console.log(inMapMode);
       if (!inMapMode)
-        return highlightAllBars('rgba(0,0,0,0.4)', 0);
-
+        return Promise.all([
+          highlightAllBars('rgba(0,0,0,0.4)', 0),
+          hideBarGraphText(1000)
+        ]);
     })
     .then( function () {
 
@@ -609,7 +612,6 @@ let openMapView = function (data, company) {
               updateYScale(),
               updateBarGraphSVG(1000),
 
-              updateBarGraphText(1000),
               updateCompanyLabel(1000),
 
               updateBarGraphParam('data', data),
