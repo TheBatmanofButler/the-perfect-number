@@ -52,7 +52,10 @@ let hideBarGraphText = function (duration) {
       .duration(duration)
       .ease(d3.easeLinear)
       .style('opacity', 0)
-      .end(resolve);
+      .end( function () {
+        console.log(123);
+        resolve();
+      });
   });
 }
 
