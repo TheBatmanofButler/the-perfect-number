@@ -120,15 +120,3 @@ let updateStoryText = function (duration, newText, imgSrc) {
       .end(resolve);
   });
 };
-
-let updateSlideTitle = function (duration, text) {
-  return new Promise( function (resolve, reject) {
-    d3.select('.slide-title')
-      .style('opacity', 0)
-      .text(text)
-      .transition()
-      .duration(duration)
-      .style('opacity', 1)
-      .end(resolve)
-  });
-}

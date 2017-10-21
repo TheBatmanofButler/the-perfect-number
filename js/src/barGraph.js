@@ -615,7 +615,6 @@ let openMapView = function (data, company) {
 
       return Promise.all([
               $('.bar-graph-elements').animate({'opacity': 1}),
-              updateSlideTitle(1000, ''),
               updateBarGraphParam('marginTop', 0),
               updateBarGraphParam('marginBottom', 90),
               updateBarGraphDims(mapModeHeight),
@@ -808,7 +807,6 @@ let showOpeningScreen = function(data) {
       return Promise.all([
         updateStoryText(0, ''),
         appendStoryText(0, ''),
-        updateSlideTitle(0, ''),
 
         updateBarGraphParam('marginBottom', 100),
         updateBarGraphParam('marginTop', 50),
@@ -931,7 +929,6 @@ let fadeStart = function (duration, data, dynamicText, yStart = -15, yEnd = 50, 
         closeMapView();
 
         return Promise.all([
-          updateSlideTitle(duration, ''),
           updateStoryText(duration, ''),
           appendStoryText(duration, dynamicText),
 
@@ -949,7 +946,7 @@ let fadeStart = function (duration, data, dynamicText, yStart = -15, yEnd = 50, 
           updateBarGraphParam('barGraphTextValue', null),
           updateBarGraphParam('barGraphTextX', 0.3),
           hideBarGraphText(duration),
-          updateCompanyLabel(duration),
+          updateCompanyLabel(duration, ''),
 
           updateBarGraphParam('data', data),
           updateBarGraphParam('yParam', 'rate'),
