@@ -95,10 +95,7 @@ let slide2 = function (data) {
         ]);
       })
       .then( function () {
-        return appendStoryText(3000, '');
-      })
-      .then( function () {
-        return appendStoryText(3000, 'We rank these companies from highest to lowest effective tax rates.', 1000);
+        return appendStoryText(3000, ' We rank these companies from highest to lowest effective tax rates.');
       })
       .then( function () {
         return appendStoryText(3000, '');
