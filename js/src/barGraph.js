@@ -564,6 +564,16 @@ let openMapView = function (data, company) {
                                        - $('.dynamic-text').outerHeight()
                                        - $(window).outerHeight() * 0.45;
 
+  console.log(99129391);
+  d3.select('.search-wrapper')
+    .transition()
+    .duration(1000)
+    .style('visibility', 'visible')
+    .style('opacity', 1)
+    .end( function () {
+      console.log(13123);
+    });
+
   let chain = Promise.resolve();
 
   if (currentSlide == 1 && !inMapMode) {

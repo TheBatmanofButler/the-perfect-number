@@ -98,6 +98,8 @@ canvas {
     .search-wrapper {
       flex: 2;
       text-align: right;
+      opacity: 0;
+      visibility: hidden;
     }
       .scrollable-dropdown-menu {
         width: 25vw;
