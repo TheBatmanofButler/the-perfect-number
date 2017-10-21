@@ -405,9 +405,9 @@ let createOpeningSlide = function () {
         if (d == ' ')
           charWidth = 0.01 * barGraphWidth;
         else if (d == 'r' || d == 'c')
-          charWidth = this.getComputedTextLength() * 2.5 + 3;
+          charWidth = this.getComputedTextLength() * 4.5 + 3;
         else
-          charWidth = this.getComputedTextLength() * 2.5;
+          charWidth = this.getComputedTextLength() * 4.5;
 
         let currentPosition;
         if (i < 3) {
