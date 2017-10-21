@@ -71,7 +71,7 @@ let slide2 = function (data) {
         ]);
       })
       .then( function () {
-        return appendStoryText(3000, 'but large corporations rarely pay that amount.');
+        return appendStoryText(2000, 'but large corporations rarely pay that amount.');
       })
       .then( function () {
         return appendStoryText(0, '', 1000);
@@ -95,16 +95,19 @@ let slide2 = function (data) {
         ]);
       })
       .then( function () {
-        return appendStoryText(0, '', 1000);
+        return appendStoryText(3000, '');
       })
       .then( function () {
         d3.select('.percent-line')
           .moveToFront();
 
         return Promise.all([
-          appendStoryText(2000, '241 of those companies paid less than a 35% effective tax rate over the 8 years.'),
+          appendStoryText(2000, '241 of those companies paid less than a 35% effective tax rate over the 8 years.', 1),
           highlightBarsSplit('rate', 35, '#0FEA00', 'rgba(0,0,0,0.4)', 3000)
         ])
+      })
+      .then( function () {
+        return appendStoryText(1000, '');
       })
   .then( function () {
     slideInProgress = false;

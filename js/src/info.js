@@ -84,9 +84,7 @@ let appendStoryText = function (duration, newText, clearDuration = false, imgSrc
 
     chain.then( function () {
       d3.select('.dynamic-text')
-        .style('line-height', function () {
-          return isHuge ? '40px' : '80px';
-        })
+        .style('line-height', '40px')
         .append('text')
         .style('opacity', 0)
         .html(function () {
