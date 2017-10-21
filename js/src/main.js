@@ -66,8 +66,7 @@ $('.toggle-label').click( function () {
 let addBarGraphClicks = function () {
   inMapMode = false;
   $('.bar-graph-viewer').click( function (e) {
-    // currentSlide++;
-    console.log(currentSlide);
+    currentSlide += 1;
 
     switch (currentSlide) {
       case 1: $("#slide1").trigger( "click" ); 

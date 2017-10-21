@@ -39,109 +39,118 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
   initBarGraph();
 
   $('#slide1').click( function (e) {
+    currentSlide = 1;
     if (!allRegionsDrawn || currentSlide == 1) return;
 
     if (slideInProgress)
       shouldFade = true;
 
-    currentSlide = 1;
+    
     slide1(data);
     clearTop();
     $('#slide1 div:first').addClass('active-slide-no-square');
   });
 
   $('#slide2').click( function (e) {
+    currentSlide = 2;
     if (!allRegionsDrawn) return;
 
     if (slideInProgress)
       shouldFade = true;
 
     slide2(data);
-    currentSlide = 2;
+    
     clearTop();
     $('#slide2 div:first').addClass('active-slide-no-square');
   });
 
   $('#slide3').click( function (e) {
+    currentSlide = 3;
     if (!allRegionsDrawn) return;
 
     if (slideInProgress)
       shouldFade = true;
 
     slide3(data, companiesYearsNoTax);
-    currentSlide = 3;
+    
     clearTop();
     $('#slide3 div:first').addClass('active-slide-no-square');
   });
 
   $('#slide4').click( function (e) {
+    currentSlide = 4;
     if (!allRegionsDrawn) return;
 
     if (slideInProgress)
       shouldFade = true;
 
     slide4(data, companiesTop25);
-    currentSlide = 4;
+    
     clearTop();
     $('#slide4 div:first').addClass('active-slide-no-square');
   });
 
   $('#slide5').click( function (e) {
+    currentSlide = 5;
     if (!allRegionsDrawn) return;
 
     if (slideInProgress)
       shouldFade = true;
 
     slide5(data, companiesRebates);
-    currentSlide = 5;
+    
     clearTop();
     $('#slide5 div:first').addClass('active-slide-no-square');
   });
 
   $('#slide6').click( function (e) {
+    currentSlide = 6;
     if (!allRegionsDrawn) return;
 
     if (slideInProgress)
       shouldFade = true;
 
     slide6(data, companiesIPS, companiesTop3EmpChanges, companiesLostEmployees, companiesCompUp);
-    currentSlide = 6;
+    
     clearTop();
     $('#slide6 div:first').addClass('active-slide-no-square');
   });
 
   $('#slide7').click( function (e) {
+    currentSlide = 7;
     if (!allRegionsDrawn) return;
 
     if (slideInProgress)
       shouldFade = true;
 
     slide7(data, companiesForeignDiff);
-    currentSlide = 7;
+    
     clearTop();
     $('#slide7 div:first').addClass('active-slide-no-square');
   });
 
   $('#slide8').click( function (e) {
+    currentSlide = 8;
     if (!allRegionsDrawn) return;
 
     if (slideInProgress)
       shouldFade = true;
 
     slide8(data, companiesCompetitors);
-    currentSlide = 8;
+    
     clearTop();
     $('#slide8 div:first').addClass('active-slide-no-square');
   });
 
   $('#slide9').click( function (e) {
+    currentSlide = 9;
     if (!allRegionsDrawn) return;
 
     if (slideInProgress)
       shouldFade = true;
 
     slide9(data);
-    currentSlide = 9;
+    
     clearTop();
     $('#slide9 div:first').addClass('active-slide-no-square');
   });
@@ -653,7 +662,7 @@ let openMapView = function (data, company) {
 }
 
 let closeMapView = function () {
-  if (currentSlide != null) {
+  if (currentSlide != null && inMapMode) {
     $('.proportion-graph-viewer').animate({'height': '0'}, 1000, 'linear');
     $('.proportion-graph-viewer').hide(500);
     addBarGraphClicks();
@@ -928,6 +937,7 @@ let fadeStart = function (duration, data, dynamicText, yStart = -15, yEnd = 50, 
         closeMapView();
 
         return Promise.all([
+          updateStoryText(duration, ''),
           appendStoryText(duration, dynamicText),
 
           updateBarGraphParam('marginBottom', 100),
