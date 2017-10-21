@@ -584,7 +584,7 @@ let openMapView = function (data, company) {
     .style('visibility', 'visible')
     .style('opacity', 1);
 
-  let chain = Promise.resolve();
+  let chain = hideBarGraphText(1000);
 
   if (currentSlide == 1 && !inMapMode) {
     chain = chain.then( function () {
@@ -597,17 +597,12 @@ let openMapView = function (data, company) {
   return chain
     .then( function () {
       slideInProgress = false;
-      console.log(inMapMode);
       if (!inMapMode)
         return Promise.all([
-          highlightAllBars('rgba(0,0,0,0.4)', 0),
-          hideBarGraphText(1000)
+          highlightAllBars('rgba(0,0,0,0.4)', 0)
         ]);
     })
     .then( function () {
-
-      d3.select('.dynamic-text')
-        .style('line-height', '80px');
 
       removeBarGraphClicks();
       $('.proportion-graph-viewer').css('display', 'flex');
