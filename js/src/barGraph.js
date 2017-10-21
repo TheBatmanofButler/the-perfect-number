@@ -392,13 +392,20 @@ let createOpeningSlide = function () {
       .delay(1000)
       .style('font-size', '80px')
       .attr('x', function (d, i) {
-        let charWidth;
+        let charWidth,
+            widthMultiple;
+        // console.log(browserName);
+        if (getBrowserName() == "Firefox")
+          widthMultiple = 4.5;
+        else
+          widthMultiple = 2.5;
+
         if (d == ' ')
           charWidth = 0.01 * barGraphWidth;
         else if (d == 'r' || d == 'c')
-          charWidth = this.getComputedTextLength() * 4.5 + 3;
+          charWidth = this.getComputedTextLength() * widthMultiple + 3;
         else
-          charWidth = this.getComputedTextLength() * 4.5;
+          charWidth = this.getComputedTextLength() * widthMultiple;
 
         let currentPosition;
         if (i < 3) {
