@@ -71,14 +71,14 @@ let slide2 = function (data) {
         ]);
       })
       .then( function () {
-        return appendStoryText(2000, 'but large corporations rarely pay that amount.');
+        return appendStoryText(3000, 'but large corporations rarely pay that amount.');
       })
       .then( function () {
-        return appendStoryText(0, '', 1000);
+        return appendStoryText(1500, '', 1000);
       })
       .then( function () {
         return Promise.all([
-          appendStoryText(2000,
+          appendStoryText(3000,
                           'The <b>Institute on Taxation and Economic Policy</b> studied 258 Fortune 500 companies that reported consistent profits from 2008 to 2015.',
                           false,
                           null,
@@ -98,16 +98,22 @@ let slide2 = function (data) {
         return appendStoryText(3000, '');
       })
       .then( function () {
+        return appendStoryText(3000, 'We rank these companies from highest to lowest effective tax rates.', 1000);
+      })
+      .then( function () {
+        return appendStoryText(3000, '');
+      })
+      .then( function () {
         d3.select('.percent-line')
           .moveToFront();
 
         return Promise.all([
-          appendStoryText(2000, '241 of those companies paid less than a 35% effective tax rate over the 8 years.', 1),
+          appendStoryText(2000, '241 of these companies paid less than a 35% effective tax rate over the 8 years.', 1),
           highlightBarsSplit('rate', 35, '#0FEA00', 'rgba(0,0,0,0.4)', 3000)
         ])
       })
       .then( function () {
-        return appendStoryText(1000, '');
+        return appendStoryText(3000, '');
       })
   .then( function () {
     slideInProgress = false;
@@ -256,10 +262,13 @@ let slide5 = function (data, companiesRebates) {
                           if (rebate == 'stockOptions')
                             return appendStoryText(500, barGraphText1, false, null, true);
                           else
-                            return appendStoryText(4000, barGraphText1, false, null, true);
+                            return appendStoryText(3000, barGraphText1, false, null, true);
                         })
                         .then( function () {
                           return highlightSomeBars(companiesRebates[rebate], '#0FEA00', 1500);
+                        })
+                        .then( function () {
+                          return appendStoryText(3000, '');
                         });
                 }
                 else {
@@ -272,6 +281,9 @@ let slide5 = function (data, companiesRebates) {
                   ])
                   .then( function () {
                     return highlightSomeBars(companiesRebates[rebate], '#0FEA00', 1500);
+                  })
+                  .then( function () {
+                    return appendStoryText(3000, '');
                   });
                 }
 
@@ -468,11 +480,14 @@ let slide7 = function (data, companiesForeignDiff) {
   fadeStart(1000, data)
   .then( function () {
     return Promise.all([
-      appendStoryText(5000,
+      appendStoryText(2000,
                       '"America is one of the highest-taxed nations in the world. Reducing taxes will cause new companies and new jobs to come roaring back into our country." - Donald Trump',
                       false,
                       './img/donald-trump.png', true),
     ]);
+  })
+  .then( function () {
+    return appendStoryText(2000, '');
   })
   .then( function () {
     return Promise.all([
@@ -486,6 +501,9 @@ let slide7 = function (data, companiesForeignDiff) {
       appendStoryText(4000, '107 had significant foreign profits (more than 10% of all profits)', false, null, true),
       highlightSomeBars(companiesForeignDiff, '#0FEA00', 2000),
     ]);
+  })
+  .then( function () {
+    return appendStoryText(2000, '');
   })
   .then( function () {
     return Promise.all([
@@ -503,7 +521,7 @@ let slide7 = function (data, companiesForeignDiff) {
   })
   .then( function () {
       return Promise.all([
-        appendStoryText(5000,
+        appendStoryText(3000,
                         '64 of these companies paid higher foreign tax rates on their foreign profits than they paid in U.S. taxes on their U.S. profits.',
                         1,
                         null,
@@ -512,11 +530,17 @@ let slide7 = function (data, companiesForeignDiff) {
       ]);
   })
   .then( function () {
+    return appendStoryText(2000, '');
+  })
+  .then( function () {
     return appendStoryText(3000,
                         'These higher foreign tax rates do not seem to hinder companies from doing business abroad. This is just more evidence that corporate income tax levels are usually not a significant determinant of what companies do.',
                         2000,
                         null,
                         true);
+  })
+  .then( function () {
+    return appendStoryText(2000, '');
   })
   .then( function () {
     slideInProgress = false;
@@ -545,6 +569,9 @@ let slide8 = function (data, companiesCompetitors) {
           competitorLow = competitorPair[1];
 
       chain = chain.then( function () {
+                return appendStoryText(2000, '');
+              })
+              .then( function () {
                 return Promise.all([
                   appendStoryText(1000, competitorHigh['company_name'] + ' ' + competitorHigh['rate'] + '%...', 1000),
                   highlightSomeBars([competitorHigh], '#0FEA00', 1000)
@@ -592,18 +619,24 @@ let slide9 = function (data) {
     return appendStoryText(2000, ' The American people.');
   })
   .then( function () {
-    return appendStoryText(6000,
+    return appendStoryText(3000,
       'There is plenty of blame to share for today\'s sad situation. These corporate loopholes and tax breaks are generally legal, and stem from laws passed over the years by Congress and signed by various presidents.',
       2000,
       null,
       true);
   })
   .then( function () {
-    return appendStoryText(6000,
+    return appendStoryText(8000, '');
+  })
+  .then( function () {
+    return appendStoryText(3000,
       'But that does not mean that low-tax corporations bear no responsibility. The tax laws were not enacted in a vacuum; they were adopted in response to relentless corporate lobbying, threats and campaign support.',
       2000,
       null,
       true);
+  })
+  .then( function () {
+    return appendStoryText(8000, '');
   })
   .then( function () {
     return appendStoryText(4000,
