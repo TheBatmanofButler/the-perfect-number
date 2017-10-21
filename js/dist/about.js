@@ -1,1 +1,1 @@
-let getAboutDiv=function(){console.log($('.about').width()),0==$('.about').width()?$('.about').animate({width:'50vw'}):$('.about').animate({width:'0'})};$(document).mouseup(function(a){var b=$('.about');b.is(a.target)||0!==b.has(a.target).length||b.animate({width:'0vw'})});
+var getAboutDiv=function(){console.log($('.about').width()),0==$('.about').width()?$('.about').animate({width:'50vw'}):$('.about').animate({width:'0'})};$(document).mouseup(function(a){var b=$('.about');b.is(a.target)||0!==b.has(a.target).length||b.animate({width:'0vw'})});
