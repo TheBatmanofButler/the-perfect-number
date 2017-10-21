@@ -4,7 +4,6 @@ let updateBarGraphText = function (duration) {
       text = barGraphParams['barGraphTextValue'],
       x = barGraphParams['barGraphTextX'],
       barGraphText = d3.select('.bar-graph-text'),
-      barGraphTextArrow = d3.select('.bar-graph-text-arrow'),
       showableElements = barGraphText;
 
   return new Promise( function (resolve, reject) {
@@ -15,22 +14,13 @@ let updateBarGraphText = function (duration) {
       })
       .style('font-size', function () {
         if (text == 'Click to continue')
-          return '2vw';
+          return '1.7vw';
         else
           return '1.5vw';
-      });
+      })
+      .style('font-style', 'italic');
 
     let barGraphTextLength = barGraphText.node().getBBox().width;
-
-    if (text == 'Click to continue') {
-      barGraphTextArrow
-        .attr('x', barGraphWidth * x + barGraphTextLength)
-        .attr('y', barGraphText.attr('y') - barGraphText.node().getBBox().height * 0.5)
-        .style('width', barGraphWidth * 0.02)
-        .style('height', barGraphHeight * 0.02);
-
-      showableElements = d3.selectAll('.bar-graph-text, .bar-graph-text-arrow');
-    }
 
     showableElements
       .transition()
@@ -44,10 +34,10 @@ let updateBarGraphText = function (duration) {
 
 let hideBarGraphText = function (duration) {
   let barGraphWidth = barGraphParams['barGraphWidth'],
-      barGraphTextAndArrow = d3.selectAll('.bar-graph-text, .bar-graph-text-arrow');
+      barGraphText = d3.selectAll('.bar-graph-text');
 
   return new Promise( function (resolve, reject) {
-    barGraphTextAndArrow
+    barGraphText
       .transition()
       .duration(duration)
       .ease(d3.easeLinear)

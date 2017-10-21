@@ -45,7 +45,7 @@ let createSlides = function (data, companiesYearsNoTax, companiesTop25, companie
       shouldFade = true;
 
     currentSlide = 1;
-    slide1();
+    slide1(data);
     clearTop();
     $('#slide1 div:first').addClass('active-slide-no-square');
   });
@@ -215,18 +215,18 @@ let initBarGraph = function () {
     .attr('y', y(barGraphTextY));
 
 
-  barGraph
-    .append('g')
-    .append('svg')
-    .attr('class', 'bar-graph-text-arrow')
-    .attr('xmlns', 'http://www.w3.org/2000/svg')
-    .attr('viewBox', '0 0 8 8')
-    .attr('width', 17)
-    .attr('height', 17)
-    .style('opacity', 0)
-    .append('path')
-    .attr('d', 'M0 0v8l4-4-4-4z')
-    .attr('transform', 'translate(2)')
+  // barGraph
+  //   .append('g')
+  //   .append('svg')
+  //   .attr('class', 'bar-graph-text-arrow')
+  //   .attr('xmlns', 'http://www.w3.org/2000/svg')
+  //   .attr('viewBox', '0 0 8 8')
+  //   .attr('width', 17)
+  //   .attr('height', 17)
+  //   .style('opacity', 0)
+  //   .append('path')
+  //   .attr('d', 'M0 0v8l4-4-4-4z')
+  //   .attr('transform', 'translate(2)')
 
   barGraph
     .append('g')
@@ -295,7 +295,7 @@ let createOpeningSlide = function () {
               .attr('class', 'quote-text');
 
 
-  updateQuoteText(50, quote1.length, quote1.length + quote2.length, quote1.length + quote2.length + quote3.length);
+  updateQuoteText(45, quote1.length, quote1.length + quote2.length, quote1.length + quote2.length + quote3.length);
 
   openingScreen
         .append('g')
@@ -334,24 +334,25 @@ let createOpeningSlide = function () {
         .append('text')
         .text('Click to advance')
         .attr('class', 'click-advance')
-        .attr('x', 1093)
+        .attr('x', 1043)
         .attr('y', 30)
         .style('opacity', 0)
+        .style('font-style', 'italic');
 
-  openingScreen
-        .append('g')
-        .append('svg')
-        .attr('class', 'click-advance')
-        .attr('xmlns', 'http://www.w3.org/2000/svg')
-        .attr('x', 1280)
-        .attr('y', 14)
-        .attr('viewBox', '0 0 8 8')
-        .attr('width', 17)
-        .attr('height', 17)
-        .style('opacity', 0)
-        .append('path')
-        .attr('d', 'M0 0v8l4-4-4-4z')
-        .attr('transform', 'translate(2)')
+  // openingScreen
+  //       .append('g')
+  //       .append('svg')
+  //       .attr('class', 'click-advance')
+  //       .attr('xmlns', 'http://www.w3.org/2000/svg')
+  //       .attr('x', 1230)
+  //       .attr('y', 14)
+  //       .attr('viewBox', '0 0 8 8')
+  //       .attr('width', 17)
+  //       .attr('height', 17)
+  //       .style('opacity', 0)
+  //       .append('path')
+  //       .attr('d', 'M0 0v8l4-4-4-4z')
+  //       .attr('transform', 'translate(2)')
 
   d3.selectAll('.bolden')
         .on("mouseover", function () {
@@ -373,7 +374,7 @@ let createOpeningSlide = function () {
 
     d3.selectAll('.quote-text')
       .transition()
-      .duration(4000)
+      .duration(2000)
       .style('opacity', 0);
     
     d3.selectAll('.highlight')
@@ -422,13 +423,13 @@ let createOpeningSlide = function () {
 
     d3.selectAll('.pedal, .pedal-link')
       .transition()
-      .delay(3000)
-      .duration(3000)
+      .delay(2000)
+      .duration(2000)
       .style('opacity', 1)
       .end( function () {
         d3.selectAll('.click-advance')
           .transition()
-          .duration(3000)
+          .duration(2000)
           .style('opacity', 1)
       })
 
@@ -564,15 +565,11 @@ let openMapView = function (data, company) {
                                        - $('.dynamic-text').outerHeight()
                                        - $(window).outerHeight() * 0.45;
 
-  console.log(99129391);
   d3.select('.search-wrapper')
     .transition()
     .duration(1000)
     .style('visibility', 'visible')
-    .style('opacity', 1)
-    .end( function () {
-      console.log(13123);
-    });
+    .style('opacity', 1);
 
   let chain = Promise.resolve();
 
@@ -785,7 +782,8 @@ let fadeOpeningScreen = function(duration) {
   });
 }
 
-let showOpeningScreen = function(duration) {
+let showOpeningScreen = function(data) {
+  console.log(data);
   slideInProgress = false;
   let barGraphWidth = barGraphParams['barGraphWidth'],
             barGraphHeight = barGraphParams['barGraphHeight'],
@@ -794,9 +792,43 @@ let showOpeningScreen = function(duration) {
             marginBottom = barGraphParams['marginBottom'],
             marginLeft = barGraphParams['marginLeft'],
             totalWidth = barGraphWidth + marginLeft + marginRight,
-            totalHeight = barGraphHeight + marginTop + marginBottom;
+            totalHeight = barGraphHeight + marginTop + marginBottom,
+            mapModeHeight = $('.graph-viewers').height();
+
   return new Promise( function (resolve, reject) {
+
     fadeAll(500)
+    .then( function () {
+      return Promise.all([
+        appendStoryText(0, ''),
+
+        updateBarGraphParam('marginBottom', 100),
+        updateBarGraphParam('marginTop', 50),
+        updateBarGraphDims(mapModeHeight),
+
+        updateBarGraphParam('axisEnding', '%'),
+        updateXScale(),
+        updateBarGraphParam('domainStart', -15),
+        updateBarGraphParam('domainEnd', 50),
+        updateYScale(),
+        updateBarGraphSVG(0),
+
+        updateBarGraphParam('barGraphTextValue', null),
+        updateBarGraphParam('barGraphTextX', 0.3),
+        hideBarGraphText(0),
+        updateCompanyLabel(0),
+
+        updateBarGraphParam('data', data),
+        updateBarGraphParam('yParam', 'rate'),
+
+        updateBarGraphParam('tickValues', [0,35]),
+        updateBarGraphYLabel(0),
+        updateYAxis(0),
+        updateXAxis(0),
+        updatePercentLine(0),
+        updateBars(0, 0, 0)
+      ]);
+    })
     .then( function () {
 
       let barGraphWidth = barGraphParams['barGraphWidth'],
@@ -865,7 +897,7 @@ let showOpeningScreen = function(duration) {
 
 let fadeStart = function (duration, data, dynamicText, yStart = -15, yEnd = 50, tickValues = [0,35]) {
   let isOpeningScreen = d3.select('.bar-graph').attr('viewBox') != null;
-  
+
   return new Promise( function (resolve, reject) {
 
     Promise.resolve()
@@ -924,7 +956,7 @@ let fadeStart = function (duration, data, dynamicText, yStart = -15, yEnd = 50, 
         d3.select('.percent-line')
           .moveToFront();
         console.log(shouldFade);
-        if (shouldFade || isOpeningScreen) {
+        if (shouldFade || isOpeningScreen && (currentSlide != 1)) {
           shouldFade = false;
           return showAll(duration);
         }
