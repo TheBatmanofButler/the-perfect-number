@@ -404,3 +404,14 @@ canvas {
     color: rgba(255, 225, 25, 1);
     border-bottom: 1px rgba(255, 225, 25, 1) dotted;
   }
+
+.image-data-source {
+  text-decoration: none;
+  color: inherit;
+  border-bottom: 1px #F7F7F7 dotted;
+}
+
+  .image-data-source:hover {
+    color: rgba(255, 225, 25, 1);
+    border-bottom: 1px rgba(255, 225, 25, 1) dotted;
+  }
