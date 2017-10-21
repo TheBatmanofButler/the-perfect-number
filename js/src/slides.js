@@ -1,7 +1,7 @@
 
 let slide1 = function (data) {
   slideInProgress = true;
-  // $('#slide1').off('click');
+
   $('.typeahead').typeahead('val', '');
   closeMapView();
   let mapModeHeight = $('.graph-viewers').height();
