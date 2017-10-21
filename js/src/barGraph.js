@@ -618,7 +618,7 @@ let openMapView = function (data, company) {
       return Promise.all([
               $('.bar-graph-elements').animate({'opacity': 1}),
               updateBarGraphParam('marginTop', 0),
-              updateBarGraphParam('marginBottom', 90),
+              updateBarGraphParam('marginBottom', 110),
               updateBarGraphDims(mapModeHeight),
 
               updateXScale(),
