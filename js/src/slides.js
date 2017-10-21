@@ -37,6 +37,7 @@ let slide2 = function (data) {
         closeMapView();
 
         return Promise.all([
+          updateSlideTitle(0, ''),
           appendStoryText(0, '', 1000),
           hideBarGraphText(0),
 
@@ -64,6 +65,7 @@ let slide2 = function (data) {
       })
       .then( function () {
         return Promise.all([
+          updateSlideTitle(2000, ''),
           showAll(2000),
           appendStoryText(2000, 'The federal corporate income tax rate is 35 percent...', 1),
           updateYAxis(3000),
@@ -122,7 +124,10 @@ let slide3 = function (data, companiesYearsNoTax) {
 
   fadeStart(500, data)
   .then(function () {
-    return appendStoryText(2000, 'These companies generated so many excess tax breaks that they sometimes reported negative taxes... ', 0, null, true);
+    return Promise.all([
+      appendStoryText(2000, 'These companies generated so many excess tax breaks that they sometimes reported negative taxes... ', 0, null, true),
+      updateSlideTitle(2000, 'Companies go years without paying tax')
+    ])
   })
   .then(function () {
     return appendStoryText(2000, 'this means that they made <b>more</b> after taxes than before taxes in those years.', false, null, true);
