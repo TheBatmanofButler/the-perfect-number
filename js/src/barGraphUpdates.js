@@ -349,6 +349,9 @@ let updateBarGraphDims = function (mapModeHeight) {
       totalWidth = barGraphWidth + marginLeft + marginRight,
       totalHeight = barGraphHeight + marginTop + marginBottom;
 
+  if (barGraphHeight > 500)
+    barGraphHeight = 500;
+
   updateBarGraphParam('barGraphWidth', barGraphWidth);
   updateBarGraphParam('barGraphHeight', barGraphHeight);
   updateBarGraphParam('totalWidth', totalWidth);
